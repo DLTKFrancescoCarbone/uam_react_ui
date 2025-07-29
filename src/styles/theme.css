@@ -500,6 +500,21 @@ revo-grid * {
   height: 600px;
 }
 
+/* Avatar Styles */
+.avatar-container {
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 200ms;
+}
+
+.avatar-container:hover {
+  opacity: 0.8;
+}
+
+.avatar-fallback {
+  border-radius: 4px;
+}
+
 /* Utility Classes */
 .space-y-1 > * + * {
   margin-top: 0.25rem;

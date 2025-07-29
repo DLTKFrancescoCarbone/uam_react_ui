@@ -3,12 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/layout/Header';
 import Sidebar from '../components/layout/Sidebar';
 import Footer from '../components/layout/Footer';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { 
   UserGroupIcon, 
-  BuildingOfficeIcon, 
   CogIcon, 
   ExclamationTriangleIcon,
   ChartBarIcon,
