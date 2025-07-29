@@ -150,9 +150,9 @@ const Dashboard = () => {
               {/* Key Metrics */}
               <div className="metrics-grid">
                 <Card>
-                  <CardContent className="dashboard-metric-card">
-                    <div className="dashboard-metric-content">
-                      <div className="dashboard-metric-info space-y-1">
+                  <CardContent className="p-6 pt-6">
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-1">
                         <p className="dashboard-metric-label">Total Users</p>
                         <p className="dashboard-metric-value">{stats.totalUsers.toLocaleString()}</p>
                       </div>
@@ -162,9 +162,9 @@ const Dashboard = () => {
                 </Card>
 
                 <Card>
-                  <CardContent className="dashboard-metric-card">
-                    <div className="dashboard-metric-content">
-                      <div className="dashboard-metric-info space-y-1">
+                  <CardContent className="p-6 pt-6">
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-1">
                         <p className="dashboard-metric-label">Active Users</p>
                         <p className="dashboard-metric-value">{stats.activeUsers.toLocaleString()}</p>
                       </div>
@@ -176,9 +176,9 @@ const Dashboard = () => {
                 </Card>
 
                 <Card>
-                  <CardContent className="dashboard-metric-card">
-                    <div className="dashboard-metric-content">
-                      <div className="dashboard-metric-info space-y-1">
+                  <CardContent className="p-6 pt-6">
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-1">
                         <p className="dashboard-metric-label">Total Roles</p>
                         <p className="dashboard-metric-value">{stats.totalRoles}</p>
                       </div>
@@ -191,8 +191,8 @@ const Dashboard = () => {
                   <CardContent className="p-6 pt-6">
                     <div className="flex items-center justify-between">
                       <div className="space-y-1">
-                        <p className="text-sm font-medium text-muted-foreground">Total Groups</p>
-                        <p className="text-2xl font-bold">{stats.totalGroups}</p>
+                        <p className="dashboard-metric-label">Total Groups</p>
+                        <p className="dashboard-metric-value">{stats.totalGroups}</p>
                       </div>
                       <UsersIcon className="h-8 w-8 text-purple-600" />
                     </div>
@@ -203,8 +203,8 @@ const Dashboard = () => {
                   <CardContent className="p-6 pt-6">
                     <div className="flex items-center justify-between">
                       <div className="space-y-1">
-                        <p className="text-sm font-medium text-muted-foreground">Pending Requests</p>
-                        <p className="text-2xl font-bold">{stats.pendingRequests}</p>
+                        <p className="dashboard-metric-label">Pending Requests</p>
+                        <p className="dashboard-metric-value">{stats.pendingRequests}</p>
                       </div>
                       <ClockIcon className="h-8 w-8 text-yellow-600" />
                     </div>
@@ -215,8 +215,8 @@ const Dashboard = () => {
                   <CardContent className="p-6 pt-6">
                     <div className="flex items-center justify-between">
                       <div className="space-y-1">
-                        <p className="text-sm font-medium text-muted-foreground">System Alerts</p>
-                        <p className="text-2xl font-bold">{stats.systemAlerts}</p>
+                        <p className="dashboard-metric-label">System Alerts</p>
+                        <p className="dashboard-metric-value">{stats.systemAlerts}</p>
                       </div>
                       <ExclamationTriangleIcon className="h-8 w-8 text-red-600" />
                     </div>

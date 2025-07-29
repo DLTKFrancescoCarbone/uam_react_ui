@@ -57,7 +57,7 @@
 
 .sidebar-item-inactive {
   background-color: transparent;
-  color: #4b5563;
+  color: #373F4E;
 }
 
 .sidebar-item-inactive:hover {
@@ -98,7 +98,6 @@
 /* Dashboard Metric Cards */
 .dashboard-metric-card {
   padding: 1.5rem;
-  padding-top: 1.5rem;
 }
 
 .dashboard-metric-content {
@@ -114,12 +113,22 @@
 .dashboard-metric-label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: hsl(var(--muted-foreground));
+  color: #373F4E;
 }
 
 .dashboard-metric-value {
   font-size: 1.5rem;
   font-weight: 700;
+  color: #646D82;
+}
+
+/* Ensure consistent styling for all metric cards */
+.metrics-grid .text-sm.font-medium {
+  color: #373F4E !important;
+}
+
+.metrics-grid .text-2xl.font-bold {
+  color: #646D82 !important;
 }
 
 .dashboard-metric-icon {
@@ -186,6 +195,7 @@
 
 .activity-message {
   font-size: 0.875rem;
+  color: #646D82;
 }
 
 .activity-footer {
@@ -304,13 +314,18 @@
 }
 
 .page-title {
-  font-size: 1.875rem;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: 'Lexend', sans-serif;
   letter-spacing: -0.025em;
+  color: #373F4E;
 }
 
 .page-description {
-  color: hsl(var(--muted-foreground));
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Lexend', sans-serif;
+  color: #646D82;
 }
 
 .page-timestamp {
@@ -438,6 +453,7 @@
 .modal-title {
   font-size: 1.125rem;
   font-weight: 600;
+  color: #373F4E;
 }
 
 .modal-body {
@@ -526,4 +542,42 @@ revo-grid * {
 
 .space-y-8 > * + * {
   margin-top: 2rem;
+}
+
+/* Color Utility Classes */
+.text-header {
+  color: #373F4E;
+}
+
+.text-body {
+  color: #646D82;
+}
+
+.text-sidebar-icon {
+  color: #373F4E;
+}
+
+/* General text elements that should use body copy color */
+p, span, div:not(.sidebar-item):not(.page-title):not(.modal-title):not(.dashboard-metric-value) {
+  color: #646D82;
+}
+
+/* Ensure headers use the header color */
+h1, h2, h3, h4, h5, h6 {
+  color: #373F4E;
+}
+
+/* Form labels and input text */
+label {
+  color: #373F4E;
+}
+
+/* Table text content */
+td {
+  color: #646D82;
+}
+
+/* Table headers */
+th {
+  color: #373F4E;
 }
