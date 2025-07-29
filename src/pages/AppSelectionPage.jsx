@@ -1,12 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '../components/ui/card';
-import { 
-  UsersIcon, 
-  ChartBarIcon, 
-  ShieldCheckIcon,
-  QuestionMarkCircleIcon
-} from '@heroicons/react/24/outline';
 
 const AppSelectionPage = () => {
   const navigate = useNavigate();
@@ -17,59 +11,115 @@ const AppSelectionPage = () => {
     }
   };
 
+  // Deltek card icon component (blue chevron)
+  const DeltekCardIcon = () => (
+    <svg width="41" height="32" viewBox="0 0 41 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4.49506 0.370377H25.6444C26.262 0.370377 26.6083 1.08183 26.2273 1.56792L16.4265 14.0725L3.52889 2.97453C2.48749 2.07844 3.1212 0.370377 4.49506 0.370377Z" fill="#254E7A"/>
+      <path d="M25.1612 0.654257L2.42778 29.0711C1.65185 30.041 2.3424 31.4778 3.58449 31.4778H24.3741C25.2088 31.4778 26.0047 31.1256 26.5662 30.508L38.6208 17.248C39.6751 16.0883 39.6437 14.3081 38.5492 13.1862L26.2697 0.599722C25.9589 0.281128 25.4393 0.306693 25.1612 0.654257Z" fill="#30659F"/>
+    </svg>
+  );
+
+  // Background diagonal lines component
+  const BackgroundLines = () => (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Diagonal lines from the reference SVG */}
+      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1728 1117" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M242.287 1167L426.2 983.087H377.311L193.399 1167H242.287Z" fill="black" fillOpacity="0.12"/>
+        <path d="M327.258 1167L511.171 983.087H462.283L278.37 1167H327.258Z" fill="black" fillOpacity="0.12"/>
+        <path d="M412.234 1167L596.146 983.087H547.258L363.345 1167H412.234Z" fill="black" fillOpacity="0.12"/>
+        <path d="M497.207 1167L681.12 983.087H632.231L448.319 1167H497.207Z" fill="black" fillOpacity="0.12"/>
+        <path d="M582.177 1167L766.089 983.087H717.201L533.289 1167H582.177Z" fill="black" fillOpacity="0.12"/>
+        <path d="M667.148 1167L851.06 983.087H802.172L618.26 1167H667.148Z" fill="black" fillOpacity="0.12"/>
+        <path d="M752.122 1167L936.034 983.087H887.146L703.233 1167H752.122Z" fill="black" fillOpacity="0.12"/>
+        <path d="M-148.22 1167L35.6928 983.087H-13.1954L-197.108 1167H-148.22Z" fill="black" fillOpacity="0.12"/>
+        <path d="M-63.2464 1167L120.666 983.087H71.778L-112.135 1167H-63.2464Z" fill="black" fillOpacity="0.12"/>
+        <path d="M1356.84 435.974C1378.22 435.974 1388.92 461.825 1373.81 476.944L989.304 861.446C984.803 865.947 978.699 868.476 972.333 868.476H416.906C395.524 868.476 384.816 842.624 399.935 827.505L784.437 443.003C788.938 438.502 795.043 435.974 801.408 435.974H1356.84ZM1373.81 344.12C1388.93 359.239 1378.22 385.091 1356.84 385.091H801.409C795.044 385.091 788.939 382.562 784.438 378.061L399.936 -6.4406C384.817 -21.5598 395.525 -47.4111 416.907 -47.4111H972.334C978.699 -47.4111 984.804 -44.8826 989.305 -40.3817L1373.81 344.12Z" fill="black" fillOpacity="0.12"/>
+        <path d="M1682.41 84.6666L1478.71 -118.333C1473.66 -123.369 1477.23 -132 1484.36 -132H1561.95L1727.65 33.1258C1729.15 34.6269 1730 36.6659 1730 38.7924V79C1730 83.4183 1726.42 87 1722 87H1688.06C1685.94 87 1683.91 86.1609 1682.41 84.6666Z" fill="black" fillOpacity="0.12"/>
+        <path d="M1682.41 116.333L1478.71 319.333C1473.66 324.369 1477.23 333 1484.36 333H1561.95L1727.65 167.874C1729.15 166.373 1730 164.334 1730 162.208V122C1730 117.582 1726.42 114 1722 114H1688.06C1685.94 114 1683.91 114.839 1682.41 116.333Z" fill="black" fillOpacity="0.12"/>
+      </svg>
+    </div>
+  );
+
+  // Network diagram component for bottom right (from provided SVG)
+  const NetworkDiagram = () => (
+    <div className="fixed bottom-8 right-8 w-32 h-32 opacity-30">
+      <svg width="345" height="345" viewBox="0 0 345 345" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+        <path d="M44.5643 144.469H69.8624V119.171H44.5643V144.469ZM75.0374 154.819H39.3893C36.5323 154.819 34.2129 152.501 34.2129 149.644V113.996C34.2129 111.139 36.5323 108.821 39.3893 108.821H75.0374C77.8944 108.821 80.2124 111.139 80.2124 113.996V149.644C80.2124 152.501 77.8944 154.819 75.0374 154.819Z" fill="white"/>
+        <path d="M159.812 73.5982H185.111V48.3H159.812V73.5982ZM190.286 83.9482H154.637C151.78 83.9482 149.462 81.6301 149.462 78.7732V43.125C149.462 40.2681 151.78 37.95 154.637 37.95H190.286C193.143 37.95 195.461 40.2681 195.461 43.125V78.7732C195.461 81.6301 193.143 83.9482 190.286 83.9482Z" fill="white"/>
+        <path d="M159.812 296.7H185.111V271.402H159.812V296.7ZM190.286 307.05H154.637C151.78 307.05 149.462 304.732 149.462 301.875V266.227C149.462 263.37 151.78 261.052 154.637 261.052H190.286C193.143 261.052 195.461 263.37 195.461 266.227V301.875C195.461 304.732 193.143 307.05 190.286 307.05Z" fill="white"/>
+        <path d="M44.5643 225.829H69.8624V200.531H44.5643V225.829ZM75.0374 236.179H39.3893C36.5323 236.179 34.2129 233.861 34.2129 231.004V195.356C34.2129 192.499 36.5323 190.181 39.3893 190.181H75.0374C77.8944 190.181 80.2124 192.499 80.2124 195.356V231.004C80.2124 233.861 77.8944 236.179 75.0374 236.179Z" fill="white"/>
+        <path d="M275.138 144.469H300.436V119.171H275.138V144.469ZM305.611 154.819H269.963C267.106 154.819 264.788 152.501 264.788 149.644V113.996C264.788 111.139 267.106 108.821 269.963 108.821H305.611C308.468 108.821 310.786 111.139 310.786 113.996V149.644C310.786 152.501 308.468 154.819 305.611 154.819Z" fill="white"/>
+        <path d="M275.138 225.829H300.436V200.531H275.138V225.829ZM305.611 236.179H269.963C267.106 236.179 264.788 233.861 264.788 231.004V195.356C264.788 192.499 267.106 190.181 269.963 190.181H305.611C308.468 190.181 310.786 192.499 310.786 195.356V231.004C310.786 233.861 308.468 236.179 305.611 236.179Z" fill="white"/>
+        <path d="M123.382 201.03L172.116 229.573L221.204 201.646L221.557 145.166L172.824 116.619L123.733 144.55L123.382 201.03ZM172.078 240.725C171.175 240.725 170.27 240.489 169.464 240.013L115.571 208.449C113.974 207.515 113.001 205.8 113.01 203.95L113.401 141.497C113.412 139.651 114.409 137.946 116.016 137.032L170.299 106.144C171.911 105.234 173.886 105.243 175.474 106.179L229.368 137.748C230.965 138.681 231.938 140.395 231.929 142.245L231.534 204.698C231.525 206.546 230.526 208.249 228.92 209.163L174.639 240.047C173.844 240.5 172.962 240.725 172.078 240.725Z" fill="white"/>
+        <path d="M172.507 177.426C171.644 177.426 170.782 177.21 170.004 176.779L98.1025 137.046H92.6042C89.7473 137.046 87.4292 134.729 87.4292 131.871C87.4292 129.014 89.7473 126.696 92.6042 126.696H99.4369C100.313 126.696 101.173 126.92 101.941 127.343L172.509 166.341L202.768 149.68C205.266 148.31 208.418 149.213 209.799 151.719C211.178 154.222 210.265 157.37 207.761 158.75L175.004 176.786C174.225 177.213 173.367 177.426 172.507 177.426Z" fill="white"/>
+        <path d="M226.759 147.558C224.937 147.558 223.165 146.591 222.222 144.88C220.845 142.377 221.757 139.229 224.259 137.849L243.353 127.337C244.119 126.92 244.977 126.696 245.849 126.696H266.482C269.339 126.696 271.657 129.014 271.657 131.871C271.657 134.729 269.339 137.046 266.482 137.046H247.181L229.254 146.919C228.462 147.353 227.606 147.558 226.759 147.558Z" fill="white"/>
+        <path d="M99.4366 218.219H78.8039C75.947 218.219 73.6289 215.901 73.6289 213.044C73.6289 210.187 75.947 207.869 78.8039 207.869H98.1022L116.41 197.751C118.901 196.374 122.057 197.274 123.442 199.776C124.826 202.277 123.917 205.426 121.417 206.807L101.94 217.573C101.175 217.997 100.313 218.219 99.4366 218.219Z" fill="white"/>
+        <path d="M252.681 218.219H245.849C244.977 218.219 244.119 217.997 243.353 217.579L224.156 207.009C221.653 205.628 220.739 202.481 222.117 199.979C223.498 197.476 226.653 196.569 229.149 197.94L247.18 207.869H252.681C255.538 207.869 257.856 210.187 257.856 213.044C257.856 215.901 255.538 218.219 252.681 218.219Z" fill="white"/>
+        <path d="M172.46 251.704C169.603 251.704 167.285 249.386 167.285 246.529V237.764C167.285 234.907 169.603 232.589 172.46 232.589C175.317 232.589 177.635 234.907 177.635 237.764V246.529C177.635 249.386 175.317 251.704 172.46 251.704Z" fill="white"/>
+        <path d="M172.469 214.358C169.613 214.358 167.294 212.04 167.294 209.183V173.282C167.294 170.424 169.613 168.107 172.469 168.107C175.326 168.107 177.644 170.424 177.644 173.282V209.183C177.644 212.04 175.326 214.358 172.469 214.358Z" fill="white"/>
+        <path d="M172.46 110.546C169.603 110.546 167.285 108.226 167.285 105.371V96.9612C167.285 94.1043 169.603 91.7862 172.46 91.7862C175.317 91.7862 177.635 94.1043 177.635 96.9612V105.371C177.635 108.226 175.317 110.546 172.46 110.546Z" fill="white"/>
+      </svg>
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-login-gradient">
-      <div className="container mx-auto px-8 py-12">
+    <div className="min-h-screen relative overflow-hidden" style={{
+      background: 'linear-gradient(135deg, #362C66 0%, #543C67 51.69%, #804A98 100%)'
+    }}>
+      {/* Background decorative elements */}
+      <BackgroundLines />
+
+      <div className="container mx-auto px-8 py-12 relative z-10">
         {/* Deltek Logo */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-light text-white mb-8">Deltek</h1>
+        <div className="mb-12">
+          <svg width="160" height="42" viewBox="0 0 160 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="delteklogosvgwhite">
+              <path id="Vector" d="M152.167 8.00751H143.816C137.338 15.2591 131.543 22.8579 131.543 22.8579V22.8846H131.476V0.0614624H125.079V40.3927H131.476V25.5422H131.543C131.543 25.5422 137.352 33.1411 143.816 40.3927H152.167C144.672 31.9926 139.707 25.7826 138.449 24.2068C139.694 22.6309 144.672 16.421 152.167 8.02086V8.00751Z" fill="white"/>
+              <path id="Vector_2" d="M23.3212 23.2452C23.3212 32.126 18.851 34.8905 12.6275 34.8905H6.88585V5.63032H10.4593C19.4667 5.63032 23.3346 8.76868 23.3346 17.4626V23.2452H23.3212ZM30.147 20.4674C30.147 6.95244 26.0917 0.141541 10.9144 0.141541H0.274231V40.3926H12.855C27.3765 40.3926 30.147 33.328 30.147 20.4807" fill="white"/>
+              <path id="Vector_3" d="M70.2985 0.0480957L63.7136 0.0614507L63.7404 0.0480957V40.3793H70.2851V0.0614507L70.2985 0.0480957Z" fill="white"/>
+              <path id="Vector_4" d="M47.2515 13.8702C42.3531 13.8702 40.2919 18.0903 40.2919 22.2035H53.1137C53.1137 18.0369 52.2705 13.8702 47.2515 13.8702ZM59.1632 26.7174H40.3589V27.679C40.3589 31.7254 42.3664 35.7052 48.2286 35.7052C51.6816 35.7052 54.7599 34.797 57.4233 33.4749L57.7846 38.6699C55.4291 40.0454 51.802 40.9669 47.5594 40.9669C36.6114 40.9669 33.8945 34.57 33.8945 25.1549C33.8945 15.7399 37.6955 9.22278 47.4389 9.22278C54.693 9.22278 59.2836 13.0155 59.2836 23.2853C59.2836 23.953 59.1632 26.7308 59.1632 26.7308" fill="white"/>
+              <path id="Vector_5" d="M86.6402 41.0203C81.1394 41.0203 78.7838 38.1223 78.8374 32.8072L78.8909 15.3125H73.9523V10.0107H78.8909L78.9444 2.34509H85.4222L85.3687 10.0107H93.225V15.3125H85.3687L85.3152 31.7789C85.3152 34.4364 86.3323 35.7051 88.7548 35.7051C90.6285 35.7051 92.8636 34.8638 92.8636 34.8638L93.225 39.6848C93.225 39.6848 90.2003 41.0203 86.6402 41.0203Z" fill="white"/>
+              <path id="Vector_6" d="M108.897 14.0973C103.999 14.0973 101.938 18.3173 101.938 22.4306H114.746C114.746 18.2639 113.903 14.0973 108.884 14.0973M120.796 26.9445H101.991V27.906C101.991 31.9525 103.986 35.9322 109.848 35.9322C113.301 35.9322 116.379 35.0241 119.042 33.702L119.417 38.8969C117.062 40.2858 113.421 41.1806 109.192 41.1806C98.244 41.1806 95.527 34.7837 95.527 25.3686C95.527 15.9536 99.3281 9.43646 109.071 9.43646C116.326 9.43646 120.916 13.2426 120.916 23.499C120.916 24.1667 120.796 26.9445 120.796 26.9445Z" fill="white"/>
+              <path id="Vector_7" d="M155.032 38.0155C155.032 36.7201 155.968 35.7719 157.253 35.7719C158.538 35.7719 159.448 36.7067 159.448 38.0021C159.448 39.2976 158.511 40.2591 157.24 40.2591C155.968 40.2591 155.032 39.3243 155.032 38.0289V38.0155ZM159.06 38.0021C159.06 36.9204 158.297 36.1191 157.24 36.1191C156.183 36.1191 155.433 36.8803 155.433 38.0021C155.433 39.1239 156.196 39.8852 157.253 39.8852C158.311 39.8852 159.06 39.1239 159.06 38.0021ZM157.628 38.9904L157.119 38.3227H156.852V38.937C156.852 39.0839 156.785 39.164 156.638 39.164H156.557C156.423 39.164 156.343 39.0572 156.343 38.8836V37.1074C156.343 36.9204 156.45 36.8269 156.611 36.8269H157.32C157.922 36.8269 158.244 37.0673 158.244 37.5614C158.244 37.9354 158.016 38.1891 157.615 38.2559L158.204 38.977C158.204 38.977 158.096 39.164 157.922 39.164C157.829 39.164 157.695 39.1106 157.601 38.977L157.628 38.9904ZM156.852 37.9354H157.32C157.601 37.9354 157.748 37.8018 157.748 37.5882C157.748 37.3478 157.588 37.2409 157.293 37.2409H156.838V37.9354H156.852Z" fill="white"/>
+            </g>
+          </svg>
         </div>
 
         {/* Available Applications Section */}
         <div className="mb-12">
-          <h2 className="text-xl text-white mb-6">Available applications</h2>
+          <h2 className="text-xl text-white mb-6 font-lexend">Available applications</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div className="flex flex-wrap justify-start gap-6 mb-8">
             {/* User Access Management Card */}
             <Card 
-              className="bg-white hover:bg-gray-50 cursor-pointer transition-colors"
+              className="bg-white hover:bg-gray-50 hover:shadow-xl hover:scale-105 cursor-pointer transition-all duration-300 shadow-lg w-80"
               onClick={() => handleAppSelection('User Access Management')}
             >
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-primary text-primary-foreground flex items-center justify-center text-xl font-bold mx-auto mb-4 rounded">
-                  <UsersIcon className="h-6 w-6" />
+              <CardContent className="pt-6 px-6 pb-6 text-center h-32 flex flex-col justify-between">
+                <div className="flex justify-center mb-4">
+                  <DeltekCardIcon />
                 </div>
-                <h3 className="text-gray-900 font-medium">User Access Management</h3>
+                <h3 className="text-gray-900 font-medium font-lexend">User Access Management</h3>
               </CardContent>
             </Card>
 
             {/* Project Portfolio Management Card */}
-            <Card className="bg-white hover:bg-gray-50 cursor-pointer transition-colors">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-primary text-primary-foreground flex items-center justify-center text-xl font-bold mx-auto mb-4 rounded">
-                  <ChartBarIcon className="h-6 w-6" />
+            <Card className="bg-white hover:bg-gray-50 hover:shadow-xl hover:scale-105 cursor-pointer transition-all duration-300 shadow-lg w-80">
+              <CardContent className="pt-6 px-6 pb-6 text-center h-32 flex flex-col justify-between">
+                <div className="flex justify-center mb-4">
+                  <DeltekCardIcon />
                 </div>
-                <h3 className="text-gray-900 font-medium">Project Portfolio Management</h3>
+                <h3 className="text-gray-900 font-medium font-lexend">Project Portfolio Management</h3>
               </CardContent>
             </Card>
 
             {/* Risk Manager Card */}
-            <Card className="bg-white hover:bg-gray-50 cursor-pointer transition-colors">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-primary text-primary-foreground flex items-center justify-center text-xl font-bold mx-auto mb-4 rounded">
-                  <ShieldCheckIcon className="h-6 w-6" />
+            <Card className="bg-white hover:bg-gray-50 hover:shadow-xl hover:scale-105 cursor-pointer transition-all duration-300 shadow-lg w-80">
+              <CardContent className="pt-6 px-6 pb-6 text-center h-32 flex flex-col justify-between">
+                <div className="flex justify-center mb-4">
+                  <DeltekCardIcon />
                 </div>
-                <h3 className="text-gray-900 font-medium">Risk manager</h3>
-              </CardContent>
-            </Card>
-
-            {/* Coming Soon Card */}
-            <Card className="bg-gray-100 cursor-not-allowed opacity-60">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-gray-400 text-white flex items-center justify-center text-xl font-bold mx-auto mb-4 rounded">
-                  <QuestionMarkCircleIcon className="h-6 w-6" />
-                </div>
-                <h3 className="text-gray-600 font-medium">Coming soon</h3>
+                <h3 className="text-gray-900 font-medium font-lexend">Risk manager</h3>
               </CardContent>
             </Card>
           </div>
@@ -77,48 +127,24 @@ const AppSelectionPage = () => {
 
         {/* Support Center Section */}
         <div>
-          <h2 className="text-xl text-white mb-6">Support center (Placeholder for now)</h2>
+          <h2 className="text-xl text-white mb-6 font-lexend">Support center (Placeholder for now)</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="flex flex-wrap justify-start gap-6">
             {/* Deltek Support Center Card */}
-            <Card className="bg-white hover:bg-gray-50 cursor-pointer transition-colors">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-primary text-primary-foreground flex items-center justify-center text-xl font-bold mx-auto mb-4 rounded">
-                  <ShieldCheckIcon className="h-6 w-6" />
+            <Card className="bg-white hover:bg-gray-50 hover:shadow-xl hover:scale-105 cursor-pointer transition-all duration-300 shadow-lg w-80">
+              <CardContent className="pt-6 px-6 pb-6 text-center h-32 flex flex-col justify-between">
+                <div className="flex justify-center mb-4">
+                  <DeltekCardIcon />
                 </div>
-                <h3 className="text-gray-900 font-medium">Deltek Support Center</h3>
+                <h3 className="text-gray-900 font-medium font-lexend">Deltek Support Center</h3>
               </CardContent>
             </Card>
-
-            {/* Coming Soon Card */}
-            <Card className="bg-gray-100 cursor-not-allowed opacity-60">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-gray-400 text-white flex items-center justify-center text-xl font-bold mx-auto mb-4 rounded">
-                  <QuestionMarkCircleIcon className="h-6 w-6" />
-                </div>
-                <h3 className="text-gray-600 font-medium">Coming soon</h3>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Decorative Network Icon */}
-        <div className="fixed bottom-8 right-8">
-          <div className="w-24 h-24 opacity-20">
-            <svg viewBox="0 0 100 100" className="w-full h-full text-white fill-current">
-              <circle cx="20" cy="20" r="8" />
-              <circle cx="80" cy="20" r="8" />
-              <circle cx="50" cy="50" r="8" />
-              <circle cx="20" cy="80" r="8" />
-              <circle cx="80" cy="80" r="8" />
-              <line x1="20" y1="20" x2="50" y2="50" stroke="currentColor" strokeWidth="2" />
-              <line x1="80" y1="20" x2="50" y2="50" stroke="currentColor" strokeWidth="2" />
-              <line x1="50" y1="50" x2="20" y2="80" stroke="currentColor" strokeWidth="2" />
-              <line x1="50" y1="50" x2="80" y2="80" stroke="currentColor" strokeWidth="2" />
-            </svg>
           </div>
         </div>
       </div>
+
+      {/* Network Diagram in bottom right */}
+      <NetworkDiagram />
     </div>
   );
 };

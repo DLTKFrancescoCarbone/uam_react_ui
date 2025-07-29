@@ -580,6 +580,38 @@ revo-grid * {
 
 .avatar-fallback {
   border-radius: 4px;
+  background-color: #30659F !important;
+  color: white !important;
+}
+
+/* Button Styles */
+.btn-white {
+  background-color: white !important;
+  color: #374151 !important;
+  border: 1px solid white !important;
+  transition: all 200ms;
+}
+
+.btn-white:hover {
+  background-color: #f9fafb !important;
+  color: #374151 !important;
+}
+
+.btn-white:disabled {
+  background-color: #9ca3af !important;
+  color: #d1d5db !important;
+  border-color: #9ca3af !important;
+  cursor: not-allowed;
+}
+
+.btn-white:focus {
+  background-color: white !important;
+  color: #374151 !important;
+}
+
+.btn-white:active {
+  background-color: #f3f4f6 !important;
+  color: #374151 !important;
 }
 
 /* Utility Classes */
@@ -593,6 +625,11 @@ revo-grid * {
 
 .space-y-8 > * + * {
   margin-top: 2rem;
+}
+
+/* Font Classes */
+.font-lexend {
+  font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 /* Color Utility Classes */

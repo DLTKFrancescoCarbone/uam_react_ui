@@ -20,7 +20,7 @@ const AvatarImage = React.forwardRef(({ className = '', alt = '', ...props }, re
 const AvatarFallback = React.forwardRef(({ className = '', ...props }, ref) => (
   <div
     ref={ref}
-    className={`flex h-full w-full items-center justify-center avatar-fallback bg-muted ${className}`}
+    className={`flex h-full w-full items-center justify-center avatar-fallback ${className}`}
     {...props}
   />
 ));
