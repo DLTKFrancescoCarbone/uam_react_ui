@@ -79,6 +79,16 @@
   font-size: 0.875rem;
   font-weight: 500;
   white-space: nowrap;
+  color: inherit;
+}
+
+/* Ensure white text in active and hover states */
+.sidebar-item-active .sidebar-item-label {
+  color: white;
+}
+
+.sidebar-item-inactive:hover .sidebar-item-label {
+  color: white;
 }
 
 /* Header Styles */
@@ -554,30 +564,5 @@ revo-grid * {
 }
 
 .text-sidebar-icon {
-  color: #373F4E;
-}
-
-/* General text elements that should use body copy color */
-p, span, div:not(.sidebar-item):not(.page-title):not(.modal-title):not(.dashboard-metric-value) {
-  color: #646D82;
-}
-
-/* Ensure headers use the header color */
-h1, h2, h3, h4, h5, h6 {
-  color: #373F4E;
-}
-
-/* Form labels and input text */
-label {
-  color: #373F4E;
-}
-
-/* Table text content */
-td {
-  color: #646D82;
-}
-
-/* Table headers */
-th {
   color: #373F4E;
 }
