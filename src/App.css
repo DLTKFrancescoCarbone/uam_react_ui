@@ -1,0 +1,15 @@
+.App {
+  text-align: left;
+}
+
+/* Ensure full height layout */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Login gradient background */
+.bg-login-gradient {
+  background: linear-gradient(135deg, #362C66 0%, #543C67 50%, #804A98 100%);
+}
