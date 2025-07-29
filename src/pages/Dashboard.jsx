@@ -100,13 +100,15 @@ const Dashboard = () => {
   const getSeverityVariant = (severity) => {
     switch (severity) {
       case 'success':
-        return 'default';
+        return 'success';
       case 'warning':
-        return 'secondary';
+        return 'warning';
       case 'error':
-        return 'destructive';
+        return 'error';
+      case 'info':
+        return 'info';
       default:
-        return 'outline';
+        return 'info';
     }
   };
 
@@ -139,14 +141,18 @@ const Dashboard = () => {
                 Welcome back! Here's what's happening with your UAM platform.
               </p>
             </div>
-            <div className="page-timestamp">
-              Last updated: {new Date().toLocaleTimeString()}
-            </div>
           </div>
 
           {/* Main Content Container */}
           <Card className="main-content-card">
             <CardContent className="main-content-body space-y-4">
+              {/* Last Updated Timestamp */}
+              <div className="flex justify-end">
+                <div className="page-timestamp">
+                  Last updated: {new Date().toLocaleTimeString()}
+                </div>
+              </div>
+              
               {/* Key Metrics */}
               <div className="metrics-grid">
                 <Card>

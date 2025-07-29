@@ -1,4 +1,45 @@
-/* Theme CSS - Centralized styling for scalability */
+l/* Theme CSS - Centralized styling for scalability */
+
+/* Badge Color Classes */
+.badge-info {
+  background-color: oklch(0.74 0.16 232.661);
+  color: oklch(0.29 0.066 243.157);
+  border: transparent;
+}
+
+.badge-info:hover {
+  background-color: oklch(0.68 0.16 232.661);
+}
+
+.badge-success {
+  background-color: oklch(0.76 0.177 163.223);
+  color: oklch(0.37 0.077 168.94);
+  border: transparent;
+}
+
+.badge-success:hover {
+  background-color: oklch(0.70 0.177 163.223);
+}
+
+.badge-warning {
+  background-color: oklch(0.82 0.189 84.429);
+  color: oklch(0.41 0.112 45.904);
+  border: transparent;
+}
+
+.badge-warning:hover {
+  background-color: oklch(0.76 0.189 84.429);
+}
+
+.badge-error {
+  background-color: oklch(0.71 0.194 13.428);
+  color: oklch(0.27 0.105 12.094);
+  border: transparent;
+}
+
+.badge-error:hover {
+  background-color: oklch(0.65 0.194 13.428);
+}
 
 /* Sidebar Styles */
 .sidebar-container {
