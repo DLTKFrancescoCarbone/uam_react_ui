@@ -13,8 +13,8 @@ RUN npm ci --legacy-peer-deps
 # Copy all files
 COPY . .
 
-# Build the app
-RUN npm run build
+# Build the app with legacy peer deps flag
+RUN npm run build --legacy-peer-deps
 
 # Production environment
 FROM nginx:stable-alpine
@@ -22,8 +22,8 @@ FROM nginx:stable-alpine
 # Copy build files from build stage
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Copy nginx configuration if needed
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port
 EXPOSE 80
