@@ -625,6 +625,7 @@ l/* Theme CSS - Centralized styling for scalability */
   --revo-cell-text-overflow: initial;
   --revo-cell-white-space: normal;
   --revo-header-padding: 0 8px;
+  --revo-grid-font-family: 'Lexend', sans-serif;
 }
 
 /* Ensure RevoGrid header uses the theme variable for background */
@@ -639,6 +640,7 @@ revo-grid {
   align-items: center !important;
   justify-content: flex-start !important;
   padding: 0 8px !important;
+  font-family: var(--revo-grid-font-family) !important;
 }
 
 .revogrid-container .rgCell-text,
@@ -652,6 +654,7 @@ revo-grid {
   justify-content: flex-start !important;
   padding-left: 0 !important;
   margin-left: 0 !important;
+  font-family: var(--revo-grid-font-family) !important;
 }
 
 .revogrid-container .rgCell .badge,

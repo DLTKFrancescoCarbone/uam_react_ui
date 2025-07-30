@@ -196,9 +196,6 @@ const UserTable = ({ className = '' }) => {
     }
   ];
 
-  // Calculate total width of all columns
-  const totalWidth = columns.reduce((sum, col) => sum + (col.size || 0), 0);
-
   return (
     <div
       className={`flex-1 mb-5 h-full relative revogrid-scrollable-container ${className}`}
