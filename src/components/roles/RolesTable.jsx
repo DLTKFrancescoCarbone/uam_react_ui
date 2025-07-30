@@ -55,10 +55,10 @@ const RolesTable = ({
   // Actions cell component
   const ActionsCell = ({ model, prop, value }) => (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
+      <DropdownMenuTrigger>
+        <div className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-8 w-8 p-0">
           <EllipsisVerticalIcon className="h-4 w-4" />
-        </Button>
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => onEditRole(model.id)}>

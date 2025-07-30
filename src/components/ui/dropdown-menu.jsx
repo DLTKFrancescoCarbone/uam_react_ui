@@ -26,14 +26,20 @@ const DropdownMenu = ({ children }) => {
   );
 };
 
-const DropdownMenuTrigger = ({ children, isOpen, setIsOpen }) => {
+const DropdownMenuTrigger = ({ children, isOpen, setIsOpen, asChild }) => {
+  if (asChild) {
+    return React.cloneElement(children, {
+      onClick: () => setIsOpen(!isOpen)
+    });
+  }
+  
   return (
-    <button
+    <div
       onClick={() => setIsOpen(!isOpen)}
-      className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-8 w-8 shrink-0"
+      className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-8 w-8 shrink-0 cursor-pointer"
     >
       {children}
-    </button>
+    </div>
   );
 };
 
