@@ -8,11 +8,16 @@ import AddUserModal from '../components/users/AddUserModal';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Select } from '../components/ui/select';
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '../components/ui/select-shadcn';
 import { 
   UserPlusIcon, 
   MagnifyingGlassIcon,
-  FunnelIcon,
   ArrowDownTrayIcon
 } from '@heroicons/react/24/outline';
 
@@ -57,9 +62,6 @@ const UsersPage = () => {
     setSearchTerm(e.target.value);
   };
 
-  const handleFilterChange = (e) => {
-    setFilterStatus(e.target.value);
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -119,15 +121,16 @@ const UsersPage = () => {
 
                       {/* Status Filter */}
                       <div className="flex items-center gap-2">
-                        <Select 
-                          value={filterStatus}
-                          onChange={handleFilterChange}
-                          className="w-48"
-                        >
-                          <option value="all">All Users</option>
-                          <option value="active">Active</option>
-                          <option value="inactive">Inactive</option>
-                          <option value="pending">Pending</option>
+                        <Select value={filterStatus} onValueChange={setFilterStatus}>
+                          <SelectTrigger className="w-48">
+                            <SelectValue placeholder="Filter by status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Users</SelectItem>
+                            <SelectItem value="active">Active</SelectItem>
+                            <SelectItem value="inactive">Inactive</SelectItem>
+                            <SelectItem value="pending">Pending</SelectItem>
+                          </SelectContent>
                         </Select>
                       </div>
                     </div>

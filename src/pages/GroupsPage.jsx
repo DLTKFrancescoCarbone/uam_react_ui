@@ -10,7 +10,13 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
-import { Select } from '../components/ui/select';
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '../components/ui/select-shadcn';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -22,7 +28,6 @@ import { mockGroups, getDepartments } from '../data/mockGroups';
 import { 
   UserGroupIcon, 
   MagnifyingGlassIcon,
-  FunnelIcon,
   PlusIcon,
   PencilIcon,
   TrashIcon,
@@ -85,9 +90,6 @@ const GroupsPage = () => {
     setSearchTerm(e.target.value);
   };
 
-  const handleFilterChange = (e) => {
-    setFilterDepartment(e.target.value);
-  };
 
   const handleViewModeChange = (newViewMode) => {
     setViewMode(newViewMode);
@@ -159,16 +161,17 @@ const GroupsPage = () => {
 
                       {/* Department Filter */}
                       <div className="flex items-center gap-2">
-                        <Select 
-                          value={filterDepartment}
-                          onChange={handleFilterChange}
-                          className="w-48"
-                        >
-                          {departments.map(dept => (
-                            <option key={dept} value={dept}>
-                              {dept === 'all' ? 'All Departments' : dept}
-                            </option>
-                          ))}
+                        <Select value={filterDepartment} onValueChange={setFilterDepartment}>
+                          <SelectTrigger className="w-48">
+                            <SelectValue placeholder="Filter by department" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {departments.map(dept => (
+                              <SelectItem key={dept} value={dept}>
+                                {dept === 'all' ? 'All Departments' : dept}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
                         </Select>
                       </div>
                     </div>

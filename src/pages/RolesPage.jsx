@@ -7,7 +7,13 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
-import { Select } from '../components/ui/select';
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '../components/ui/select-shadcn';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -22,7 +28,6 @@ import { mockRoles } from '../data/mockRoles';
 import { 
   CogIcon, 
   MagnifyingGlassIcon,
-  FunnelIcon,
   PlusIcon,
   PencilIcon,
   TrashIcon,
@@ -79,9 +84,6 @@ const RolesPage = () => {
     setSearchTerm(e.target.value);
   };
 
-  const handleFilterChange = (e) => {
-    setFilterType(e.target.value);
-  };
 
   const handleViewModeChange = (newViewMode) => {
     setViewMode(newViewMode);
@@ -143,14 +145,15 @@ const RolesPage = () => {
 
                       {/* Type Filter */}
                       <div className="flex items-center gap-2">
-                        <Select 
-                          value={filterType}
-                          onChange={handleFilterChange}
-                          className="w-48"
-                        >
-                          <option value="all">All Roles</option>
-                          <option value="composite">Composite Roles</option>
-                          <option value="simple">Simple Roles</option>
+                        <Select value={filterType} onValueChange={setFilterType}>
+                          <SelectTrigger className="w-48">
+                            <SelectValue placeholder="Filter by type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Roles</SelectItem>
+                            <SelectItem value="composite">Composite Roles</SelectItem>
+                            <SelectItem value="simple">Simple Roles</SelectItem>
+                          </SelectContent>
                         </Select>
                       </div>
                     </div>
