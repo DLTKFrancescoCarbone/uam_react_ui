@@ -2,20 +2,10 @@ import React, { useState } from 'react';
 import { RevoGrid, Template } from '@revolist/react-datagrid';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-} from '../ui/dropdown-menu';
 import { 
   UserGroupIcon, 
-  PencilIcon,
-  TrashIcon,
-  UsersIcon,
-  CogIcon,
-  EllipsisVerticalIcon
+  EyeIcon,
+  TrashIcon
 } from '@heroicons/react/24/outline';
 
 const GroupsTable = ({ 
@@ -77,35 +67,22 @@ const GroupsTable = ({
 
   // Actions cell component
   const ActionsCell = ({ model, prop, value }) => (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <EllipsisVerticalIcon className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => onEditGroup(model.id)}>
-          <PencilIcon className="h-4 w-4 mr-2" />
-          Edit Group
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onViewMembers(model.id)}>
-          <UsersIcon className="h-4 w-4 mr-2" />
-          View Members
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onViewRoles(model.id)}>
-          <CogIcon className="h-4 w-4 mr-2" />
-          View Roles
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem 
-          onClick={() => onDeleteGroup(model.id)}
-          className="text-destructive focus:text-destructive"
-        >
-          <TrashIcon className="h-4 w-4 mr-2" />
-          Delete Group
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex items-center space-x-2">
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        onClick={() => onEditGroup(model.id)}
+      >
+        <EyeIcon className="h-4 w-4 text-gray-600" />
+      </Button>
+      <Button 
+        variant="ghost" 
+        size="icon"
+        onClick={() => onDeleteGroup(model.id)}
+      >
+        <TrashIcon className="h-4 w-4 text-gray-600" />
+      </Button>
+    </div>
   );
 
   // Header template for consistent background

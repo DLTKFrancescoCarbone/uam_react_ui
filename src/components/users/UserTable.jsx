@@ -9,6 +9,7 @@ import UserDetailPanel from './UserDetailPanel';
 const UserTable = ({ className = '' }) => {
   // Only include properties defined in columns to prevent extra columns
   const columnProps = [
+    'id',
     'select',
     'username',
     'firstName',

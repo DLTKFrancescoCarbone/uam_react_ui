@@ -1,19 +1,11 @@
 import React, { useState } from 'react';
 import { RevoGrid, Template } from '@revolist/react-datagrid';
 import { Badge } from '../ui/badge';
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-} from '../ui/dropdown-menu';
+import { Button } from '../ui/button';
 import { 
   CogIcon, 
-  PencilIcon,
-  TrashIcon,
-  UsersIcon,
-  EllipsisVerticalIcon
+  EyeIcon,
+  TrashIcon
 } from '@heroicons/react/24/outline';
 
 const RolesTable = ({ 
@@ -66,31 +58,22 @@ const RolesTable = ({
 
   // Actions cell component
   const ActionsCell = ({ model, prop, value }) => (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <div className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-8 w-8 p-0">
-          <EllipsisVerticalIcon className="h-4 w-4" />
-        </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => onEditRole(model.id)}>
-          <PencilIcon className="h-4 w-4 mr-2" />
-          Edit Role
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onViewUsers(model.id)}>
-          <UsersIcon className="h-4 w-4 mr-2" />
-          View Users
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem 
-          onClick={() => onDeleteRole(model.id)}
-          className="text-destructive focus:text-destructive"
-        >
-          <TrashIcon className="h-4 w-4 mr-2" />
-          Delete Role
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex items-center space-x-2">
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        onClick={() => onEditRole(model.id)}
+      >
+        <EyeIcon className="h-4 w-4 text-gray-600" />
+      </Button>
+      <Button 
+        variant="ghost" 
+        size="icon"
+        onClick={() => onDeleteRole(model.id)}
+      >
+        <TrashIcon className="h-4 w-4 text-gray-600" />
+      </Button>
+    </div>
   );
 
   // Header template for consistent background

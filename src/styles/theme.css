@@ -731,3 +731,23 @@ revo-grid {
 .revogrid-container .rgHeaderCell {
   background: #EDF0F6 !important;
 }
+
+/* RevoGrid text color customization to match application theme */
+/* Body text in cells - match application body text color */
+.revogrid-container .rgCell {
+  color: #646D82 !important;
+}
+
+/* Header text - match application header text color (darker gray) */
+.revogrid-container .rgHeaderCell {
+  color: #373F4E !important;
+}
+
+/* Ensure text color applies to cell content and header content */
+.revogrid-container .rgCell-text {
+  color: #646D82 !important;
+}
+
+.revogrid-container .rgHeaderCell-text {
+  color: #373F4E !important;
+}
