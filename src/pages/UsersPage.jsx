@@ -72,8 +72,8 @@ const UsersPage = () => {
           {/* Header Section */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
             <div className="space-y-1">
-              <h1 className="text-3xl font-bold tracking-tight">User Management</h1>
-              <p className="text-muted-foreground">
+              <h1 className="page-title">User Management</h1>
+              <p className="page-description">
                 Manage users, their roles, and group memberships.
               </p>
             </div>
@@ -87,6 +87,7 @@ const UsersPage = () => {
                 Export
               </Button>
               <Button 
+                variant="primary-header"
                 onClick={handleCreateUser}
                 className="shrink-0"
               >
@@ -98,7 +99,7 @@ const UsersPage = () => {
 
           {/* Main Content Container */}
           <Card className="main-content-card">
-            <CardContent className="main-content-body space-y-8">
+            <CardContent className="main-content-body space-y-2">
               {/* Search and Filter Section */}
               <Card>
                 <CardContent className="pt-6">
@@ -118,7 +119,6 @@ const UsersPage = () => {
 
                       {/* Status Filter */}
                       <div className="flex items-center gap-2">
-                        <FunnelIcon className="h-4 w-4 text-muted-foreground" />
                         <Select 
                           value={filterStatus}
                           onChange={handleFilterChange}

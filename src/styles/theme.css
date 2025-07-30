@@ -525,48 +525,6 @@ l/* Theme CSS - Centralized styling for scalability */
   background-color: #212631;
 }
 
-/* RevoGrid Styling */
-revo-grid {
-  --rgrid-color-border: hsl(var(--border));
-  --rgrid-color-border-focus: hsl(var(--ring));
-  --rgrid-color-bg-primary: hsl(var(--background));
-  --rgrid-color-bg-primary-hover: hsl(var(--muted));
-  --rgrid-color-text-primary: hsl(var(--foreground));
-  --rgrid-header-border-color: hsl(var(--border));
-  --rgrid-header-bottom-border: hsl(var(--border));
-  --rgrid-color-border-header: hsl(var(--border));
-  --rgrid-header-border: hsl(var(--border));
-  --rgrid-color-header-border: hsl(var(--border));
-  --rgrid-font-size: 14px;
-  --rgrid-font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-}
-
-/* Additional RevoGrid header border targeting */
-revo-grid [data-rgheadercell],
-revo-grid .rgHeaderCell {
-  border-bottom: 1px solid hsl(var(--border)) !important;
-}
-
-/* RevoGrid container and viewport borders */
-revo-grid,
-revo-grid .rgViewport,
-revo-grid .rgViewportContainer,
-revo-grid .rgTable,
-revo-grid .rgTableContainer {
-  border: 1px solid hsl(var(--border)) !important;
-  border-bottom: 1px solid hsl(var(--border)) !important;
-}
-
-/* Target all borders within RevoGrid */
-revo-grid * {
-  border-color: hsl(var(--border)) !important;
-}
-
-/* RevoGrid Height */
-.revogrid-container {
-  height: 600px;
-}
-
 /* Avatar Styles */
 .avatar-container {
   border-radius: 4px;
@@ -614,6 +572,16 @@ revo-grid * {
   color: #374151 !important;
 }
 
+/* Primary Header Button Style */
+.primary-header {
+  background-color: #043852 !important;
+  color: white !important;
+}
+
+.primary-header:hover {
+  background-color: rgba(4, 56, 82, 0.9) !important;
+}
+
 /* Utility Classes */
 .space-y-1 > * + * {
   margin-top: 0.25rem;
@@ -643,4 +611,92 @@ revo-grid * {
 
 .text-sidebar-icon {
   color: #373F4E;
+}
+
+/* RevoGrid Custom Variables */
+:root {
+  --revo-grid-header-border: transparent;
+  --revo-grid-header-bg: hsl(var(--background));
+  --revo-grid-header-color: hsl(var(--foreground));
+  --revo-grid-cell-border: hsl(var(--border));
+  --revo-cell-padding: 0 8px;
+  --revo-cell-text-align: left;
+  --revo-cell-vertical-align: middle;
+  --revo-cell-text-overflow: initial;
+  --revo-cell-white-space: normal;
+  --revo-header-padding: 0 8px;
+}
+
+/* RevoGrid Custom Styles */
+.revogrid-container .rgCell,
+.revogrid-container .rgHeaderCell {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding: 0 8px !important;
+}
+
+.revogrid-container .rgCell-text,
+.revogrid-container .rgHeaderCell-text {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+.revogrid-container .rgCell .badge,
+.revogrid-container .rgCell .icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Fix for button alignment in cells */
+.revogrid-container .rgCell button {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Ensure specific columns are not truncated */
+.revogrid-container [data-prop="description"] .rgCell-text,
+.revogrid-container [data-prop="department"] .rgCell-text,
+.revogrid-container [data-prop="manager"] .rgCell-text,
+.revogrid-container [data-prop="email"] .rgCell-text {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+/* Fix for header alignment with content */
+.revogrid-container .rgHeaderCell {
+  text-indent: 0 !important;
+  padding-left: 8px !important;
+  text-align: left !important;
+}
+
+.revogrid-container .rgHeaderCell-text {
+  text-indent: 0 !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  text-align: left !important;
+}
+
+/* Ensure all header cells have consistent alignment */
+.revogrid-container th {
+  text-align: left !important;
+}
+
+/* Target specific column headers that might have alignment issues */
+.revogrid-container [data-prop="memberCount"] .rgHeaderCell-text,
+.revogrid-container [data-prop="roleCount"] .rgHeaderCell-text,
+.revogrid-container [data-prop="userCount"] .rgHeaderCell-text,
+.revogrid-container [data-prop="created"] .rgHeaderCell-text,
+.revogrid-container [data-prop="createdDate"] .rgHeaderCell-text {
+  text-align: left !important;
+  justify-content: flex-start !important;
 }

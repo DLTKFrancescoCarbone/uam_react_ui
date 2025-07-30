@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { RevoGrid, Template } from '@revolist/react-datagrid';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
-import { Eye, Edit, Trash2 } from 'lucide-react';
+import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { mockUsers } from '../../data/mockUsers';
 import UserDetailPanel from './UserDetailPanel';
 
@@ -60,17 +60,22 @@ const UserTable = () => {
     <div className="flex items-center space-x-2">
       <Button 
         variant="ghost" 
-        size="sm" 
-        className="h-8 w-8 p-0"
+        size="icon" 
         onClick={() => handleUserClick(model)}
       >
-        <Eye size={16} className="text-gray-600" />
+        <EyeIcon className="h-4 w-4 text-gray-600" />
       </Button>
-      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-        <Edit size={16} className="text-gray-600" />
+      <Button 
+        variant="ghost" 
+        size="icon"
+      >
+        <PencilIcon className="h-4 w-4 text-gray-600" />
       </Button>
-      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-        <Trash2 size={16} className="text-gray-600" />
+      <Button 
+        variant="ghost" 
+        size="icon"
+      >
+        <TrashIcon className="h-4 w-4 text-gray-600" />
       </Button>
     </div>
   );
@@ -81,6 +86,8 @@ const UserTable = () => {
       prop: 'select',
       name: '',
       size: 50,
+      minSize: 50,
+      autoSize: true,
       cellTemplate: Template(() => (
         <input 
           type="checkbox" 
@@ -92,44 +99,58 @@ const UserTable = () => {
       prop: 'username',
       name: 'Username',
       size: 150,
+      minSize: 150,
+      autoSize: true,
       cellTemplate: Template(UsernameCell)
     },
     {
       prop: 'firstName',
       name: 'First Name',
-      size: 150
+      size: 150,
+      minSize: 150,
+      autoSize: true
     },
     {
       prop: 'lastName',
       name: 'Last Name',
-      size: 150
+      size: 150,
+      minSize: 150,
+      autoSize: true
     },
     {
       prop: 'email',
       name: 'Email',
-      size: 250
+      size: 250,
+      minSize: 200,
+      autoSize: true
     },
     {
       prop: 'status',
       name: 'Status',
       size: 100,
+      minSize: 100,
+      autoSize: true,
       cellTemplate: Template(StatusCell)
     },
     {
       prop: 'created',
       name: 'Created',
-      size: 180
+      size: 180,
+      minSize: 180,
+      autoSize: true
     },
     {
       prop: 'actions',
       name: 'Actions',
       size: 120,
+      minSize: 120,
+      autoSize: true,
       cellTemplate: Template(ActionsCell)
     }
   ];
 
   return (
-    <div className="w-full relative">
+    <div className="w-full h-[calc(100vh-300px)] relative">
       <RevoGrid
         source={users}
         columns={columns}
@@ -140,6 +161,9 @@ const UserTable = () => {
         rowSize={45}
         readonly={true}
         className="revogrid-container"
+        autoSizeColumn={true}
+        trimmedRows={false}
+        exporting={true}
       />
       
       {/* User Detail Panel */}

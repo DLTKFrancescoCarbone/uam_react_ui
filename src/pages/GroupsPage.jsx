@@ -4,6 +4,8 @@ import Header from '../components/layout/Header';
 import Sidebar from '../components/layout/Sidebar';
 import Footer from '../components/layout/Footer';
 import CreateGroupModal from '../components/groups/CreateGroupModal';
+import GroupsTable from '../components/groups/GroupsTable';
+import ViewToggle from '../components/ui/view-toggle';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -34,6 +36,9 @@ const GroupsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDepartment, setFilterDepartment] = useState('all');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [viewMode, setViewMode] = useState(() => {
+    return localStorage.getItem('groupsViewMode') || 'card';
+  });
 
   // Use mock groups data
   const [groups] = useState(mockGroups);
@@ -84,6 +89,11 @@ const GroupsPage = () => {
     setFilterDepartment(e.target.value);
   };
 
+  const handleViewModeChange = (newViewMode) => {
+    setViewMode(newViewMode);
+    localStorage.setItem('groupsViewMode', newViewMode);
+  };
+
   const filteredGroups = groups.filter(group => {
     const matchesSearch = group.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          group.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -116,20 +126,20 @@ const GroupsPage = () => {
           {/* Header Section */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
             <div className="space-y-1">
-              <h1 className="text-3xl font-bold tracking-tight">Group Management</h1>
-              <p className="text-muted-foreground">
+              <h1 className="page-title">Group Management</h1>
+              <p className="page-description">
                 Manage groups, members, and group role assignments.
               </p>
             </div>
-            <Button onClick={handleCreateGroup} className="shrink-0">
+            <Button variant="primary-header" onClick={handleCreateGroup} className="shrink-0">
               <PlusIcon className="h-4 w-4 mr-2" />
-              Create Group
+              Add Group
             </Button>
           </div>
 
           {/* Main Content Container */}
           <Card className="main-content-card">
-            <CardContent className="main-content-body space-y-8">
+            <CardContent className="main-content-body space-y-2">
               {/* Search and Filter Section */}
               <Card>
                 <CardContent className="pt-6">
@@ -149,7 +159,6 @@ const GroupsPage = () => {
 
                       {/* Department Filter */}
                       <div className="flex items-center gap-2">
-                        <FunnelIcon className="h-4 w-4 text-muted-foreground" />
                         <Select 
                           value={filterDepartment}
                           onChange={handleFilterChange}
@@ -164,128 +173,127 @@ const GroupsPage = () => {
                       </div>
                     </div>
 
-                    {/* Results Count */}
-                    <div className="text-sm text-muted-foreground whitespace-nowrap">
-                      Showing {filteredGroups.length} of {groups.length} groups
+                    <div className="flex items-center gap-4">
+                      {/* Results Count */}
+                      <div className="text-sm text-muted-foreground whitespace-nowrap">
+                        Showing {filteredGroups.length} of {groups.length} groups
+                      </div>
+                      
+                      {/* View Toggle */}
+                      <ViewToggle 
+                        viewMode={viewMode} 
+                        onViewModeChange={handleViewModeChange} 
+                      />
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Groups Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredGroups.map((group) => (
-                  <Card key={group.id} className="hover:shadow-lg transition-shadow duration-200">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-center gap-3 min-w-0 flex-1">
-                          <div className="p-2 bg-primary/10 rounded-lg shrink-0">
-                            <UserGroupIcon className="h-5 w-5 text-primary" />
-                          </div>
-                          <div className="space-y-1 min-w-0">
-                            <CardTitle className="text-lg truncate">{group.name}</CardTitle>
-                            <Badge variant={getDepartmentColor(group.department)} className="text-xs">
-                              {group.department}
-                            </Badge>
-                          </div>
-                        </div>
-                        
-                        <DropdownMenu>
-                          <DropdownMenuTrigger>
-                            <EllipsisVerticalIcon className="h-4 w-4" />
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleEditGroup(group.id)}>
-                              <PencilIcon className="h-4 w-4 mr-2" />
-                              Edit Group
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleViewMembers(group.id)}>
-                              <UsersIcon className="h-4 w-4 mr-2" />
-                              View Members
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleViewRoles(group.id)}>
-                              <CogIcon className="h-4 w-4 mr-2" />
-                              View Roles
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem 
-                              onClick={() => handleDeleteGroup(group.id)}
-                              destructive
-                            >
-                              <TrashIcon className="h-4 w-4 mr-2" />
-                              Delete Group
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </CardHeader>
-
-                    <CardContent className="space-y-4">
-                      <CardDescription className="line-clamp-2">
-                        {group.description}
-                      </CardDescription>
-
-                      {/* Stats */}
-                      <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                        <div className="flex items-center gap-2 text-sm">
-                          <UsersIcon className="h-4 w-4 text-muted-foreground" />
-                          <span className="font-medium">{group.memberCount}</span>
-                          <span className="text-muted-foreground">members</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm">
-                          <CogIcon className="h-4 w-4 text-muted-foreground" />
-                          <span className="font-medium">{group.roleCount}</span>
-                          <span className="text-muted-foreground">roles</span>
-                        </div>
-                      </div>
-
-                      {/* Attributes */}
-                      {Object.keys(group.attributes).length > 0 && (
-                        <div className="space-y-2">
-                          <h4 className="text-sm font-medium">Attributes:</h4>
-                          <div className="flex flex-wrap gap-1">
-                            {Object.entries(group.attributes).slice(0, 3).map(([key, values]) => (
-                              values.slice(0, 2).map((value, index) => (
-                                <Badge key={`${key}-${index}`} variant="outline" className="text-xs">
-                                  {key}: {value}
-                                </Badge>
-                              ))
-                            ))}
-                            {Object.values(group.attributes).flat().length > 6 && (
-                              <Badge variant="outline" className="text-xs">
-                                +{Object.values(group.attributes).flat().length - 6} more
+              {/* Groups Content - Card or Table View */}
+              {viewMode === 'card' ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredGroups.map((group) => (
+                    <Card key={group.id} className="hover:shadow-lg transition-shadow duration-200">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-center gap-3 min-w-0 flex-1">
+                            <div className="p-2 bg-primary/10 rounded-lg shrink-0">
+                              <UserGroupIcon className="h-5 w-5 text-primary" />
+                            </div>
+                            <div className="space-y-1 min-w-0">
+                              <CardTitle className="text-lg truncate">{group.name}</CardTitle>
+                              <Badge variant={getDepartmentColor(group.department)} className="text-xs">
+                                {group.department}
                               </Badge>
-                            )}
+                            </div>
+                          </div>
+                          
+                          <DropdownMenu>
+                            <DropdownMenuTrigger>
+                              <EllipsisVerticalIcon className="h-4 w-4" />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem onClick={() => handleEditGroup(group.id)}>
+                                <PencilIcon className="h-4 w-4 mr-2" />
+                                Edit Group
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleViewMembers(group.id)}>
+                                <UsersIcon className="h-4 w-4 mr-2" />
+                                View Members
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleViewRoles(group.id)}>
+                                <CogIcon className="h-4 w-4 mr-2" />
+                                View Roles
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem 
+                                onClick={() => handleDeleteGroup(group.id)}
+                                className="text-destructive focus:text-destructive"
+                              >
+                                <TrashIcon className="h-4 w-4 mr-2" />
+                                Delete Group
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </CardHeader>
+
+                      <CardContent className="space-y-4">
+                        <CardDescription className="line-clamp-2">
+                          {group.description}
+                        </CardDescription>
+
+                        {/* Stats */}
+                        <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                          <div className="flex items-center gap-2 text-sm">
+                            <UsersIcon className="h-4 w-4 text-muted-foreground" />
+                            <span className="font-medium">{group.memberCount}</span>
+                            <span className="text-muted-foreground">members</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <CogIcon className="h-4 w-4 text-muted-foreground" />
+                            <span className="font-medium">{group.roleCount}</span>
+                            <span className="text-muted-foreground">roles</span>
                           </div>
                         </div>
-                      )}
-                    </CardContent>
+                      </CardContent>
 
-                    <CardFooter className="pt-0">
-                      <div className="flex gap-2 w-full">
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => handleEditGroup(group.id)}
-                          className="flex-1"
-                        >
-                          <PencilIcon className="h-3 w-3 mr-1" />
-                          Edit
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => handleViewMembers(group.id)}
-                          className="flex-1"
-                        >
-                          <UsersIcon className="h-3 w-3 mr-1" />
-                          Members
-                        </Button>
-                      </div>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </div>
+                      <CardFooter className="pt-0">
+                        <div className="flex gap-2 w-full">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => handleEditGroup(group.id)}
+                            className="flex-1"
+                          >
+                            <PencilIcon className="h-3 w-3 mr-1" />
+                            Edit
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => handleViewMembers(group.id)}
+                            className="flex-1"
+                          >
+                            <UsersIcon className="h-3 w-3 mr-1" />
+                            Members
+                          </Button>
+                        </div>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Card className="overflow-hidden mb-5">
+                  <GroupsTable
+                    groups={filteredGroups}
+                    onEditGroup={handleEditGroup}
+                    onDeleteGroup={handleDeleteGroup}
+                    onViewMembers={handleViewMembers}
+                    onViewRoles={handleViewRoles}
+                  />
+                </Card>
+              )}
 
               {/* Empty State */}
               {filteredGroups.length === 0 && (
@@ -300,9 +308,9 @@ const GroupsPage = () => {
                       }
                     </CardDescription>
                     {(!searchTerm && filterDepartment === 'all') && (
-                      <Button onClick={handleCreateGroup}>
+                      <Button variant="primary-header" onClick={handleCreateGroup}>
                         <PlusIcon className="h-4 w-4 mr-2" />
-                        Create Group
+                        Add Group
                       </Button>
                     )}
                   </CardContent>
