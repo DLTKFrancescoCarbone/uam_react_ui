@@ -11,11 +11,13 @@ const LoginPage = () => {
 
   const handleLogin = () => {
     if (username.trim() && password.trim()) {
+      localStorage.setItem('isAuthenticated', 'true');
       navigate('/app-selection');
     }
   };
 
   const handleSSO = () => {
+    localStorage.setItem('isAuthenticated', 'true');
     navigate('/app-selection');
   };
 
