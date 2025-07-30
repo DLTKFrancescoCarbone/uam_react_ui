@@ -1,7 +1,6 @@
 import React from 'react';
 import { RevoGrid, Template } from '@revolist/react-datagrid';
 import { Badge } from '../ui/badge';
-import { Button } from '../ui/button';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
