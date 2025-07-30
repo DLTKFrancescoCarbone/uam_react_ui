@@ -143,54 +143,48 @@ const GroupsPage = () => {
           <Card className="main-content-card">
             <CardContent className="main-content-body space-y-2">
               {/* Search and Filter Section */}
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-                    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1">
-                      {/* Search Input */}
-                      <div className="relative flex-1 max-w-sm">
-                        <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          type="text"
-                          placeholder="Search groups..."
-                          value={searchTerm}
-                          onChange={handleSearch}
-                          className="pl-10"
-                        />
-                      </div>
-
-                      {/* Department Filter */}
-                      <div className="flex items-center gap-2">
-                        <Select value={filterDepartment} onValueChange={setFilterDepartment}>
-                          <SelectTrigger className="w-48">
-                            <SelectValue placeholder="Filter by department" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {departments.map(dept => (
-                              <SelectItem key={dept} value={dept}>
-                                {dept === 'all' ? 'All Departments' : dept}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                      {/* Results Count */}
-                      <div className="text-sm text-muted-foreground whitespace-nowrap">
-                        Showing {filteredGroups.length} of {groups.length} groups
-                      </div>
-                      
-                      {/* View Toggle */}
-                      <ViewToggle 
-                        viewMode={viewMode} 
-                        onViewModeChange={handleViewModeChange} 
-                      />
-                    </div>
+              <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between p-4 border rounded-lg bg-card">
+                <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:space-x-4 flex-1">
+                  {/* Search Input */}
+                  <div className="relative w-full sm:w-auto sm:max-w-sm">
+                    <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="text"
+                      placeholder="Search groups..."
+                      value={searchTerm}
+                      onChange={handleSearch}
+                      className="pl-10 w-full"
+                    />
                   </div>
-                </CardContent>
-              </Card>
+
+                  {/* Department Filter */}
+                  <Select value={filterDepartment} onValueChange={setFilterDepartment}>
+                    <SelectTrigger className="w-full sm:w-48">
+                      <SelectValue placeholder="Filter by department" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {departments.map(dept => (
+                        <SelectItem key={dept} value={dept}>
+                          {dept === 'all' ? 'All Departments' : dept}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                  {/* Results Count */}
+                  <div className="text-sm text-muted-foreground whitespace-nowrap">
+                    Showing {filteredGroups.length} of {groups.length} groups
+                  </div>
+                  
+                  {/* View Toggle */}
+                  <ViewToggle 
+                    viewMode={viewMode} 
+                    onViewModeChange={handleViewModeChange} 
+                  />
+                </div>
+              </div>
 
               {/* Groups Content - Card or Table View */}
               {viewMode === 'card' ? (
@@ -287,7 +281,7 @@ const GroupsPage = () => {
                   ))}
                 </div>
               ) : (
-                <Card className="overflow-hidden mb-5">
+                <Card className="overflow-visible mb-5 h-full">
                   <GroupsTable
                     groups={filteredGroups}
                     onEditGroup={handleEditGroup}

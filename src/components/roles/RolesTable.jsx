@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RevoGrid, Template } from '@revolist/react-datagrid';
 import { Badge } from '../ui/badge';
 import {
@@ -22,6 +22,23 @@ const RolesTable = ({
   onDeleteRole, 
   onViewUsers 
 }) => {
+  // Only include properties defined in columns to prevent extra columns
+  const columnProps = [
+    'select',
+    'name',
+    'description',
+    'composite',
+    'userCount',
+    'createdDate'
+  ];
+  const [filteredRoles] = useState(
+    roles.map(role =>
+      Object.fromEntries(
+        Object.entries(role).filter(([key]) => columnProps.includes(key))
+      )
+    )
+  );
+
   // Type cell component with badge
   const TypeCell = ({ model, prop, value }) => {
     const isComposite = model.composite;
@@ -35,21 +52,17 @@ const RolesTable = ({
     );
   };
 
-  // Role name cell component
+  // Role name cell component - now read-only
   const RoleNameCell = ({ model, prop, value }) => (
     <div className="flex items-center gap-3">
       <div className="p-1.5 bg-primary/10 rounded-lg shrink-0">
         <CogIcon className="h-4 w-4 text-primary" />
       </div>
-      <button 
-        className="text-blue-600 hover:text-blue-800 underline text-left font-medium"
-        onClick={() => onEditRole(model.id)}
-      >
+      <span className="text-left font-medium">
         {value}
-      </button>
+      </span>
     </div>
   );
-
 
   // Actions cell component
   const ActionsCell = ({ model, prop, value }) => (
@@ -80,6 +93,24 @@ const RolesTable = ({
     </DropdownMenu>
   );
 
+  // Header template for consistent background
+  const HeaderTemplate = ({ name }) => (
+    <div
+      style={{
+        background: '#EDF0F6',
+        minHeight: '45px',
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        paddingLeft: '8px',
+        fontWeight: '600'
+      }}
+    >
+      {name}
+    </div>
+  );
+
   // Column definitions
   const columns = [
     {
@@ -87,10 +118,22 @@ const RolesTable = ({
       name: '',
       size: 50,
       minSize: 50,
+      maxSize: 50,
+      autoSize: false,
       cellTemplate: Template(() => (
         <input 
           type="checkbox" 
           className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+        />
+      )),
+      headerTemplate: Template(() => (
+        <div
+          style={{
+            background: '#EDF0F6',
+            minHeight: '45px',
+            height: '100%',
+            width: '100%',
+          }}
         />
       ))
     },
@@ -99,51 +142,64 @@ const RolesTable = ({
       name: 'Role Name',
       size: 200,
       minSize: 200,
-      autoSize: true,
-      cellTemplate: Template(RoleNameCell)
+      autoSize: false,
+      cellTemplate: Template(RoleNameCell),
+      headerTemplate: Template(() => <HeaderTemplate name="Role Name" />)
     },
     {
       prop: 'description',
       name: 'Description',
       size: 600,
       minSize: 300,
-      autoSize: true
+      autoSize: false,
+      headerTemplate: Template(() => <HeaderTemplate name="Description" />)
     },
     {
       prop: 'composite',
       name: 'Type',
       size: 120,
       minSize: 120,
-      autoSize: true,
-      cellTemplate: Template(TypeCell)
+      autoSize: false,
+      cellTemplate: Template(TypeCell),
+      headerTemplate: Template(() => <HeaderTemplate name="Type" />)
     },
     {
       prop: 'userCount',
       name: 'Users',
       size: 100,
       minSize: 100,
-      autoSize: true
+      autoSize: false,
+      headerTemplate: Template(() => <HeaderTemplate name="Users" />)
     },
     {
       prop: 'createdDate',
       name: 'Created',
       size: 120,
       minSize: 120,
-      autoSize: true
+      autoSize: false,
+      headerTemplate: Template(() => <HeaderTemplate name="Created" />)
     },
     {
       prop: 'actions',
       name: 'Actions',
       size: 120,
       minSize: 120,
-      cellTemplate: Template(ActionsCell)
+      maxSize: 120,
+      autoSize: false,
+      cellTemplate: Template(ActionsCell),
+      pin: 'colPinEnd',
+      columnClass: 'actions-column',
+      headerTemplate: Template(() => <HeaderTemplate name="Actions" />)
     }
   ];
 
   return (
-    <div className="w-full h-[calc(100vh-300px)] relative">
+    <div
+      className={`flex-1 mb-5 h-full relative revogrid-scrollable-container`}
+      style={{ minHeight: 0, width: '100%', overflowX: 'auto' }}
+    >
       <RevoGrid
-        source={roles}
+        source={filteredRoles}
         columns={columns}
         theme="compact"
         resize={true}
@@ -151,8 +207,14 @@ const RolesTable = ({
         rowHeaders={true}
         rowSize={45}
         readonly={true}
-        className="revogrid-container"
+        className="revogrid-container w-full h-full"
         autoSizeColumn={true}
+        useVirtualScrolling={true}
+        stretch={true}
+        height="100%"
+        trimmedRows={false}
+        exporting={true}
+        style={{ width: '100%' }}
       />
     </div>
   );

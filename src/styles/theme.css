@@ -401,7 +401,7 @@ l/* Theme CSS - Centralized styling for scalability */
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  overflow-y: auto;
+  overflow: hidden;
   height: 100%;
 }
 
@@ -616,7 +616,7 @@ l/* Theme CSS - Centralized styling for scalability */
 /* RevoGrid Custom Variables */
 :root {
   --revo-grid-header-border: transparent;
-  --revo-grid-header-bg: hsl(var(--background));
+  --revo-grid-header-bg: #EDF0F6;
   --revo-grid-header-color: hsl(var(--foreground));
   --revo-grid-cell-border: hsl(var(--border));
   --revo-cell-padding: 0 8px;
@@ -625,6 +625,11 @@ l/* Theme CSS - Centralized styling for scalability */
   --revo-cell-text-overflow: initial;
   --revo-cell-white-space: normal;
   --revo-header-padding: 0 8px;
+}
+
+/* Ensure RevoGrid header uses the theme variable for background */
+revo-grid {
+  --header-background: var(--revo-grid-header-bg);
 }
 
 /* RevoGrid Custom Styles */
@@ -699,4 +704,30 @@ l/* Theme CSS - Centralized styling for scalability */
 .revogrid-container [data-prop="createdDate"] .rgHeaderCell-text {
   text-align: left !important;
   justify-content: flex-start !important;
+}
+
+/* RevoGrid Scrollable Container */
+.revogrid-scrollable-container {
+  flex: 1;
+  min-height: 400px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* Enable RevoGrid internal scrolling */
+.revogrid-scrollable-container .revogrid-container {
+  height: 100%;
+  width: 100%;
+}
+
+/* Ensure RevoGrid viewport handles overflow properly */
+.revogrid-scrollable-container .main-viewport,
+.revogrid-scrollable-container .content-area {
+  overflow: auto !important;
+  max-height: 100%;
+}
+
+/* Force RevoGrid header bar background color */
+.revogrid-container .rgHeaderCell {
+  background: #EDF0F6 !important;
 }

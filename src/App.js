@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import AppSelectionPage from './pages/AppSelectionPage';
 import Dashboard from './pages/Dashboard';
 import UsersPage from './pages/UsersPage';
+import UserDetailPage from './pages/UserDetailPage';
 import RolesPage from './pages/RolesPage';
 import GroupsPage from './pages/GroupsPage';
 import './App.css';
@@ -20,6 +21,7 @@ function App() {
           <Route path="/app-selection" element={<AppSelectionPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/users" element={<UsersPage />} />
+          <Route path="/users/:userId" element={<UserDetailPage />} />
           <Route path="/roles" element={<RolesPage />} />
           <Route path="/groups" element={<GroupsPage />} />
         </Routes>

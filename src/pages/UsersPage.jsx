@@ -101,50 +101,44 @@ const UsersPage = () => {
 
           {/* Main Content Container */}
           <Card className="main-content-card">
-            <CardContent className="main-content-body space-y-2">
+            <CardContent className="main-content-body space-y-2 h-full">
               {/* Search and Filter Section */}
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-                    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1">
-                      {/* Search Input */}
-                      <div className="relative flex-1 max-w-sm">
-                        <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          type="text"
-                          placeholder="Search users..."
-                          value={searchTerm}
-                          onChange={handleSearch}
-                          className="pl-10"
-                        />
-                      </div>
-
-                      {/* Status Filter */}
-                      <div className="flex items-center gap-2">
-                        <Select value={filterStatus} onValueChange={setFilterStatus}>
-                          <SelectTrigger className="w-48">
-                            <SelectValue placeholder="Filter by status" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Users</SelectItem>
-                            <SelectItem value="active">Active</SelectItem>
-                            <SelectItem value="inactive">Inactive</SelectItem>
-                            <SelectItem value="pending">Pending</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    {/* Results Count */}
-                    <div className="text-sm text-muted-foreground whitespace-nowrap">
-                      Showing 1,247 users
-                    </div>
+              <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between p-4 border rounded-lg bg-card">
+                <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:space-x-4 flex-1">
+                  {/* Search Input */}
+                  <div className="relative w-full sm:w-auto sm:max-w-sm">
+                    <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="text"
+                      placeholder="Search users..."
+                      value={searchTerm}
+                      onChange={handleSearch}
+                      className="pl-10 w-full"
+                    />
                   </div>
-                </CardContent>
-              </Card>
+
+                  {/* Status Filter */}
+                  <Select value={filterStatus} onValueChange={setFilterStatus}>
+                    <SelectTrigger className="w-full sm:w-48">
+                      <SelectValue placeholder="Filter by status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Users</SelectItem>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="inactive">Inactive</SelectItem>
+                      <SelectItem value="pending">Pending</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Results Count */}
+                <div className="text-sm text-muted-foreground whitespace-nowrap">
+                  Showing 1,247 users
+                </div>
+              </div>
 
               {/* Users Table */}
-              <Card className="overflow-hidden">
+              <Card className="overflow-visible h-full">
                 <UserTable 
                   searchTerm={searchTerm}
                   filterStatus={filterStatus}

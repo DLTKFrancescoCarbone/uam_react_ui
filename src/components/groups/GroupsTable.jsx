@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RevoGrid, Template } from '@revolist/react-datagrid';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
@@ -25,6 +25,24 @@ const GroupsTable = ({
   onViewMembers,
   onViewRoles 
 }) => {
+  // Only include properties defined in columns to prevent extra columns
+  const columnProps = [
+    'select',
+    'name',
+    'department',
+    'memberCount',
+    'roleCount',
+    'manager',
+    'createdDate'
+  ];
+  const [filteredGroups] = useState(
+    groups.map(group =>
+      Object.fromEntries(
+        Object.entries(group).filter(([key]) => columnProps.includes(key))
+      )
+    )
+  );
+
   // Helper function for department badge colors
   const getDepartmentColor = (department) => {
     const colors = {
@@ -45,18 +63,15 @@ const GroupsTable = ({
     </Badge>
   );
 
-  // Group name cell component
+  // Group name cell component - now read-only
   const GroupNameCell = ({ model, prop, value }) => (
     <div className="flex items-center gap-3">
       <div className="p-1.5 bg-primary/10 rounded-lg shrink-0">
         <UserGroupIcon className="h-4 w-4 text-primary" />
       </div>
-      <button 
-        className="text-blue-600 hover:text-blue-800 underline text-left font-medium"
-        onClick={() => onEditGroup(model.id)}
-      >
+      <span className="text-left font-medium">
         {value}
-      </button>
+      </span>
     </div>
   );
 
@@ -93,6 +108,24 @@ const GroupsTable = ({
     </DropdownMenu>
   );
 
+  // Header template for consistent background
+  const HeaderTemplate = ({ name }) => (
+    <div
+      style={{
+        background: '#EDF0F6',
+        minHeight: '45px',
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        paddingLeft: '8px',
+        fontWeight: '600'
+      }}
+    >
+      {name}
+    </div>
+  );
+
   // Column definitions
   const columns = [
     {
@@ -100,11 +133,22 @@ const GroupsTable = ({
       name: '',
       size: 50,
       minSize: 50,
-      autoSize: true,
+      maxSize: 50,
+      autoSize: false,
       cellTemplate: Template(() => (
         <input 
           type="checkbox" 
           className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+        />
+      )),
+      headerTemplate: Template(() => (
+        <div
+          style={{
+            background: '#EDF0F6',
+            minHeight: '45px',
+            height: '100%',
+            width: '100%',
+          }}
         />
       ))
     },
@@ -113,71 +157,87 @@ const GroupsTable = ({
       name: 'Group Name',
       size: 250,
       minSize: 200,
-      autoSize: true,
-      cellTemplate: Template(GroupNameCell)
+      autoSize: false,
+      cellTemplate: Template(GroupNameCell),
+      headerTemplate: Template(() => <HeaderTemplate name="Group Name" />)
     },
     {
       prop: 'department',
       name: 'Department',
       size: 150,
       minSize: 120,
-      autoSize: true,
-      cellTemplate: Template(DepartmentCell)
+      autoSize: false,
+      cellTemplate: Template(DepartmentCell),
+      headerTemplate: Template(() => <HeaderTemplate name="Department" />)
     },
     {
       prop: 'memberCount',
       name: 'Members',
       size: 100,
       minSize: 80,
-      autoSize: true
+      autoSize: false,
+      headerTemplate: Template(() => <HeaderTemplate name="Members" />)
     },
     {
       prop: 'roleCount',
       name: 'Roles',
       size: 100,
       minSize: 80,
-      autoSize: true
+      autoSize: false,
+      headerTemplate: Template(() => <HeaderTemplate name="Roles" />)
     },
     {
       prop: 'manager',
       name: 'Manager',
       size: 200,
       minSize: 150,
-      autoSize: true
+      autoSize: false,
+      headerTemplate: Template(() => <HeaderTemplate name="Manager" />)
     },
     {
       prop: 'createdDate',
       name: 'Created',
       size: 120,
       minSize: 120,
-      autoSize: true
+      autoSize: false,
+      headerTemplate: Template(() => <HeaderTemplate name="Created" />)
     },
     {
       prop: 'actions',
       name: 'Actions',
       size: 120,
       minSize: 120,
-      autoSize: true,
-      cellTemplate: Template(ActionsCell)
+      maxSize: 120,
+      autoSize: false,
+      cellTemplate: Template(ActionsCell),
+      pin: 'colPinEnd',
+      columnClass: 'actions-column',
+      headerTemplate: Template(() => <HeaderTemplate name="Actions" />)
     }
   ];
 
   return (
-    <div className="w-full h-[calc(100vh-300px)] relative">
-      <RevoGrid
-        source={groups}
-        columns={columns}
-        theme="compact"
-        resize={true}
-        range={true}
-        rowHeaders={true}
-        rowSize={45}
-        readonly={true}
-        className="revogrid-container"
-        autoSizeColumn={true}
-        trimmedRows={false}
-        exporting={true}
-      />
+    <div className="flex-1 h-full flex flex-col revogrid-scrollable-container" style={{ minHeight: 0, width: '100%', overflowX: 'auto' }}>
+      <div className="flex-1 h-full mb-5">
+        <RevoGrid
+          source={filteredGroups}
+          columns={columns}
+          theme="compact"
+          resize={true}
+          range={true}
+          rowHeaders={true}
+          rowSize={45}
+          readonly={true}
+          className="revogrid-container w-full h-full"
+          autoSizeColumn={true}
+          trimmedRows={false}
+          exporting={true}
+          useVirtualScrolling={true}
+          stretch={true}
+          height="100%"
+          style={{ width: '100%' }}
+        />
+      </div>
     </div>
   );
 };

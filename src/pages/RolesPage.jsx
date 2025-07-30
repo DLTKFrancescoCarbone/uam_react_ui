@@ -127,52 +127,46 @@ const RolesPage = () => {
           <Card className="main-content-card">
             <CardContent className="main-content-body space-y-2">
               {/* Search and Filter Section */}
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-                    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1">
-                      {/* Search Input */}
-                      <div className="relative flex-1 max-w-sm">
-                        <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          type="text"
-                          placeholder="Search roles..."
-                          value={searchTerm}
-                          onChange={handleSearch}
-                          className="pl-10"
-                        />
-                      </div>
-
-                      {/* Type Filter */}
-                      <div className="flex items-center gap-2">
-                        <Select value={filterType} onValueChange={setFilterType}>
-                          <SelectTrigger className="w-48">
-                            <SelectValue placeholder="Filter by type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Roles</SelectItem>
-                            <SelectItem value="composite">Composite Roles</SelectItem>
-                            <SelectItem value="simple">Simple Roles</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                      {/* Results Count */}
-                      <div className="text-sm text-muted-foreground whitespace-nowrap">
-                        Showing {filteredRoles.length} of {roles.length} roles
-                      </div>
-                      
-                      {/* View Toggle */}
-                      <ViewToggle 
-                        viewMode={viewMode} 
-                        onViewModeChange={handleViewModeChange} 
-                      />
-                    </div>
+              <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between p-4 border rounded-lg bg-card">
+                <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:space-x-4 flex-1">
+                  {/* Search Input */}
+                  <div className="relative w-full sm:w-auto sm:max-w-sm">
+                    <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="text"
+                      placeholder="Search roles..."
+                      value={searchTerm}
+                      onChange={handleSearch}
+                      className="pl-10 w-full"
+                    />
                   </div>
-                </CardContent>
-              </Card>
+
+                  {/* Type Filter */}
+                  <Select value={filterType} onValueChange={setFilterType}>
+                    <SelectTrigger className="w-full sm:w-48">
+                      <SelectValue placeholder="Filter by type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Roles</SelectItem>
+                      <SelectItem value="composite">Composite Roles</SelectItem>
+                      <SelectItem value="simple">Simple Roles</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                  {/* Results Count */}
+                  <div className="text-sm text-muted-foreground whitespace-nowrap">
+                    Showing {filteredRoles.length} of {roles.length} roles
+                  </div>
+                  
+                  {/* View Toggle */}
+                  <ViewToggle 
+                    viewMode={viewMode} 
+                    onViewModeChange={handleViewModeChange} 
+                  />
+                </div>
+              </div>
 
               {/* Roles Content - Card or Table View */}
               {viewMode === 'card' ? (
@@ -259,7 +253,7 @@ const RolesPage = () => {
                   ))}
                 </div>
               ) : (
-                <Card className="overflow-hidden mb-5">
+                <Card className="overflow-visible mb-5 h-full">
                   <RolesTable
                     roles={filteredRoles}
                     onEditRole={handleEditRole}

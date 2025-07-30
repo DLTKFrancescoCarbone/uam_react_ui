@@ -2,12 +2,28 @@ import React, { useState } from 'react';
 import { RevoGrid, Template } from '@revolist/react-datagrid';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
-import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { mockUsers } from '../../data/mockUsers';
 import UserDetailPanel from './UserDetailPanel';
 
-const UserTable = () => {
-  const [users, setUsers] = useState(mockUsers);
+const UserTable = ({ className = '' }) => {
+  // Only include properties defined in columns to prevent extra columns
+  const columnProps = [
+    'select',
+    'username',
+    'firstName',
+    'lastName',
+    'email',
+    'status',
+    'created'
+  ];
+  const [users, setUsers] = useState(
+    mockUsers.map(user =>
+      Object.fromEntries(
+        Object.entries(user).filter(([key]) => columnProps.includes(key))
+      )
+    )
+  );
   const [selectedUser, setSelectedUser] = useState(null);
   const [showDetailPanel, setShowDetailPanel] = useState(false);
 
@@ -45,14 +61,11 @@ const UserTable = () => {
     );
   };
 
-  // Username cell component
+  // Username cell component - now read-only
   const UsernameCell = ({ model, prop, value }) => (
-    <button 
-      className="text-blue-600 hover:text-blue-800 underline text-left"
-      onClick={() => handleUserClick(model)}
-    >
+    <span className="text-left">
       {value}
-    </button>
+    </span>
   );
 
   // Actions cell component
@@ -69,14 +82,26 @@ const UserTable = () => {
         variant="ghost" 
         size="icon"
       >
-        <PencilIcon className="h-4 w-4 text-gray-600" />
-      </Button>
-      <Button 
-        variant="ghost" 
-        size="icon"
-      >
         <TrashIcon className="h-4 w-4 text-gray-600" />
       </Button>
+    </div>
+  );
+
+  // Header template for consistent background
+  const HeaderTemplate = ({ name }) => (
+    <div
+      style={{
+        background: '#EDF0F6',
+        minHeight: '45px',
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        paddingLeft: '8px',
+        fontWeight: '600'
+      }}
+    >
+      {name}
     </div>
   );
 
@@ -87,70 +112,97 @@ const UserTable = () => {
       name: '',
       size: 50,
       minSize: 50,
-      autoSize: true,
+      maxSize: 50,
+      autoSize: false,
       cellTemplate: Template(() => (
         <input 
           type="checkbox" 
           className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+        />
+      )),
+      headerTemplate: Template(() => (
+        <div
+          style={{
+            background: '#EDF0F6',
+            minHeight: '45px',
+            height: '100%',
+            width: '100%',
+          }}
         />
       ))
     },
     {
       prop: 'username',
       name: 'Username',
-      size: 150,
+      size: 200,
       minSize: 150,
-      autoSize: true,
-      cellTemplate: Template(UsernameCell)
+      autoSize: false,
+      cellTemplate: Template(UsernameCell),
+      headerTemplate: Template(() => <HeaderTemplate name="Username" />)
     },
     {
       prop: 'firstName',
       name: 'First Name',
       size: 150,
-      minSize: 150,
-      autoSize: true
+      minSize: 120,
+      autoSize: false,
+      headerTemplate: Template(() => <HeaderTemplate name="First Name" />)
     },
     {
       prop: 'lastName',
       name: 'Last Name',
       size: 150,
-      minSize: 150,
-      autoSize: true
+      minSize: 120,
+      autoSize: false,
+      headerTemplate: Template(() => <HeaderTemplate name="Last Name" />)
     },
     {
       prop: 'email',
       name: 'Email',
       size: 250,
       minSize: 200,
-      autoSize: true
+      autoSize: false,
+      headerTemplate: Template(() => <HeaderTemplate name="Email" />)
     },
     {
       prop: 'status',
       name: 'Status',
-      size: 100,
+      size: 120,
       minSize: 100,
-      autoSize: true,
-      cellTemplate: Template(StatusCell)
+      autoSize: false,
+      cellTemplate: Template(StatusCell),
+      headerTemplate: Template(() => <HeaderTemplate name="Status" />)
     },
     {
       prop: 'created',
       name: 'Created',
       size: 180,
-      minSize: 180,
-      autoSize: true
+      minSize: 160,
+      autoSize: false,
+      headerTemplate: Template(() => <HeaderTemplate name="Created" />)
     },
     {
       prop: 'actions',
       name: 'Actions',
       size: 120,
       minSize: 120,
-      autoSize: true,
-      cellTemplate: Template(ActionsCell)
+      maxSize: 120,
+      autoSize: false,
+      cellTemplate: Template(ActionsCell),
+      pin: 'colPinEnd',
+      columnClass: 'actions-column',
+      headerTemplate: Template(() => <HeaderTemplate name="Actions" />)
     }
   ];
 
+  // Calculate total width of all columns
+  const totalWidth = columns.reduce((sum, col) => sum + (col.size || 0), 0);
+
   return (
-    <div className="w-full h-[calc(100vh-300px)] relative">
+    <div
+      className={`flex-1 mb-5 h-full relative revogrid-scrollable-container ${className}`}
+      style={{ minHeight: 0, width: '100%', overflowX: 'auto' }}
+    >
       <RevoGrid
         source={users}
         columns={columns}
@@ -160,12 +212,16 @@ const UserTable = () => {
         rowHeaders={true}
         rowSize={45}
         readonly={true}
-        className="revogrid-container"
+        className="revogrid-container w-full h-full"
         autoSizeColumn={true}
         trimmedRows={false}
         exporting={true}
+        useVirtualScrolling={true}
+        stretch={true}
+        height="100%"
+        style={{ width: '100%' }}
       />
-      
+
       {/* User Detail Panel */}
       {showDetailPanel && selectedUser && (
         <UserDetailPanel
