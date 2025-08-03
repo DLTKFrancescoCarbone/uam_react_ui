@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalTitle, ModalContent, ModalFooter } from '../ui/modal';
 import { Button } from '../ui/button';
 import { FloatingLabelInput } from '../ui/floating-label-input';
-import { Label } from '../ui/label';
 
 const CreateGroupModal = ({ isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
