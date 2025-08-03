@@ -503,7 +503,7 @@ l/* Theme CSS - Centralized styling for scalability */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem;
+  padding: 1rem;
   border-bottom: 1px solid hsl(var(--border));
 }
 
@@ -512,18 +512,37 @@ l/* Theme CSS - Centralized styling for scalability */
 }
 
 .modal-close-button {
-  margin-left: 1rem;
-  width: 2rem;
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: background-color 200ms;
+  margin-left: 1rem !important;
+  width: 2rem !important;
+  height: 2rem !important;
+  min-width: 2rem !important;
+  min-height: 2rem !important;
+  max-width: 2rem !important;
+  max-height: 2rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  transition: background-color 200ms !important;
+  flex-shrink: 0 !important;
+  border: none !important;
+  background: none !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
 }
 
 .modal-close-button:hover {
-  background-color: hsl(var(--accent));
+  background-color: hsl(var(--accent)) !important;
+  border-radius: 50% !important;
+}
+
+/* Ensure the icon inside doesn't affect the button shape */
+.modal-close-button svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  flex-shrink: 0 !important;
+  pointer-events: none !important;
 }
 
 .modal-title {
@@ -533,7 +552,7 @@ l/* Theme CSS - Centralized styling for scalability */
 }
 
 .modal-body {
-  padding: 1.5rem;
+  padding: 1.25rem;
 }
 
 .modal-footer {
@@ -541,7 +560,7 @@ l/* Theme CSS - Centralized styling for scalability */
   align-items: center;
   justify-content: flex-start;
   gap: 0.75rem;
-  padding: 1.5rem;
+  padding: 1rem;
   border-top: 1px solid hsl(var(--border));
 }
 
@@ -607,63 +626,99 @@ l/* Theme CSS - Centralized styling for scalability */
   background-color: rgba(4, 56, 82, 0.9) !important;
 }
 
-/* Floating Label Input Styles - Production Fix */
+/* Floating Label Input Styles - Exact Flowbite Outlined */
 .floating-label-input {
   position: relative;
 }
 
-.floating-label-input input {
-  height: 48px;
+/* Input field - exact Flowbite classes converted to CSS */
+.floating-label-input .peer {
+  display: block;
+  padding: 1rem 0.625rem 0.625rem 0.625rem; /* pt-4 pb-2.5 px-2.5 */
   width: 100%;
-  padding: 20px 12px 8px 12px !important;
+  font-size: 0.875rem; /* text-sm */
+  color: hsl(var(--foreground));
+  background-color: transparent;
+  border-radius: 0.5rem; /* rounded-lg */
   border: 1px solid hsl(var(--border));
-  border-radius: 6px;
-  background-color: hsl(var(--background));
-  font-size: 14px;
-  transition: border-color 200ms;
-}
-
-.floating-label-input input:focus {
+  appearance: none;
   outline: none;
-  border-color: hsl(var(--ring));
-  box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
-}
-
-.floating-label-input input.error {
-  border-color: #ef4444;
-}
-
-.floating-label-input input.error:focus {
-  border-color: #ef4444;
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
-}
-
-.floating-label-input label {
-  position: absolute;
-  left: 12px;
-  top: 16px;
-  font-size: 14px;
-  color: hsl(var(--muted-foreground));
   transition: all 200ms ease-in-out;
-  pointer-events: none;
-  user-select: none;
-  cursor: text;
 }
 
-.floating-label-input label.floating {
-  top: 4px !important;
-  font-size: 12px !important;
-  font-weight: 500;
-  color: hsl(var(--primary));
+.floating-label-input .peer:focus {
+  outline: none;
+  box-shadow: none; /* ring-0 */
+  border-color: hsl(var(--ring));
 }
 
-.floating-label-input label.error {
+.floating-label-input .peer.error {
+  border-color: #ef4444;
+}
+
+.floating-label-input .peer.error:focus {
+  border-color: #ef4444;
+}
+
+/* Label - exact Flowbite classes converted to CSS */
+.floating-label-input .floating-label {
+  position: absolute;
+  font-size: 0.875rem; /* text-sm */
+  color: hsl(var(--muted-foreground));
+  transition: all 300ms ease-in-out; /* duration-300 */
+  transform: translateY(-1rem) scale(0.75); /* -translate-y-4 scale-75 */
+  top: 0.5rem; /* top-2 */
+  z-index: 10;
+  transform-origin: left top; /* origin-[0] */
+  background-color: hsl(var(--background));
+  padding: 0 0.5rem; /* px-2 */
+  left: 0.5rem; /* Fixed: better padding from left border */
+}
+
+/* When input is placeholder-shown (empty) - label stays in center */
+.floating-label-input .peer:placeholder-shown ~ .floating-label {
+  transform: scale(1) translateY(-50%); /* scale-100 -translate-y-1/2 */
+  top: 50%; /* top-1/2 */
+  left: 0.625rem; /* Match input padding for centered appearance */
+  background-color: transparent; /* No background when inside */
+  padding: 0;
+}
+
+/* When input is focused or has content - label floats to top */
+.floating-label-input .peer:focus ~ .floating-label,
+.floating-label-input .peer:not(:placeholder-shown) ~ .floating-label {
+  transform: translateY(-1rem) scale(0.75); /* -translate-y-4 scale-75 */
+  top: 0.5rem; /* top-2 */
+  background-color: hsl(var(--background)); /* Background for border cutout */
+  padding: 0 0.5rem; /* px-2 */
+}
+
+/* Focus color */
+.floating-label-input .peer:focus ~ .floating-label {
+  color: hsl(var(--ring)); /* peer-focus:text-blue-600 */
+}
+
+/* Error states */
+.floating-label-input .peer.error ~ .floating-label,
+.floating-label-input .floating-label.error {
   color: #ef4444;
 }
 
+/* Read-only states */
+.floating-label-input .peer.readonly {
+  background-color: hsl(var(--muted) / 0.1);
+  cursor: not-allowed;
+  color: hsl(var(--muted-foreground));
+}
+
+.floating-label-input .peer.readonly ~ .floating-label,
+.floating-label-input .floating-label.readonly {
+  color: hsl(var(--muted-foreground) / 0.7);
+}
+
 .floating-label-input .error-message {
-  margin-top: 4px;
-  font-size: 12px;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
   color: #ef4444;
 }
 
@@ -984,48 +1039,3 @@ button.tabs-trigger-underline:hover:not([data-state="active"]) {
   font-weight: 600 !important;
 }
 
-/* Floating Label Input Styles */
-.floating-label-container {
-  position: relative;
-}
-
-.floating-label-input {
-  padding-top: 1rem;
-  padding-bottom: 0.5rem;
-}
-
-.floating-label {
-  position: absolute;
-  left: 0.75rem;
-  top: 0.75rem;
-  font-size: 0.875rem;
-  color: hsl(var(--muted-foreground));
-  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: text;
-  pointer-events: none;
-  user-select: none;
-  transform-origin: left top;
-}
-
-.floating-label.floating {
-  top: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  transform: scale(1);
-}
-
-.floating-label.focused {
-  color: #30659F;
-}
-
-.floating-label.error {
-  color: #dc2626;
-}
-
-/* Ensure smooth transitions for floating labels */
-.floating-label-input:focus + .floating-label,
-.floating-label-input:not(:placeholder-shown) + .floating-label {
-  top: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-}

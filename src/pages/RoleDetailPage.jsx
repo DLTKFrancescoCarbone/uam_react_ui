@@ -257,7 +257,23 @@ const RoleDetailPage = () => {
                     </CardHeader>
                     <CardContent className="space-y-6">
                       {/* Role Type Display */}
-                      <div className="flex items-center justify-between">
+                      {isEditing ? (
+                        <div className="flex items-center space-x-3">
+                          <ToggleSwitch
+                            checked={isComposite}
+                            onChange={handleCompositeToggle}
+                          />
+                          <Label className="text-sm font-medium text-muted-foreground">
+                            Type
+                          </Label>
+                          <Badge 
+                            variant={isComposite ? 'purple' : 'cyan'}
+                            className="text-xs"
+                          >
+                            {isComposite ? 'Composite' : 'Simple'}
+                          </Badge>
+                        </div>
+                      ) : (
                         <div className="flex items-center gap-2">
                           <Label className="text-sm font-medium">Type:</Label>
                           <Badge 
@@ -267,17 +283,7 @@ const RoleDetailPage = () => {
                             {isComposite ? 'Composite' : 'Simple'}
                           </Badge>
                         </div>
-                        {isEditing && (
-                          <div className="flex items-center gap-2">
-                            <Label className="text-sm font-medium text-muted-foreground">Simple</Label>
-                            <ToggleSwitch
-                              checked={isComposite}
-                              onChange={handleCompositeToggle}
-                            />
-                            <Label className="text-sm font-medium text-muted-foreground">Composite</Label>
-                          </div>
-                        )}
-                      </div>
+                      )}
 
                       {/* First Row: Role Name */}
                       <div className="grid grid-cols-1 gap-4 items-end">

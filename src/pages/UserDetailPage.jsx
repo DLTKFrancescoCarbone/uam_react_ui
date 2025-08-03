@@ -6,6 +6,7 @@ import Footer from '../components/layout/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Label } from '../components/ui/label';
 import { FloatingLabelInput } from '../components/ui/floating-label-input';
 import { ToggleSwitch } from '../components/ui/toggle-switch';
@@ -260,7 +261,22 @@ const UserDetailPage = () => {
                     </CardHeader>
                     <CardContent className="space-y-6">
                       {/* Status Display */}
-                      <div className="flex items-center justify-between">
+                      {isEditing ? (
+                        <div className="flex items-center space-x-3">
+                          <ToggleSwitch
+                            checked={currentStatus === 'Active'}
+                            onChange={handleStatusToggle}
+                          />
+                          <Label className="text-sm font-medium text-muted-foreground">
+                            Status
+                          </Label>
+                          <Badge 
+                            variant={currentStatus === 'Active' ? 'success' : 'secondary'}
+                          >
+                            {currentStatus === 'Active' ? 'Active' : 'Inactive'}
+                          </Badge>
+                        </div>
+                      ) : (
                         <div className="flex items-center gap-2">
                           <Label className="text-sm font-medium">Status:</Label>
                           <Badge 
@@ -269,28 +285,18 @@ const UserDetailPage = () => {
                             {currentStatus}
                           </Badge>
                         </div>
-                        {isEditing && (
-                          <div className="flex items-center gap-2">
-                            <Label className="text-sm font-medium text-muted-foreground">Inactive</Label>
-                            <ToggleSwitch
-                              checked={currentStatus === 'Active'}
-                              onChange={handleStatusToggle}
-                            />
-                            <Label className="text-sm font-medium text-muted-foreground">Active</Label>
-                          </div>
-                        )}
-                      </div>
+                      )}
 
                       {/* First Row: Username, First Name, Last Name */}
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                         {/* Username (read-only) */}
                         <div className="min-h-[4rem] flex flex-col justify-end">
-                          <div className="space-y-2">
-                            <Label className="text-sm font-medium">Username</Label>
-                            <div className="form-field-readonly">
-                              {user.username}
-                            </div>
-                          </div>
+                          <FloatingLabelInput
+                            id="username"
+                            label="Username"
+                            value={user.username}
+                            readOnly={true}
+                          />
                         </div>
 
                         {/* First Name (editable) */}
@@ -454,9 +460,9 @@ const UserDetailPage = () => {
                 </div>
                 <button
                   onClick={handleCloseGroupMembers}
-                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-700"
+                  className="modal-close-button"
                 >
-                  ✕
+                  <XMarkIcon className="h-5 w-5" />
                 </button>
               </div>
             </div>
@@ -536,9 +542,9 @@ const UserDetailPage = () => {
                 </div>
                 <button
                   onClick={handleCloseRoleMembers}
-                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-700"
+                  className="modal-close-button"
                 >
-                  ✕
+                  <XMarkIcon className="h-5 w-5" />
                 </button>
               </div>
             </div>

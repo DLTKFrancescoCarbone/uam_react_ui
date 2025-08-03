@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
+import { FloatingLabelInput } from '../components/ui/floating-label-input';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -94,33 +93,23 @@ const LoginPage = () => {
           {/* Login Form */}
           <div className="space-y-6">
             <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="username" className="text-white text-sm">
-                  Username / email
-                </Label>
-                <Input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full h-12 px-4 bg-white/90 border-0 rounded text-gray-900 placeholder:text-gray-500"
-                  placeholder="Enter username or email"
-                />
-              </div>
+              <FloatingLabelInput
+                id="username"
+                type="text"
+                label="Username / email"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="bg-white/90 border-0 text-gray-900"
+              />
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-white text-sm">
-                  Password
-                </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-12 px-4 bg-white/90 border-0 rounded text-gray-900 placeholder:text-gray-500"
-                  placeholder="Enter password"
-                />
-              </div>
+              <FloatingLabelInput
+                id="password"
+                type="password"
+                label="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="bg-white/90 border-0 text-gray-900"
+              />
             </div>
 
             <div className="flex space-x-4">

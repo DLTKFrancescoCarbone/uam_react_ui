@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
+import { FloatingLabelInput } from '../components/ui/floating-label-input';
 
 const CompanySetupPage = () => {
   const [companyName, setCompanyName] = useState('');
@@ -96,17 +95,14 @@ const CompanySetupPage = () => {
           
           {/* Company Input Form */}
           <div className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="company" className="text-white text-sm block text-left">
-                Company name
-              </Label>
-              <Input
+            <div className="w-80">
+              <FloatingLabelInput
                 id="company"
                 type="text"
+                label="Company name"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
-                className="w-80 h-12 px-4 bg-white/90 border-0 rounded text-gray-900 placeholder:text-gray-500"
-                placeholder="Enter company name"
+                className="bg-white/90 border-0 text-gray-900"
               />
             </div>
 

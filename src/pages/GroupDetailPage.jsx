@@ -6,6 +6,7 @@ import Footer from '../components/layout/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Label } from '../components/ui/label';
 import { FloatingLabelInput } from '../components/ui/floating-label-input';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
@@ -421,9 +422,9 @@ const GroupDetailPage = () => {
                     setShowMemberModal(false);
                     setSelectedMember(null);
                   }}
-                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-700"
+                  className="modal-close-button"
                 >
-                  ✕
+                  <XMarkIcon className="h-5 w-5" />
                 </button>
               </div>
             </div>
@@ -529,9 +530,9 @@ const GroupDetailPage = () => {
                     setShowRoleModal(false);
                     setSelectedRole(null);
                   }}
-                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-700"
+                  className="modal-close-button"
                 >
-                  ✕
+                  <XMarkIcon className="h-5 w-5" />
                 </button>
               </div>
             </div>

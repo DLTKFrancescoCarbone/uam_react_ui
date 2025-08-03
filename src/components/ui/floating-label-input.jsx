@@ -1,19 +1,24 @@
-import React, { useState, forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 
 const FloatingLabelInput = forwardRef(({ 
   className = '', 
   type = 'text', 
   label, 
   id,
-  value = '',
+  value,
   error,
+  disabled = false,
+  readOnly = false,
   ...props 
 }, ref) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const hasValue = value && value.toString().length > 0;
-  const isFloating = isFocused || hasValue;
-
   const inputId = id || `floating-input-${Math.random().toString(36).substr(2, 9)}`;
+  
+  // Handle both controlled and uncontrolled inputs
+  const inputProps = value !== undefined 
+    ? { value: value || '' }  // Controlled - ensure empty string for empty values
+    : {};  // Uncontrolled
+
+  const isReadOnlyOrDisabled = disabled || readOnly;
 
   return (
     <div className="floating-label-input">
@@ -21,22 +26,16 @@ const FloatingLabelInput = forwardRef(({
         ref={ref}
         type={type}
         id={inputId}
-        className={`${error ? 'error' : ''} ${className}`}
-        value={value}
-        onFocus={(e) => {
-          setIsFocused(true);
-          props.onFocus?.(e);
-        }}
-        onBlur={(e) => {
-          setIsFocused(false);
-          props.onBlur?.(e);
-        }}
-        placeholder=""
+        className={`peer ${error ? 'error' : ''} ${isReadOnlyOrDisabled ? 'readonly' : ''} ${className}`}
+        placeholder=" "
+        disabled={disabled}
+        readOnly={readOnly}
+        {...inputProps}
         {...props}
       />
       <label
         htmlFor={inputId}
-        className={`${isFloating ? 'floating' : ''} ${isFocused ? 'focused' : ''} ${error ? 'error' : ''}`}
+        className={`floating-label ${error ? 'error' : ''} ${isReadOnlyOrDisabled ? 'readonly' : ''}`}
       >
         {label}
       </label>
