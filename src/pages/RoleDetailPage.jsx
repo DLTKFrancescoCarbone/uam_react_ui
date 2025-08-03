@@ -10,8 +10,9 @@ import { Label } from '../components/ui/label';
 import { FloatingLabelInput } from '../components/ui/floating-label-input';
 import { ToggleSwitch } from '../components/ui/toggle-switch';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
-import { ArrowLeftIcon, CogIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, CogIcon, UserIcon } from '@heroicons/react/24/outline';
 import { mockRoles, getRoleMembers } from '../data/mockRoles';
+import { Modal, ModalHeader, ModalTitle, ModalContent, ModalFooter } from '../components/ui/modal';
 
 const RoleDetailPage = () => {
   const { roleId } = useParams();
@@ -29,6 +30,8 @@ const RoleDetailPage = () => {
   const [isEditingPermissions, setIsEditingPermissions] = useState(false);
   const [editedPermissions, setEditedPermissions] = useState([]);
   const [rolePermissions, setRolePermissions] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showUserDetail, setShowUserDetail] = useState(false);
 
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('isAuthenticated');
@@ -151,7 +154,7 @@ const RoleDetailPage = () => {
           <Sidebar />
           <div className="ml-[66px] px-8">
             <div className="flex items-center justify-center h-64">
-              <div className="text-lg text-gray-500">Role not found</div>
+              <div className="text-lg text-muted-foreground">Role not found</div>
             </div>
           </div>
         </div>
@@ -192,6 +195,16 @@ const RoleDetailPage = () => {
   };
 
   const displayPermissions = isEditingPermissions ? editedPermissions : rolePermissions;
+
+  const handleUserClick = (user) => {
+    setSelectedUser(user);
+    setShowUserDetail(true);
+  };
+
+  const handleCloseUserDetail = () => {
+    setShowUserDetail(false);
+    setSelectedUser(null);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -392,7 +405,7 @@ const RoleDetailPage = () => {
                           >
                             <div className="flex-1">
                               <div className="font-medium text-base mb-1">{permission.name}</div>
-                              <div className="text-sm text-gray-600">{permission.description}</div>
+                              <div className="text-sm text-body">{permission.description}</div>
                             </div>
                             {isEditingPermissions ? (
                               <label className="flex items-center justify-between cursor-pointer min-w-[100px]">
@@ -435,7 +448,7 @@ const RoleDetailPage = () => {
                             onClick={() => {
                               // Check if this is a real user ID that has a detail page
                               if (Number(user.id) <= 15) {
-                                navigate(`/users/${user.id}`);
+                                handleUserClick(user);
                               }
                             }}
                           >
@@ -448,9 +461,9 @@ const RoleDetailPage = () => {
                               <div>
                                 <div className="font-medium text-base mb-1">
                                   {user.firstName} {user.lastName}
-                                  {Number(user.id) <= 15 && <span className="ml-2 text-xs text-blue-500">• View Profile</span>}
+                                  {Number(user.id) <= 15 && <span className="ml-2 text-xs text-blue-500">• View Details</span>}
                                 </div>
-                                <div className="text-sm text-gray-600">{user.username} • {user.email}</div>
+                                <div className="text-sm text-body">{user.username} • {user.email}</div>
                               </div>
                             </div>
                             <Badge 
@@ -461,7 +474,7 @@ const RoleDetailPage = () => {
                           </div>
                         ))}
                         {roleMembers.length === 0 && (
-                          <div className="text-center py-8 text-gray-500">
+                          <div className="text-center py-8 text-muted-foreground">
                             No users assigned to this role
                           </div>
                         )}
@@ -474,6 +487,77 @@ const RoleDetailPage = () => {
           </Card>
         </div>
       </div>
+      
+      {/* User Detail Modal */}
+      <Modal isOpen={showUserDetail} onClose={handleCloseUserDetail} className="max-w-2xl w-full">
+        <ModalHeader onClose={handleCloseUserDetail}>
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-blue-100 rounded-lg shrink-0">
+              <UserIcon className="h-5 w-5 text-blue-600" />
+            </div>
+            <div>
+              <ModalTitle className="text-header">{selectedUser?.firstName} {selectedUser?.lastName}</ModalTitle>
+              <p className="text-sm text-muted-foreground mt-1">{selectedUser?.email}</p>
+            </div>
+          </div>
+        </ModalHeader>
+
+        <ModalContent>
+          <div className="space-y-6">
+            {/* Basic Information */}
+            <div>
+              <h3 className="text-lg font-medium text-header mb-4">Basic Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-sm font-medium">Username</Label>
+                  <div className="text-sm text-body mt-1">{selectedUser?.username}</div>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Status</Label>
+                  <div className="mt-1">
+                    <Badge variant={selectedUser?.status === 'Active' ? 'success' : 'secondary'}>
+                      {selectedUser?.status}
+                    </Badge>
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">First Name</Label>
+                  <div className="text-sm text-body mt-1">{selectedUser?.firstName}</div>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Last Name</Label>
+                  <div className="text-sm text-body mt-1">{selectedUser?.lastName}</div>
+                </div>
+                <div className="md:col-span-2">
+                  <Label className="text-sm font-medium">Email Address</Label>
+                  <div className="text-sm text-body mt-1">{selectedUser?.email}</div>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Created</Label>
+                  <div className="text-sm text-body mt-1">{selectedUser?.created}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ModalContent>
+
+        <ModalFooter>
+          <Button
+            onClick={() => {
+              handleCloseUserDetail();
+              navigate(`/users/${selectedUser.id}`);
+            }}
+          >
+            View Full Profile
+          </Button>
+          <Button
+            variant="outline"
+            onClick={handleCloseUserDetail}
+          >
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
       
       <Footer />
     </div>

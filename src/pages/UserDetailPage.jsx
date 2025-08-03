@@ -6,15 +6,15 @@ import Footer from '../components/layout/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, ArrowLeftIcon, CogIcon } from '@heroicons/react/24/outline';
 import { Label } from '../components/ui/label';
 import { FloatingLabelInput } from '../components/ui/floating-label-input';
 import { ToggleSwitch } from '../components/ui/toggle-switch';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
-import { ArrowLeftIcon, CogIcon } from '@heroicons/react/24/outline';
+import { Modal, ModalHeader, ModalTitle, ModalContent, ModalFooter } from '../components/ui/modal';
 import { mockUsers } from '../data/mockUsers';
 import { mockGroups, getGroupMembers } from '../data/mockGroups';
-import { mockRoles } from '../data/mockRoles';
+import { mockRoles, getRoleMembers } from '../data/mockRoles';
 
 const UserDetailPage = () => {
   const { userId } = useParams();
@@ -31,8 +31,8 @@ const UserDetailPage = () => {
   const [currentStatus, setCurrentStatus] = useState('');
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [showGroupMembers, setShowGroupMembers] = useState(false);
-  // Removed selectedRole state as we now show all roles in modal
-  const [showRoleMembers, setShowRoleMembers] = useState(false);
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [showRoleDetail, setShowRoleDetail] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
 
   useEffect(() => {
@@ -133,12 +133,14 @@ const UserDetailPage = () => {
     setSelectedGroup(null);
   };
 
-  const handleRoleClick = () => {
-    setShowRoleMembers(true);
+  const handleRoleClick = (role) => {
+    setSelectedRole(role);
+    setShowRoleDetail(true);
   };
 
-  const handleCloseRoleMembers = () => {
-    setShowRoleMembers(false);
+  const handleCloseRoleDetail = () => {
+    setShowRoleDetail(false);
+    setSelectedRole(null);
   };
 
   const handleGroupMemberClick = (memberId) => {
@@ -155,11 +157,10 @@ const UserDetailPage = () => {
     }
   };
 
-  // Removed handleRoleMemberClick as we now navigate to role details instead
-
   const handleRoleDetailClick = (roleId) => {
     // Close the modal first
-    setShowRoleMembers(false);
+    setShowRoleDetail(false);
+    setSelectedRole(null);
     // Navigate to the role detail page
     navigate(`/roles/${roleId}`);
   };
@@ -189,7 +190,7 @@ const UserDetailPage = () => {
           <Sidebar />
           <div className="ml-[66px] px-8">
             <div className="flex items-center justify-center h-64">
-              <div className="text-lg text-gray-500">User not found</div>
+              <div className="text-lg text-muted-foreground">User not found</div>
             </div>
           </div>
         </div>
@@ -235,8 +236,8 @@ const UserDetailPage = () => {
               <Tabs value={activeTab} onValueChange={setActiveTab} className="tabs-container">
                 <TabsList className="tabs-list-underline">
                   <TabsTrigger value="details" className="tabs-trigger-underline">User Details</TabsTrigger>
-                  <TabsTrigger value="groups" className="tabs-trigger-underline">Groups</TabsTrigger>
-                  <TabsTrigger value="roles" className="tabs-trigger-underline">Roles</TabsTrigger>
+                  <TabsTrigger value="groups" className="tabs-trigger-underline">Assigned Groups</TabsTrigger>
+                  <TabsTrigger value="roles" className="tabs-trigger-underline">Assigned Roles</TabsTrigger>
                 </TabsList>
 
                 {/* Details Tab */}
@@ -389,8 +390,8 @@ const UserDetailPage = () => {
                           >
                             <div className="flex-1">
                               <div className="font-medium text-base mb-1">{group.name}</div>
-                              <div className="text-sm text-gray-600 mb-2">{group.description}</div>
-                              <div className="flex items-center gap-4 text-xs text-gray-500">
+                              <div className="text-sm text-body mb-2">{group.description}</div>
+                              <div className="flex items-center gap-4 text-xs text-muted-foreground">
                                 <span className="text-blue-600 hover:text-blue-800">{group.memberCount} members</span>
                                 <span>•</span>
                                 <span>{group.department}</span>
@@ -399,7 +400,7 @@ const UserDetailPage = () => {
                           </div>
                         ))}
                         {userGroups.length === 0 && (
-                          <div className="text-center py-8 text-gray-500">
+                          <div className="text-center py-8 text-muted-foreground">
                             No groups assigned to this user
                           </div>
                         )}
@@ -424,8 +425,8 @@ const UserDetailPage = () => {
                           >
                             <div className="flex-1">
                               <div className="font-medium text-base mb-1">{role.name}</div>
-                              <div className="text-sm text-gray-600 mb-2">{role.description}</div>
-                              <div className="flex items-center gap-4 text-xs text-gray-500">
+                              <div className="text-sm text-body mb-2">{role.description}</div>
+                              <div className="flex items-center gap-4 text-xs text-muted-foreground">
                                 <span className="text-blue-600 hover:text-blue-800">{role.userCount} users</span>
                                 <span>•</span>
                                 <span>{role.composite ? 'Composite' : 'Simple'} role</span>
@@ -434,7 +435,7 @@ const UserDetailPage = () => {
                           </div>
                         ))}
                         {userRoles.length === 0 && (
-                          <div className="text-center py-8 text-gray-500">
+                          <div className="text-center py-8 text-muted-foreground">
                             No roles assigned to this user
                           </div>
                         )}
@@ -455,8 +456,8 @@ const UserDetailPage = () => {
             <div className="p-6 border-b flex-shrink-0">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-semibold">{selectedGroup.name} ({getGroupMembers(selectedGroup.id).length})</h2>
-                  <p className="text-sm text-gray-600 mt-1">{selectedGroup.description}</p>
+                  <h2 className="text-xl font-semibold text-header">{selectedGroup.name} ({getGroupMembers(selectedGroup.id).length})</h2>
+                  <p className="text-sm text-body mt-1">{selectedGroup.description}</p>
                 </div>
                 <button
                   onClick={handleCloseGroupMembers}
@@ -492,7 +493,7 @@ const UserDetailPage = () => {
                           isClickable ? 'bg-blue-100' : 'bg-gray-100'
                         }`}>
                           <span className={`font-medium text-sm ${
-                            isClickable ? 'text-blue-600' : 'text-gray-600'
+                            isClickable ? 'text-blue-600' : 'text-muted-foreground'
                           }`}>
                             {member.firstName[0]}{member.lastName[0]}
                           </span>
@@ -501,12 +502,12 @@ const UserDetailPage = () => {
                           <div className={`font-medium text-sm ${
                             isClickable 
                               ? 'text-blue-900 hover:text-blue-700' 
-                              : 'text-gray-700'
+                              : 'text-body'
                           }`}>
                             {member.firstName} {member.lastName}
                             {isClickable && <span className="ml-2 text-xs text-blue-500">• View Profile</span>}
                           </div>
-                          <div className="text-xs text-gray-500">
+                          <div className="text-xs text-muted-foreground">
                             {member.username} • {member.email}
                           </div>
                         </div>
@@ -520,7 +521,7 @@ const UserDetailPage = () => {
                   );
                 })}
                 {getGroupMembers(selectedGroup.id).length === 0 && (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8 text-muted-foreground">
                     No members found in this group
                   </div>
                 )}
@@ -530,64 +531,144 @@ const UserDetailPage = () => {
         </div>
       )}
       
-      {/* Available Roles Modal */}
-      {showRoleMembers && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[85vh] flex flex-col">
-            <div className="p-6 border-b flex-shrink-0">
-              <div className="flex items-center justify-between">
+      {/* Role Detail Modal */}
+      <Modal isOpen={showRoleDetail} onClose={handleCloseRoleDetail} className="max-w-4xl w-full max-h-[90vh] flex flex-col">
+        <ModalHeader onClose={handleCloseRoleDetail} className="flex-shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-primary/10 rounded-lg shrink-0">
+              <CogIcon className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <ModalTitle className="text-header">{selectedRole?.name}</ModalTitle>
+              <p className="text-sm text-muted-foreground mt-1">Role assigned to {user?.firstName} {user?.lastName}</p>
+            </div>
+          </div>
+        </ModalHeader>
+
+        <ModalContent className="flex-1 overflow-y-auto">
+          <div className="space-y-6">
+            {/* Role Information */}
+            <div>
+              <h3 className="text-lg font-medium text-header mb-4">Role Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <h2 className="text-xl font-semibold">Available Roles ({mockRoles.length})</h2>
-                  <p className="text-sm text-gray-600 mt-1">Select a role to view details</p>
+                  <Label className="text-sm font-medium">Role Name</Label>
+                  <div className="text-sm text-body mt-1">{selectedRole?.name}</div>
                 </div>
-                <button
-                  onClick={handleCloseRoleMembers}
-                  className="modal-close-button"
-                >
-                  <XMarkIcon className="h-5 w-5" />
-                </button>
+                <div>
+                  <Label className="text-sm font-medium">Type</Label>
+                  <div className="text-sm text-body mt-1">
+                    {selectedRole?.composite ? 'Composite Role' : 'Simple Role'}
+                  </div>
+                </div>
+                <div className="md:col-span-2">
+                  <Label className="text-sm font-medium">Description</Label>
+                  <div className="text-sm text-body mt-1">{selectedRole?.description}</div>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Total Users</Label>
+                  <div className="text-sm text-body mt-1">{selectedRole?.userCount} users</div>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Created</Label>
+                  <div className="text-sm text-body mt-1">{selectedRole?.createdDate}</div>
+                </div>
               </div>
             </div>
-            <div className="p-6 overflow-y-auto flex-1">
+
+            {/* Users with this Role */}
+            <div>
+              <h3 className="text-lg font-medium text-header mb-4">Users with this Role ({getRoleMembers(selectedRole?.id || '').length})</h3>
               <div className="space-y-3">
-                {mockRoles.map((role) => {
+                {getRoleMembers(selectedRole?.id || '').map((user) => {
+                  const isRealUser = Number(user.id) <= 15;
+                  
                   return (
                     <div 
-                      key={role.id} 
-                      className="flex items-start justify-between p-4 border rounded-lg hover:bg-blue-50 hover:border-blue-200 cursor-pointer transition-all duration-200"
-                      onClick={() => handleRoleDetailClick(role.id)}
+                      key={user.id} 
+                      className={`flex items-center justify-between p-3 border rounded-lg transition-all duration-200 ${
+                        isRealUser 
+                          ? 'hover:bg-blue-50 hover:border-blue-200 cursor-pointer' 
+                          : 'hover:bg-gray-50 cursor-default opacity-90'
+                      }`}
+                      onClick={() => {
+                        if (isRealUser) {
+                          handleCloseRoleDetail();
+                          navigate(`/users/${user.id}`);
+                        }
+                      }}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-primary/10 rounded-lg shrink-0">
-                          <CogIcon className="h-5 w-5 text-primary" />
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                          isRealUser ? 'bg-blue-100' : 'bg-gray-100'
+                        }`}>
+                          <span className={`font-medium text-sm ${
+                            isRealUser ? 'text-blue-600' : 'text-muted-foreground'
+                          }`}>
+                            {user.firstName[0]}{user.lastName[0]}
+                          </span>
                         </div>
-                        <div className="flex-1">
-                          <div className="font-medium text-base mb-1">
-                            {role.name}
-                            <span className="ml-2 text-xs text-blue-500">• View Details</span>
+                        <div className="flex-1 min-w-0">
+                          <div className={`font-medium text-sm ${
+                            isRealUser 
+                              ? 'text-blue-900 hover:text-blue-700' 
+                              : 'text-body'
+                          }`}>
+                            {user.firstName} {user.lastName}
+                            {isRealUser && <span className="ml-2 text-xs text-blue-500">• View Profile</span>}
                           </div>
-                          <div className="text-sm text-gray-600 mb-2">{role.description}</div>
-                          <div className="flex items-center gap-4 text-xs text-gray-500">
-                            <span className="text-blue-600">{role.userCount} users</span>
-                            <span>•</span>
-                            <span>{role.composite ? 'Composite' : 'Simple'} role</span>
+                          <div className="text-xs text-muted-foreground truncate">
+                            {user.username} • {user.email}
                           </div>
                         </div>
                       </div>
                       <Badge 
-                        variant={role.composite ? 'purple' : 'cyan'}
-                        className="text-xs"
+                        variant={user.status === 'Active' ? 'success' : 'secondary'}
+                        className="shrink-0"
                       >
-                        {role.composite ? 'Composite' : 'Simple'}
+                        {user.status}
                       </Badge>
                     </div>
                   );
                 })}
+                {getRoleMembers(selectedRole?.id || '').length === 0 && (
+                  <div className="text-center py-8 text-muted-foreground">
+                    No users found with this role
+                  </div>
+                )}
               </div>
             </div>
+
+            {/* Permissions */}
+            {selectedRole?.attributes?.permissions && (
+              <div>
+                <h3 className="text-lg font-medium text-header mb-4">Permissions</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedRole.attributes.permissions.map((permission, index) => (
+                    <Badge key={index} variant="outline" className="text-xs">
+                      {permission}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-      )}
+        </ModalContent>
+
+        <ModalFooter className="flex-shrink-0">
+          <Button
+            onClick={() => handleRoleDetailClick(selectedRole.id)}
+          >
+            View Full Role Details
+          </Button>
+          <Button
+            variant="outline"
+            onClick={handleCloseRoleDetail}
+          >
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
       
       <Footer />
     </div>

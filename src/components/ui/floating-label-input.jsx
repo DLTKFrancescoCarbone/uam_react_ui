@@ -21,12 +21,12 @@ const FloatingLabelInput = forwardRef(({
   const isReadOnlyOrDisabled = disabled || readOnly;
 
   return (
-    <div className="floating-label-input">
+    <div className={`floating-label-input ${className}`}>
       <input
         ref={ref}
         type={type}
         id={inputId}
-        className={`peer ${error ? 'error' : ''} ${isReadOnlyOrDisabled ? 'readonly' : ''} ${className}`}
+        className={`peer ${error ? 'error' : ''} ${isReadOnlyOrDisabled ? 'readonly' : ''}`}
         placeholder=" "
         disabled={disabled}
         readOnly={readOnly}

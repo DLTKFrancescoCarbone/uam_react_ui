@@ -99,7 +99,7 @@ const LoginPage = () => {
                 label="Username / email"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="bg-white/90 border-0 text-gray-900"
+                className="login-variant"
               />
 
               <FloatingLabelInput
@@ -108,7 +108,7 @@ const LoginPage = () => {
                 label="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-white/90 border-0 text-gray-900"
+                className="login-variant"
               />
             </div>
 

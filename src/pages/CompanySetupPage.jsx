@@ -102,7 +102,7 @@ const CompanySetupPage = () => {
                 label="Company name"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
-                className="bg-white/90 border-0 text-gray-900"
+                className="login-variant"
               />
             </div>
 
