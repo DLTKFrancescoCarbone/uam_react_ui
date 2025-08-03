@@ -513,8 +513,12 @@ l/* Theme CSS - Centralized styling for scalability */
 
 .modal-close-button {
   margin-left: 1rem;
-  padding: 0.25rem;
-  border-radius: 0.375rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   transition: background-color 200ms;
 }
 

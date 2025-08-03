@@ -27,7 +27,7 @@ const FloatingLabelInput = forwardRef(({
         type={type}
         id={inputId}
         className={cn(
-          "flex h-12 w-full rounded-md border border-input bg-background px-3 pt-4 pb-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          "flex h-12 w-full rounded-md border border-input bg-background px-3 pt-5 pb-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
           error && "border-red-500 focus-visible:ring-red-500",
           className
         )}
@@ -46,8 +46,8 @@ const FloatingLabelInput = forwardRef(({
       <label
         htmlFor={inputId}
         className={cn(
-          "absolute left-3 top-3 text-sm text-muted-foreground transition-all duration-200 ease-in-out cursor-text pointer-events-none select-none",
-          isFloating && "top-1 text-xs font-medium transform-gpu",
+          "absolute left-3 top-3.5 text-sm text-muted-foreground transition-all duration-200 ease-in-out cursor-text pointer-events-none select-none",
+          isFloating && "top-0.5 text-xs font-medium transform-gpu",
           isFocused && "text-primary",
           error && "text-red-500"
         )}
