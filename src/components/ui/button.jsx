@@ -6,9 +6,10 @@ const Button = React.forwardRef(({ className = '', variant = 'default', size = '
 const variants = {
   default: 'bg-primary text-primary-foreground hover:bg-primary/90',
   destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-  outline: 'border border-input hover:bg-accent hover:text-accent-foreground',
+  outline: 'border border-input hover:bg-accent hover:text-accent-foreground text-body',
+  'outline-header': 'border border-[#043852] text-[#043852] hover:bg-[#043852]/10',
   secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-  ghost: 'hover:bg-accent hover:text-accent-foreground',
+  ghost: 'hover:bg-accent hover:text-accent-foreground text-body',
   link: 'underline-offset-4 hover:underline text-primary',
   'primary-header': 'primary-header',
 };

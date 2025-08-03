@@ -5,7 +5,7 @@ const badgeVariants = {
   default: "bg-[oklch(0.76_0.177_163.223)] text-[oklch(0.37_0.077_168.94)] border-transparent",
   secondary: "bg-secondary text-secondary-foreground border-transparent",
   destructive: "bg-destructive text-destructive-foreground border-transparent",
-  outline: "text-foreground border-border",
+  outline: "text-body border-border",
   info: "bg-[oklch(0.74_0.16_232.661)] text-[oklch(0.29_0.066_243.157)] border-transparent",
   success: "bg-[oklch(0.76_0.177_163.223)] text-[oklch(0.37_0.077_168.94)] border-transparent",
   warning: "bg-[oklch(0.82_0.189_84.429)] text-[oklch(0.41_0.112_45.904)] border-transparent",

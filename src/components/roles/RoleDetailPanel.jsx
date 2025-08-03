@@ -121,7 +121,7 @@ const RoleDetailPanel = ({ role, onClose, onSave }) => {
             <div className="p-1.5 bg-primary/10 rounded-lg shrink-0">
               <CogIcon className="h-4 w-4 text-primary" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900">Role Details</h3>
+            <h3 className="text-lg font-semibold text-header">Role Details</h3>
           </div>
           <Button
             variant="ghost"
@@ -178,7 +178,7 @@ const RoleDetailPanel = ({ role, onClose, onSave }) => {
                         )}
                       </>
                     ) : (
-                      <div className="text-sm text-gray-900">{role.name}</div>
+                      <div className="text-sm text-body">{role.name}</div>
                     )}
                   </div>
 
@@ -201,7 +201,7 @@ const RoleDetailPanel = ({ role, onClose, onSave }) => {
                         )}
                       </>
                     ) : (
-                      <div className="text-sm text-gray-900">{role.description}</div>
+                      <div className="text-sm text-body">{role.description}</div>
                     )}
                   </div>
 

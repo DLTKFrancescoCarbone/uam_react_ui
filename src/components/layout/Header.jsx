@@ -28,7 +28,7 @@ const Header = () => {
           <div className="header-breadcrumb-icon">
             <ChevronRightIcon className="h-4 w-4" />
           </div>
-          <h1 className="text-lg font-medium">User Access Management</h1>
+          <h1 className="text-lg font-medium text-header">User Access Management</h1>
         </div>
         
         <div className="flex items-center gap-4">

@@ -402,7 +402,7 @@ const GroupDetailPage = () => {
       
       {/* Member Details Modal */}
       {showMemberModal && selectedMember && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[85vh] flex flex-col">
             <div className="p-6 border-b flex-shrink-0">
               <div className="flex items-center justify-between">
@@ -436,11 +436,11 @@ const GroupDetailPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label className="text-sm font-medium text-gray-700">Username</Label>
-                      <div className="text-sm text-gray-900 mt-1">{selectedMember.username}</div>
+                      <div className="text-sm text-body mt-1">{selectedMember.username}</div>
                     </div>
                     <div>
                       <Label className="text-sm font-medium text-gray-700">Email</Label>
-                      <div className="text-sm text-gray-900 mt-1">{selectedMember.email}</div>
+                      <div className="text-sm text-body mt-1">{selectedMember.email}</div>
                     </div>
                     <div>
                       <Label className="text-sm font-medium text-gray-700">Status</Label>
@@ -452,7 +452,7 @@ const GroupDetailPage = () => {
                     </div>
                     <div>
                       <Label className="text-sm font-medium text-gray-700">Group Role</Label>
-                      <div className="text-sm text-gray-900 mt-1">Member</div>
+                      <div className="text-sm text-body mt-1">Member</div>
                     </div>
                   </div>
                 </div>
@@ -464,12 +464,12 @@ const GroupDetailPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label className="text-sm font-medium text-gray-700">Department</Label>
-                        <div className="text-sm text-gray-900 mt-1">{selectedMember.department}</div>
+                        <div className="text-sm text-body mt-1">{selectedMember.department}</div>
                       </div>
                       {selectedMember.position && (
                         <div>
                           <Label className="text-sm font-medium text-gray-700">Position</Label>
-                          <div className="text-sm text-gray-900 mt-1">{selectedMember.position}</div>
+                          <div className="text-sm text-body mt-1">{selectedMember.position}</div>
                         </div>
                       )}
                     </div>
@@ -510,7 +510,7 @@ const GroupDetailPage = () => {
 
       {/* Role Details Modal */}
       {showRoleModal && selectedRole && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[85vh] flex flex-col">
             <div className="p-6 border-b flex-shrink-0">
               <div className="flex items-center justify-between">
@@ -544,25 +544,25 @@ const GroupDetailPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label className="text-sm font-medium text-gray-700">Role Name</Label>
-                      <div className="text-sm text-gray-900 mt-1">{selectedRole.name}</div>
+                      <div className="text-sm text-body mt-1">{selectedRole.name}</div>
                     </div>
                     <div>
                       <Label className="text-sm font-medium text-gray-700">Type</Label>
-                      <div className="text-sm text-gray-900 mt-1">
+                      <div className="text-sm text-body mt-1">
                         {selectedRole.composite ? 'Composite Role' : 'Simple Role'}
                       </div>
                     </div>
                     <div className="md:col-span-2">
                       <Label className="text-sm font-medium text-gray-700">Description</Label>
-                      <div className="text-sm text-gray-900 mt-1">{selectedRole.description}</div>
+                      <div className="text-sm text-body mt-1">{selectedRole.description}</div>
                     </div>
                     <div>
                       <Label className="text-sm font-medium text-gray-700">Total Users</Label>
-                      <div className="text-sm text-gray-900 mt-1">{selectedRole.userCount} users</div>
+                      <div className="text-sm text-body mt-1">{selectedRole.userCount} users</div>
                     </div>
                     <div>
                       <Label className="text-sm font-medium text-gray-700">Created</Label>
-                      <div className="text-sm text-gray-900 mt-1">{selectedRole.createdDate}</div>
+                      <div className="text-sm text-body mt-1">{selectedRole.createdDate}</div>
                     </div>
                   </div>
                 </div>

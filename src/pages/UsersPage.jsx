@@ -121,7 +121,7 @@ const UsersPage = () => {
             </div>
             <div className="flex gap-3">
               <Button 
-                variant="outline"
+                variant="outline-header"
                 onClick={handleExportUsers}
                 className="shrink-0"
               >

@@ -126,7 +126,7 @@ const AddUserModal = ({ isOpen, onClose, onSave }) => {
       <ModalContent className="space-y-6">
         {/* Basic Information Section */}
         <div>
-          <h3 className="text-base font-medium text-muted-foreground mb-4">Basic Information</h3>
+          <h3 className="text-base font-medium text-header mb-4">Basic Information</h3>
           
           <div className="space-y-4">
             {/* Username */}
@@ -185,7 +185,7 @@ const AddUserModal = ({ isOpen, onClose, onSave }) => {
                 checked={formData.status}
                 onChange={(checked) => handleInputChange('status', checked)}
               />
-              <Label className="text-sm font-medium text-muted-foreground">
+              <Label className="text-sm font-medium text-body">
                 Status
               </Label>
               <Badge 
@@ -201,19 +201,19 @@ const AddUserModal = ({ isOpen, onClose, onSave }) => {
         <div className="grid grid-cols-2 gap-6">
           {/* Required Actions */}
           <div className="border rounded-lg p-4">
-            <h4 className="text-sm font-medium text-muted-foreground mb-3">Required Actions</h4>
+            <h4 className="text-sm font-medium text-header mb-3">Required Actions</h4>
             <div className="space-y-3">
               <Checkbox
                 checked={formData.requiredActions.verifyEmail}
                 onChange={(e) => handleRequiredActionChange('verifyEmail', e.target.checked)}
-                textClassName="text-muted-foreground"
+                textClassName="text-body"
               >
                 Verify email
               </Checkbox>
               <Checkbox
                 checked={formData.requiredActions.configureMFA}
                 onChange={(e) => handleRequiredActionChange('configureMFA', e.target.checked)}
-                textClassName="text-muted-foreground"
+                textClassName="text-body"
               >
                 Configure MFA
               </Checkbox>
@@ -222,26 +222,26 @@ const AddUserModal = ({ isOpen, onClose, onSave }) => {
 
           {/* Groups */}
           <div className="border rounded-lg p-4">
-            <h4 className="text-sm font-medium text-muted-foreground mb-3">Groups</h4>
+            <h4 className="text-sm font-medium text-header mb-3">Groups</h4>
             <div className="space-y-3 max-h-24 overflow-y-auto">
               <Checkbox
                 checked={formData.groups.fileManager1}
                 onChange={(e) => handleGroupChange('fileManager1', e.target.checked)}
-                textClassName="text-muted-foreground"
+                textClassName="text-body"
               >
                 File-Manager1
               </Checkbox>
               <Checkbox
                 checked={formData.groups.groupTest}
                 onChange={(e) => handleGroupChange('groupTest', e.target.checked)}
-                textClassName="text-muted-foreground"
+                textClassName="text-body"
               >
                 GroupTest
               </Checkbox>
               <Checkbox
                 checked={formData.groups.projectManager}
                 onChange={(e) => handleGroupChange('projectManager', e.target.checked)}
-                textClassName="text-muted-foreground"
+                textClassName="text-body"
               >
                 Project-Manager
               </Checkbox>

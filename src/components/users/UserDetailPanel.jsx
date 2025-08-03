@@ -82,7 +82,7 @@ const UserDetailPanel = ({ user, onClose, onSave }) => {
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">User Details</h3>
+          <h3 className="text-lg font-semibold text-header">User Details</h3>
           <Button
             variant="ghost"
             size="sm"
@@ -146,7 +146,7 @@ const UserDetailPanel = ({ user, onClose, onSave }) => {
                         )}
                       </>
                     ) : (
-                      <div className="text-sm text-gray-900">{user.firstName}</div>
+                      <div className="text-sm text-body">{user.firstName}</div>
                     )}
                   </div>
 
@@ -168,7 +168,7 @@ const UserDetailPanel = ({ user, onClose, onSave }) => {
                         )}
                       </>
                     ) : (
-                      <div className="text-sm text-gray-900">{user.lastName}</div>
+                      <div className="text-sm text-body">{user.lastName}</div>
                     )}
                   </div>
 
@@ -191,7 +191,7 @@ const UserDetailPanel = ({ user, onClose, onSave }) => {
                         )}
                       </>
                     ) : (
-                      <div className="text-sm text-gray-900">{user.email}</div>
+                      <div className="text-sm text-body">{user.email}</div>
                     )}
                   </div>
 

@@ -92,7 +92,7 @@ const GroupDetailPanel = ({ group, onClose, onSave }) => {
             <div className="p-1.5 bg-primary/10 rounded-lg shrink-0">
               <UserGroupIcon className="h-4 w-4 text-primary" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900">Group Details</h3>
+            <h3 className="text-lg font-semibold text-header">Group Details</h3>
           </div>
           <Button
             variant="ghost"
@@ -149,7 +149,7 @@ const GroupDetailPanel = ({ group, onClose, onSave }) => {
                         )}
                       </>
                     ) : (
-                      <div className="text-sm text-gray-900">{group.name}</div>
+                      <div className="text-sm text-body">{group.name}</div>
                     )}
                   </div>
 
@@ -172,7 +172,7 @@ const GroupDetailPanel = ({ group, onClose, onSave }) => {
                         )}
                       </>
                     ) : (
-                      <div className="text-sm text-gray-900">{group.description}</div>
+                      <div className="text-sm text-body">{group.description}</div>
                     )}
                   </div>
 

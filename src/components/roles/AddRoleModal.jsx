@@ -69,7 +69,7 @@ const AddRoleModal = ({ isOpen, onClose, onSave }) => {
         />
         
         <div className="space-y-2">
-          <Label htmlFor="description" className="text-sm font-medium">
+          <Label htmlFor="description" className="text-sm font-medium text-header">
             Description
           </Label>
           <textarea
