@@ -10,7 +10,7 @@ import { Label } from '../components/ui/label';
 import { FloatingLabelInput } from '../components/ui/floating-label-input';
 import { ToggleSwitch } from '../components/ui/toggle-switch';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
-import { ArrowLeftIcon, CogIcon, UserIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, CogIcon, UserIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { mockRoles, getRoleMembers } from '../data/mockRoles';
 import { Modal, ModalHeader, ModalTitle, ModalContent, ModalFooter } from '../components/ui/modal';
 
@@ -32,6 +32,8 @@ const RoleDetailPage = () => {
   const [rolePermissions, setRolePermissions] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showUserDetail, setShowUserDetail] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteUser, setDeleteUser] = useState(null);
 
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('isAuthenticated');
@@ -204,6 +206,25 @@ const RoleDetailPage = () => {
   const handleCloseUserDetail = () => {
     setShowUserDetail(false);
     setSelectedUser(null);
+  };
+
+  const handleDeleteClick = (user, e) => {
+    e.stopPropagation();
+    setDeleteUser(user);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    // Here you would typically make an API call to remove the user from the role
+    console.log(`Removing user ${deleteUser.firstName} ${deleteUser.lastName} from role ${role.name}`);
+    
+    setShowDeleteConfirm(false);
+    setDeleteUser(null);
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
+    setDeleteUser(null);
   };
 
   return (
@@ -466,11 +487,22 @@ const RoleDetailPage = () => {
                                 <div className="text-sm text-body">{user.username} • {user.email}</div>
                               </div>
                             </div>
-                            <Badge 
-                              variant={user.status === 'Active' ? 'success' : 'secondary'}
-                            >
-                              {user.status}
-                            </Badge>
+                            <div className="flex items-center gap-2">
+                              <Badge 
+                                variant={user.status === 'Active' ? 'success' : 'secondary'}
+                              >
+                                {user.status}
+                              </Badge>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={(e) => handleDeleteClick(user, e)}
+                                className="text-primary hover:text-white hover:bg-primary"
+                                title="Remove user from role"
+                              >
+                                <TrashIcon className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </div>
                         ))}
                         {roleMembers.length === 0 && (
@@ -555,6 +587,48 @@ const RoleDetailPage = () => {
             onClick={handleCloseUserDetail}
           >
             Close
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal isOpen={showDeleteConfirm} onClose={handleDeleteCancel} className="max-w-md w-full">
+        <ModalHeader onClose={handleDeleteCancel}>
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-red-100 rounded-lg shrink-0">
+              <TrashIcon className="h-5 w-5 text-red-600" />
+            </div>
+            <div>
+              <ModalTitle className="text-header">Confirm Removal</ModalTitle>
+              <p className="text-sm text-muted-foreground mt-1">Remove user from role</p>
+            </div>
+          </div>
+        </ModalHeader>
+
+        <ModalContent>
+          <div className="space-y-4">
+            <p className="text-sm text-body">
+              Are you sure you want to remove <strong>{deleteUser?.firstName} {deleteUser?.lastName}</strong> from the role <strong>{role?.name}</strong>?
+            </p>
+            <p className="text-xs text-muted-foreground">
+              This action cannot be undone. The user will no longer have the permissions associated with this role.
+            </p>
+          </div>
+        </ModalContent>
+
+        <ModalFooter>
+          <Button
+            variant="destructive"
+            onClick={handleDeleteConfirm}
+            className="bg-red-600 hover:bg-red-700"
+          >
+            Remove User
+          </Button>
+          <Button
+            variant="outline"
+            onClick={handleDeleteCancel}
+          >
+            Cancel
           </Button>
         </ModalFooter>
       </Modal>

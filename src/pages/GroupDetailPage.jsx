@@ -9,7 +9,7 @@ import { Badge } from '../components/ui/badge';
 import { Label } from '../components/ui/label';
 import { FloatingLabelInput } from '../components/ui/floating-label-input';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
-import { ArrowLeftIcon, UserGroupIcon, UserIcon, CogIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, UserGroupIcon, UserIcon, CogIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { Modal, ModalHeader, ModalTitle, ModalContent, ModalFooter } from '../components/ui/modal';
 import { mockGroups, getGroupMembers } from '../data/mockGroups';
 import { mockRoles, getRoleMembers } from '../data/mockRoles';
@@ -30,6 +30,9 @@ const GroupDetailPage = () => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [showRoleModal, setShowRoleModal] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteItem, setDeleteItem] = useState(null);
+  const [deleteType, setDeleteType] = useState(null);
 
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('isAuthenticated');
@@ -101,6 +104,33 @@ const GroupDetailPage = () => {
 
   const handleBack = () => {
     navigate('/groups');
+  };
+
+  const handleDeleteClick = (item, type, e) => {
+    e.stopPropagation();
+    setDeleteItem(item);
+    setDeleteType(type);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (deleteType === 'user') {
+      // Here you would typically make an API call to remove the user from the group
+      console.log(`Removing user ${deleteItem.firstName} ${deleteItem.lastName} from group ${group.name}`);
+    } else if (deleteType === 'role') {
+      // Here you would typically make an API call to remove the role from the group
+      console.log(`Removing role ${deleteItem.name} from group ${group.name}`);
+    }
+    
+    setShowDeleteConfirm(false);
+    setDeleteItem(null);
+    setDeleteType(null);
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
+    setDeleteItem(null);
+    setDeleteType(null);
   };
 
   if (loading) {
@@ -329,11 +359,22 @@ const GroupDetailPage = () => {
                                 <div className="text-sm text-body">{member.username} • {member.email}</div>
                               </div>
                             </div>
-                            <Badge 
-                              variant={member.status === 'Active' ? 'success' : 'secondary'}
-                            >
-                              {member.status}
-                            </Badge>
+                            <div className="flex items-center gap-2">
+                              <Badge 
+                                variant={member.status === 'Active' ? 'success' : 'secondary'}
+                              >
+                                {member.status}
+                              </Badge>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={(e) => handleDeleteClick(member, 'user', e)}
+                                className="text-primary hover:text-white hover:bg-primary"
+                                title="Remove user from group"
+                              >
+                                <TrashIcon className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </div>
                         ))}
                         {groupMembers.length === 0 && (
@@ -375,12 +416,23 @@ const GroupDetailPage = () => {
                                 <span>{role.composite ? 'Composite' : 'Simple'} role</span>
                               </div>
                             </div>
-                            <Badge 
-                              variant={role.composite ? 'purple' : 'cyan'}
-                              className="text-xs"
-                            >
-                              {role.composite ? 'Composite' : 'Simple'}
-                            </Badge>
+                            <div className="flex items-center gap-2">
+                              <Badge 
+                                variant={role.composite ? 'purple' : 'cyan'}
+                                className="text-xs"
+                              >
+                                {role.composite ? 'Composite' : 'Simple'}
+                              </Badge>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={(e) => handleDeleteClick(role, 'role', e)}
+                                className="text-primary hover:text-white hover:bg-primary"
+                                title="Remove role from group"
+                              >
+                                <TrashIcon className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </div>
                         ))}
                         {assignedRoles.length === 0 && (
@@ -639,6 +691,58 @@ const GroupDetailPage = () => {
             }}
           >
             Close
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal isOpen={showDeleteConfirm} onClose={handleDeleteCancel} className="max-w-md w-full">
+        <ModalHeader onClose={handleDeleteCancel}>
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-red-100 rounded-lg shrink-0">
+              <TrashIcon className="h-5 w-5 text-red-600" />
+            </div>
+            <div>
+              <ModalTitle className="text-header">Confirm Removal</ModalTitle>
+              <p className="text-sm text-muted-foreground mt-1">
+                {deleteType === 'user' ? 'Remove user from group' : 'Remove role from group'}
+              </p>
+            </div>
+          </div>
+        </ModalHeader>
+
+        <ModalContent>
+          <div className="space-y-4">
+            <p className="text-sm text-body">
+              {deleteType === 'user' ? (
+                <>
+                  Are you sure you want to remove <strong>{deleteItem?.firstName} {deleteItem?.lastName}</strong> from the group <strong>{group?.name}</strong>?
+                </>
+              ) : (
+                <>
+                  Are you sure you want to remove the role <strong>{deleteItem?.name}</strong> from the group <strong>{group?.name}</strong>?
+                </>
+              )}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              This action cannot be undone. {deleteType === 'user' ? 'The user' : 'The role'} will no longer be associated with this group.
+            </p>
+          </div>
+        </ModalContent>
+
+        <ModalFooter>
+          <Button
+            variant="destructive"
+            onClick={handleDeleteConfirm}
+            className="bg-red-600 hover:bg-red-700"
+          >
+            Remove {deleteType === 'user' ? 'User' : 'Role'}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={handleDeleteCancel}
+          >
+            Cancel
           </Button>
         </ModalFooter>
       </Modal>

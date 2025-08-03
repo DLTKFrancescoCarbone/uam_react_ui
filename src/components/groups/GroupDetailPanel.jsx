@@ -109,7 +109,7 @@ const GroupDetailPanel = ({ group, onClose, onSave }) => {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="tabs-list-underline">
               <TabsTrigger value="details" className="tabs-trigger-underline">Details</TabsTrigger>
-              <TabsTrigger value="members" className="tabs-trigger-underline">Members</TabsTrigger>
+              <TabsTrigger value="members" className="tabs-trigger-underline">Assigned Users</TabsTrigger>
               <TabsTrigger value="roles" className="tabs-trigger-underline">Assigned Roles</TabsTrigger>
             </TabsList>
 
