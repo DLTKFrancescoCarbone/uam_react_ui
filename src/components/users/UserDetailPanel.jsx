@@ -18,6 +18,7 @@ const UserDetailPanel = ({ user, onClose, onSave }) => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [errors, setErrors] = useState({});
+  const [activeTab, setActiveTab] = useState("details");
 
   const handleInputChange = (field, value) => {
     setEditedUser(prev => ({
@@ -77,7 +78,7 @@ const UserDetailPanel = ({ user, onClose, onSave }) => {
   const userRoles = mockRoles.slice(0, 2); // Show first 2 roles as example
 
   return (
-    <div className="absolute top-0 right-0 w-96 h-full bg-white border-l border-gray-200 shadow-lg z-10">
+    <div className="absolute top-0 right-0 w-[420px] h-full bg-white border-l border-gray-200 shadow-lg z-10">
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
@@ -88,17 +89,17 @@ const UserDetailPanel = ({ user, onClose, onSave }) => {
             onClick={onClose}
             className="h-8 w-8 p-0"
           >
-            <XMarkIcon className="h-4 w-4" />
+            <XMarkIcon className="h-3.5 w-3.5" />
           </Button>
         </div>
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-4">
-          <Tabs defaultValue="details" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="details">Details</TabsTrigger>
-              <TabsTrigger value="groups">Groups</TabsTrigger>
-              <TabsTrigger value="roles">Roles</TabsTrigger>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="tabs-list-underline">
+              <TabsTrigger value="details" className="tabs-trigger-underline">Details</TabsTrigger>
+              <TabsTrigger value="groups" className="tabs-trigger-underline">Groups</TabsTrigger>
+              <TabsTrigger value="roles" className="tabs-trigger-underline">Roles</TabsTrigger>
             </TabsList>
 
             {/* Details Tab */}
@@ -199,8 +200,7 @@ const UserDetailPanel = ({ user, onClose, onSave }) => {
                     <Label className="text-sm font-medium">Status</Label>
                     <div>
                       <Badge 
-                        variant={user.status === 'Active' ? 'default' : 'secondary'}
-                        className={user.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}
+                        variant={user.status === 'Active' ? 'success' : 'secondary'}
                       >
                         {user.status}
                       </Badge>

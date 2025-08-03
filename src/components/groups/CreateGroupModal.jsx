@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalTitle, ModalContent, ModalFooter } from '../ui/modal';
 import { Button } from '../ui/button';
-import { Input } from '../ui/input';
+import { FloatingLabelInput } from '../ui/floating-label-input';
 import { Label } from '../ui/label';
 
 const CreateGroupModal = ({ isOpen, onClose, onSave }) => {
@@ -59,21 +59,13 @@ const CreateGroupModal = ({ isOpen, onClose, onSave }) => {
       </ModalHeader>
       
       <ModalContent className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="name" className="text-sm font-medium">
-            Group Name <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="name"
-            value={formData.name}
-            onChange={(e) => handleInputChange('name', e.target.value)}
-            className={errors.name ? 'border-red-500' : ''}
-            placeholder="Enter group name"
-          />
-          {errors.name && (
-            <p className="text-xs text-red-500 mt-1">{errors.name}</p>
-          )}
-        </div>
+        <FloatingLabelInput
+          id="name"
+          label="Group Name *"
+          value={formData.name}
+          onChange={(e) => handleInputChange('name', e.target.value)}
+          error={errors.name}
+        />
       </ModalContent>
 
       <ModalFooter>

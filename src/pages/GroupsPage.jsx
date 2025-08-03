@@ -6,6 +6,8 @@ import Footer from '../components/layout/Footer';
 import CreateGroupModal from '../components/groups/CreateGroupModal';
 import GroupsTable from '../components/groups/GroupsTable';
 import ViewToggle from '../components/ui/view-toggle';
+import { getGroupMembers } from '../data/mockGroups';
+import { mockUsers } from '../data/mockUsers';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -44,6 +46,8 @@ const GroupsPage = () => {
   const [viewMode, setViewMode] = useState(() => {
     return localStorage.getItem('groupsViewMode') || 'card';
   });
+  const [showMembersModal, setShowMembersModal] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState(null);
 
   // Use mock groups data
   const [groups] = useState(mockGroups);
@@ -66,12 +70,15 @@ const GroupsPage = () => {
 
   const handleSaveGroup = (groupData) => {
     console.log('Save group:', groupData);
-    // Here you would typically make an API call to save the group
+    // Here you would typically make an API call to save/update the group
     // For now, just log the data
+    if (isCreateModalOpen) {
+      setIsCreateModalOpen(false);
+    }
   };
 
   const handleEditGroup = (groupId) => {
-    console.log('Edit group:', groupId);
+    navigate(`/groups/${groupId}`);
   };
 
   const handleDeleteGroup = (groupId) => {
@@ -79,12 +86,23 @@ const GroupsPage = () => {
   };
 
   const handleViewMembers = (groupId) => {
-    console.log('View members for group:', groupId);
+    const group = groups.find(g => g.id === groupId);
+    if (group) {
+      setSelectedGroup(group);
+      setShowMembersModal(true);
+    }
   };
 
   const handleViewRoles = (groupId) => {
+    // This is now handled by the GroupsTable component internally
     console.log('View roles for group:', groupId);
   };
+
+  const handleCloseMembersModal = () => {
+    setShowMembersModal(false);
+    setSelectedGroup(null);
+  };
+
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -282,13 +300,7 @@ const GroupsPage = () => {
                 </div>
               ) : (
                 <Card className="overflow-visible mb-5 h-full">
-                  <GroupsTable
-                    groups={filteredGroups}
-                    onEditGroup={handleEditGroup}
-                    onDeleteGroup={handleDeleteGroup}
-                    onViewMembers={handleViewMembers}
-                    onViewRoles={handleViewRoles}
-                  />
+                  <GroupsTable />
                 </Card>
               )}
 
@@ -326,6 +338,89 @@ const GroupsPage = () => {
         onClose={handleCloseCreateModal}
         onSave={handleSaveGroup}
       />
+
+      {/* Group Members Modal */}
+      {showMembersModal && selectedGroup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[85vh] flex flex-col">
+            <div className="p-6 border-b flex-shrink-0">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold">{selectedGroup.name} ({getGroupMembers(selectedGroup.id).length})</h2>
+                  <p className="text-sm text-gray-600 mt-1">{selectedGroup.description}</p>
+                </div>
+                <button
+                  onClick={handleCloseMembersModal}
+                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-700"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+            <div className="p-6 overflow-y-auto flex-1">
+              <div className="space-y-3">
+                {getGroupMembers(selectedGroup.id).map((member) => {
+                  // Check if this is a real user ID that has a detail page
+                  const isRealUser = mockUsers.find(user => Number(user.id) === Number(member.id));
+                  const isClickable = Boolean(isRealUser);
+                  
+                  return (
+                    <div 
+                      key={member.id} 
+                      className={`flex items-center justify-between p-3 border rounded-lg transition-all duration-200 ${
+                        isClickable 
+                          ? 'hover:bg-blue-50 hover:border-blue-200 cursor-pointer' 
+                          : 'hover:bg-gray-50 cursor-default opacity-90'
+                      }`}
+                      onClick={() => {
+                        if (isClickable) {
+                          handleCloseMembersModal();
+                          navigate(`/users/${member.id}`);
+                        }
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                          isClickable ? 'bg-blue-100' : 'bg-gray-100'
+                        }`}>
+                          <span className={`font-medium text-sm ${
+                            isClickable ? 'text-blue-600' : 'text-gray-600'
+                          }`}>
+                            {member.firstName[0]}{member.lastName[0]}
+                          </span>
+                        </div>
+                        <div>
+                          <div className={`font-medium text-sm ${
+                            isClickable 
+                              ? 'text-blue-900 hover:text-blue-700' 
+                              : 'text-gray-700'
+                          }`}>
+                            {member.firstName} {member.lastName}
+                            {isClickable && <span className="ml-2 text-xs text-blue-500">• View Profile</span>}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {member.username} • {member.email}
+                          </div>
+                        </div>
+                      </div>
+                      <Badge 
+                        variant={member.status === 'Active' ? 'success' : 'secondary'}
+                      >
+                        {member.status}
+                      </Badge>
+                    </div>
+                  );
+                })}
+                {getGroupMembers(selectedGroup.id).length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    No members found in this group
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

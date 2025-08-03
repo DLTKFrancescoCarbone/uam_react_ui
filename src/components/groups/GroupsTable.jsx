@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { RevoGrid, Template } from '@revolist/react-datagrid';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
@@ -7,16 +8,14 @@ import {
   EyeIcon,
   TrashIcon
 } from '@heroicons/react/24/outline';
+import { mockGroups } from '../../data/mockGroups';
+import GroupDetailPanel from './GroupDetailPanel';
 
-const GroupsTable = ({ 
-  groups, 
-  onEditGroup, 
-  onDeleteGroup, 
-  onViewMembers,
-  onViewRoles 
-}) => {
+const GroupsTable = ({ className = '' }) => {
+  const navigate = useNavigate();
   // Only include properties defined in columns to prevent extra columns
   const columnProps = [
+    'id',
     'select',
     'name',
     'department',
@@ -25,25 +24,51 @@ const GroupsTable = ({
     'manager',
     'createdDate'
   ];
-  const [filteredGroups] = useState(
-    groups.map(group =>
+  const [groups, setGroups] = useState(
+    mockGroups.map(group =>
       Object.fromEntries(
         Object.entries(group).filter(([key]) => columnProps.includes(key))
       )
     )
   );
+  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [showDetailPanel, setShowDetailPanel] = useState(false);
+
+  // Handle group click to show detail panel
+  const handleGroupClick = (group) => {
+    setSelectedGroup(group);
+    setShowDetailPanel(true);
+  };
+
+  // Handle closing detail panel
+  const handleCloseDetailPanel = () => {
+    setShowDetailPanel(false);
+    setSelectedGroup(null);
+  };
+
+  // Handle saving group changes
+  const handleSaveGroup = (updatedGroup) => {
+    setGroups(prevGroups => 
+      prevGroups.map(group => 
+        group.id === updatedGroup.id ? updatedGroup : group
+      )
+    );
+  };
 
   // Helper function for department badge colors
   const getDepartmentColor = (department) => {
     const colors = {
-      'Engineering': 'default',
-      'Management': 'secondary',
-      'Finance': 'outline',
-      'IT': 'secondary',
-      'Marketing': 'outline',
-      'Construction': 'default'
+      'Engineering': 'success',      // Green
+      'Management': 'purple',        // Purple
+      'Finance': 'warning',          // Yellow/Orange
+      'IT': 'info',                  // Blue
+      'Marketing': 'pink',           // Pink
+      'Construction': 'teal',        // Teal
+      'Operations': 'indigo',        // Indigo
+      'Sales': 'cyan',               // Cyan
+      'HR': 'orange'                 // Orange
     };
-    return colors[department] || 'outline';
+    return colors[department] || 'secondary';
   };
 
   // Department cell component with colored badge
@@ -53,17 +78,28 @@ const GroupsTable = ({
     </Badge>
   );
 
-  // Group name cell component - now read-only
-  const GroupNameCell = ({ model, prop, value }) => (
-    <div className="flex items-center gap-3">
-      <div className="p-1.5 bg-primary/10 rounded-lg shrink-0">
-        <UserGroupIcon className="h-4 w-4 text-primary" />
-      </div>
-      <span className="text-left font-medium">
-        {value}
-      </span>
-    </div>
-  );
+  // Group name cell component - clickable link to group detail page
+  const GroupNameCell = ({ model, prop, value }) => {
+    const handleGroupNameClick = (e) => {
+      e.preventDefault();
+      navigate(`/groups/${model.id}`);
+    };
+
+    return (
+      <button
+        onClick={handleGroupNameClick}
+        className="text-left text-blue-600 hover:text-blue-800 hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded px-1 py-0.5 w-full text-left flex items-center gap-3"
+        style={{ background: 'transparent', border: 'none' }}
+      >
+        <div className="p-1.5 bg-primary/10 rounded-lg shrink-0">
+          <UserGroupIcon className="h-4 w-4 text-primary" />
+        </div>
+        <span className="font-medium">
+          {value}
+        </span>
+      </button>
+    );
+  };
 
   // Actions cell component
   const ActionsCell = ({ model, prop, value }) => (
@@ -71,14 +107,13 @@ const GroupsTable = ({
       <Button 
         variant="ghost" 
         size="icon" 
-        onClick={() => onEditGroup(model.id)}
+        onClick={() => handleGroupClick(model)}
       >
         <EyeIcon className="h-4 w-4 text-gray-600" />
       </Button>
       <Button 
         variant="ghost" 
         size="icon"
-        onClick={() => onDeleteGroup(model.id)}
       >
         <TrashIcon className="h-4 w-4 text-gray-600" />
       </Button>
@@ -194,27 +229,37 @@ const GroupsTable = ({
   ];
 
   return (
-    <div className="flex-1 h-full flex flex-col revogrid-scrollable-container" style={{ minHeight: 0, width: '100%', overflowX: 'auto' }}>
-      <div className="flex-1 h-full mb-5">
-        <RevoGrid
-          source={filteredGroups}
-          columns={columns}
-          theme="compact"
-          resize={true}
-          range={true}
-          rowHeaders={true}
-          rowSize={45}
-          readonly={true}
-          className="revogrid-container w-full h-full"
-          autoSizeColumn={true}
-          trimmedRows={false}
-          exporting={true}
-          useVirtualScrolling={true}
-          stretch={true}
-          height="100%"
-          style={{ width: '100%' }}
+    <div
+      className="flex-1 mb-5 h-full relative revogrid-scrollable-container"
+      style={{ minHeight: 0, width: '100%', overflowX: 'auto' }}
+    >
+      <RevoGrid
+        source={groups}
+        columns={columns}
+        theme="compact"
+        resize={true}
+        range={true}
+        rowHeaders={true}
+        rowSize={45}
+        readonly={true}
+        className="revogrid-container w-full h-full"
+        autoSizeColumn={true}
+        trimmedRows={false}
+        exporting={true}
+        useVirtualScrolling={true}
+        stretch={true}
+        height="100%"
+        style={{ width: '100%' }}
+      />
+
+      {/* Group Detail Panel */}
+      {showDetailPanel && selectedGroup && (
+        <GroupDetailPanel
+          group={selectedGroup}
+          onClose={handleCloseDetailPanel}
+          onSave={handleSaveGroup}
         />
-      </div>
+      )}
     </div>
   );
 };

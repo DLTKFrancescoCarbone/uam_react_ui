@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { RevoGrid, Template } from '@revolist/react-datagrid';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
@@ -7,6 +8,8 @@ import { mockUsers } from '../../data/mockUsers';
 import UserDetailPanel from './UserDetailPanel';
 
 const UserTable = ({ className = '' }) => {
+  const navigate = useNavigate();
+  
   // Only include properties defined in columns to prevent extra columns
   const columnProps = [
     'id',
@@ -51,23 +54,45 @@ const UserTable = ({ className = '' }) => {
 
   // Status cell component
   const StatusCell = ({ model, prop, value }) => {
-    const isActive = value === 'Active';
+    const getStatusVariant = (status) => {
+      switch (status.toLowerCase()) {
+        case 'active':
+          return 'success';
+        case 'inactive':
+          return 'secondary';
+        case 'pending':
+          return 'warning';
+        case 'suspended':
+          return 'error';
+        default:
+          return 'secondary';
+      }
+    };
+
     return (
-      <Badge 
-        variant={isActive ? 'default' : 'secondary'}
-        className={isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}
-      >
+      <Badge variant={getStatusVariant(value)}>
         {value}
       </Badge>
     );
   };
 
-  // Username cell component - now read-only
-  const UsernameCell = ({ model, prop, value }) => (
-    <span className="text-left">
-      {value}
-    </span>
-  );
+  // Username cell component - clickable link to user detail page
+  const UsernameCell = ({ model, prop, value }) => {
+    const handleUsernameClick = (e) => {
+      e.preventDefault();
+      navigate(`/users/${model.id}`);
+    };
+
+    return (
+      <button
+        onClick={handleUsernameClick}
+        className="text-left text-blue-600 hover:text-blue-800 hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded px-1 py-0.5 w-full text-left"
+        style={{ background: 'transparent', border: 'none' }}
+      >
+        {value}
+      </button>
+    );
+  };
 
   // Actions cell component
   const ActionsCell = ({ model, prop, value }) => (

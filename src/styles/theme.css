@@ -1,14 +1,10 @@
 l/* Theme CSS - Centralized styling for scalability */
 
-/* Badge Color Classes */
+/* Badge Color Classes - Standardized without hover states for table usage */
 .badge-info {
   background-color: oklch(0.74 0.16 232.661);
   color: oklch(0.29 0.066 243.157);
   border: transparent;
-}
-
-.badge-info:hover {
-  background-color: oklch(0.68 0.16 232.661);
 }
 
 .badge-success {
@@ -17,18 +13,10 @@ l/* Theme CSS - Centralized styling for scalability */
   border: transparent;
 }
 
-.badge-success:hover {
-  background-color: oklch(0.70 0.177 163.223);
-}
-
 .badge-warning {
   background-color: oklch(0.82 0.189 84.429);
   color: oklch(0.41 0.112 45.904);
   border: transparent;
-}
-
-.badge-warning:hover {
-  background-color: oklch(0.76 0.189 84.429);
 }
 
 .badge-error {
@@ -37,8 +25,41 @@ l/* Theme CSS - Centralized styling for scalability */
   border: transparent;
 }
 
-.badge-error:hover {
-  background-color: oklch(0.65 0.194 13.428);
+/* Additional Badge Colors for Groups and Roles */
+.badge-purple {
+  background-color: oklch(0.75 0.15 308);
+  color: oklch(0.35 0.09 308);
+  border: transparent;
+}
+
+.badge-teal {
+  background-color: oklch(0.75 0.12 200);
+  color: oklch(0.35 0.08 200);
+  border: transparent;
+}
+
+.badge-indigo {
+  background-color: oklch(0.72 0.18 260);
+  color: oklch(0.32 0.12 260);
+  border: transparent;
+}
+
+.badge-pink {
+  background-color: oklch(0.78 0.14 350);
+  color: oklch(0.38 0.10 350);
+  border: transparent;
+}
+
+.badge-cyan {
+  background-color: oklch(0.77 0.11 210);
+  color: oklch(0.37 0.08 210);
+  border: transparent;
+}
+
+.badge-orange {
+  background-color: oklch(0.79 0.16 50);
+  color: oklch(0.39 0.11 50);
+  border: transparent;
 }
 
 /* Sidebar Styles */
@@ -401,7 +422,7 @@ l/* Theme CSS - Centralized styling for scalability */
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  overflow: hidden;
+  overflow-y: auto;
   height: 100%;
 }
 
@@ -753,4 +774,194 @@ revo-grid {
 
 .revogrid-container .rgHeaderCell-text {
   color: #373F4E !important;
+}
+
+/* Form Field Styles */
+.form-field-readonly {
+  font-size: 0.875rem;
+  color: #646D82;
+  background-color: #f9fafb;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px dashed #d1d5db;
+  opacity: 0.8;
+}
+
+.form-field-readonly-simple {
+  font-size: 0.875rem;
+  color: #646D82;
+  background-color: #f9fafb;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px dashed #d1d5db;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  min-height: 2.5rem;
+}
+
+.form-field-editable {
+  font-size: 0.875rem;
+}
+
+/* Tab Container Styles */
+.tabs-container {
+  width: 100%;
+}
+
+.tabs-list-custom {
+  display: inline-flex;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  background-color: #f1f5f9;
+  padding: 0.25rem;
+  color: #64748b;
+  width: fit-content;
+}
+
+.tabs-trigger-custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 150ms ease-in-out;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+
+.tabs-trigger-custom:hover {
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.tabs-trigger-custom[data-state="active"] {
+  background-color: white;
+  color: #0f172a;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+/* Underline Tab Styles - Based on shadcn blocks example */
+.tabs-list-underline {
+  width: 100% !important;
+  padding: 0 !important;
+  background: hsl(var(--background)) !important;
+  justify-content: flex-start !important;
+  border-bottom: 1px solid hsl(var(--border)) !important;
+  border-radius: 0 !important;
+  height: auto !important;
+}
+
+/* High specificity selectors for tab triggers */
+.tabs-list-underline .tabs-trigger-underline,
+[data-radix-collection-item].tabs-trigger-underline,
+button.tabs-trigger-underline {
+  border-radius: 0 !important;
+  background: hsl(var(--background)) !important;
+  height: 100% !important;
+  box-shadow: none !important;
+  border-bottom: 2px solid transparent !important;
+  padding: 0.75rem 1rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  transition: all 150ms ease-in-out !important;
+  color: hsl(var(--muted-foreground)) !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/* Hover state with high specificity */
+.tabs-list-underline .tabs-trigger-underline:hover:not([data-state="active"]),
+[data-radix-collection-item].tabs-trigger-underline:hover:not([data-state="active"]),
+button.tabs-trigger-underline:hover:not([data-state="active"]) {
+  color: hsl(var(--foreground)) !important;
+  background: hsl(var(--background)) !important;
+  border-bottom: 2px solid hsl(var(--muted-foreground)) !important;
+}
+
+/* Active state targeting the actual CSS classes used by the custom tabs implementation */
+.tabs-list-underline .tabs-trigger-underline.bg-background {
+  box-shadow: none !important;
+  border-bottom: 2px solid #30659F !important;
+  color: #373F4E !important;
+  background: hsl(var(--background)) !important;
+  font-weight: 600 !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/* Target active tabs with text-foreground class */
+.tabs-list-underline .tabs-trigger-underline.text-foreground {
+  color: #373F4E !important;
+  border-bottom: 2px solid #30659F !important;
+  font-weight: 600 !important;
+}
+
+/* Target active tabs with shadow-sm class */
+.tabs-list-underline .tabs-trigger-underline.shadow-sm {
+  box-shadow: none !important;
+  border-bottom: 2px solid #30659F !important;
+}
+
+/* High specificity for active state combination */
+.tabs-list-underline .tabs-trigger-underline.bg-background.text-foreground.shadow-sm {
+  box-shadow: none !important;
+  border-bottom: 2px solid #30659F !important;
+  color: #373F4E !important;
+  background: hsl(var(--background)) !important;
+  font-weight: 600 !important;
+}
+
+/* Floating Label Input Styles */
+.floating-label-container {
+  position: relative;
+}
+
+.floating-label-input {
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.floating-label {
+  position: absolute;
+  left: 0.75rem;
+  top: 0.75rem;
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: text;
+  pointer-events: none;
+  user-select: none;
+  transform-origin: left top;
+}
+
+.floating-label.floating {
+  top: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transform: scale(1);
+}
+
+.floating-label.focused {
+  color: #30659F;
+}
+
+.floating-label.error {
+  color: #dc2626;
+}
+
+/* Ensure smooth transitions for floating labels */
+.floating-label-input:focus + .floating-label,
+.floating-label-input:not(:placeholder-shown) + .floating-label {
+  top: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
 }

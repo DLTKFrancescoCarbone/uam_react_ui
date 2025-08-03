@@ -1,3 +1,6 @@
+// Import actual users to use real user data for group members
+import { mockUsers } from './mockUsers.js';
+
 export const mockGroups = [
   {
     id: '1',
@@ -205,4 +208,65 @@ export const getTotalMembers = () => {
 
 export const getTotalRoles = () => {
   return mockGroups.reduce((total, group) => total + group.roleCount, 0);
+};
+
+// Create realistic group member assignments using actual user data
+const createGroupMembers = (userIds) => {
+  return userIds.map(id => {
+    const user = mockUsers.find(u => u.id === id);
+    return user ? {
+      id: user.id,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      status: user.status
+    } : null;
+  }).filter(Boolean);
+};
+
+// Generate additional mock users for larger groups (since we only have 15 real users)
+const generateAdditionalMembers = (count, startId = 100) => {
+  const firstNames = ['Aaron', 'Adam', 'Alex', 'Amanda', 'Amelia', 'Benjamin', 'Bella', 'Beth', 'Carl', 'Chris', 'David', 'Emma', 'Frank', 'Grace', 'Henry', 'Isabella', 'Jack', 'Kate', 'Liam', 'Mia', 'Noah', 'Olivia', 'Peter', 'Quinn', 'Ryan', 'Sarah', 'Tom', 'Uma', 'Victor', 'Wendy'];
+  const lastNames = ['Anderson', 'Brown', 'Clark', 'Davis', 'Evans', 'Fisher', 'Green', 'Hall', 'Johnson', 'King', 'Lee', 'Miller', 'Nelson', 'Parker', 'Rodriguez', 'Smith', 'Taylor', 'Wilson', 'Young', 'Zhang'];
+  const domains = ['example.com', 'company.com', 'corp.com', 'enterprise.com'];
+  
+  return Array.from({ length: count }, (_, index) => {
+    const firstName = firstNames[index % firstNames.length];
+    const lastName = lastNames[index % lastNames.length];
+    const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${index + startId}`;
+    const email = `${username}@${domains[index % domains.length]}`;
+    const status = Math.random() > 0.15 ? 'Active' : 'Inactive';
+    
+    return {
+      id: startId + index,
+      username,
+      firstName,
+      lastName,
+      email,
+      status
+    };
+  });
+};
+
+export const mockGroupMembers = {
+  // Engineering Team - Mix of real users + generated ones to reach 45
+  '1': [
+    ...createGroupMembers([2, 3, 5, 13, 15]), // 5 real users
+    ...generateAdditionalMembers(40, 100) // 40 additional members
+  ],
+  // Project Managers - Mix of real users + generated ones to reach 23  
+  '2': [
+    ...createGroupMembers([6, 7, 11]), // 3 real users
+    ...generateAdditionalMembers(20, 200) // 20 additional members
+  ],
+  // Finance Department - Mix of real users + generated ones to reach 18
+  '3': [
+    ...createGroupMembers([8, 9, 14]), // 3 real users  
+    ...generateAdditionalMembers(15, 300) // 15 additional members
+  ]
+};
+
+export const getGroupMembers = (groupId) => {
+  return mockGroupMembers[groupId] || [];
 };

@@ -1,3 +1,6 @@
+// Import actual users to use real user data for role members
+import { mockUsers } from './mockUsers.js';
+
 export const mockRoles = [
   {
     id: '1',
@@ -135,4 +138,60 @@ export const getCompositeRoles = () => {
 
 export const getSimpleRoles = () => {
   return mockRoles.filter(role => !role.composite);
+};
+
+// Create realistic role member assignments using actual user data
+const createRoleMembers = (userIds) => {
+  return userIds.map(id => {
+    const user = mockUsers.find(u => u.id === id);
+    return user ? {
+      id: user.id,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      status: user.status
+    } : null;
+  }).filter(Boolean);
+};
+
+// Generate additional mock users for larger roles (since we only have 15 real users)
+const generateAdditionalRoleMembers = (count, startId = 400) => {
+  const firstNames = ['Aaron', 'Adam', 'Alex', 'Amanda', 'Amelia', 'Benjamin', 'Bella', 'Beth', 'Carl', 'Chris', 'David', 'Emma', 'Frank', 'Grace', 'Henry', 'Isabella', 'Jack', 'Kate', 'Liam', 'Mia', 'Noah', 'Olivia', 'Peter', 'Quinn', 'Ryan', 'Sarah', 'Tom', 'Uma', 'Victor', 'Wendy'];
+  const lastNames = ['Anderson', 'Brown', 'Clark', 'Davis', 'Evans', 'Fisher', 'Green', 'Hall', 'Johnson', 'King', 'Lee', 'Miller', 'Nelson', 'Parker', 'Rodriguez', 'Smith', 'Taylor', 'Wilson', 'Young', 'Zhang'];
+  const domains = ['example.com', 'company.com', 'corp.com', 'enterprise.com'];
+  
+  return Array.from({ length: count }, (_, index) => {
+    const firstName = firstNames[index % firstNames.length];
+    const lastName = lastNames[index % lastNames.length];
+    const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${index + startId}`;
+    const email = `${username}@${domains[index % domains.length]}`;
+    const status = Math.random() > 0.15 ? 'Active' : 'Inactive';
+    
+    return {
+      id: startId + index,
+      username,
+      firstName,
+      lastName,
+      email,
+      status
+    };
+  });
+};
+
+export const mockRoleMembers = {
+  // admin - Mix of real users + generated ones to reach 5
+  '1': [
+    ...createRoleMembers([4, 1]), // 2 real users (admin, aaa)
+    ...generateAdditionalRoleMembers(3, 400) // 3 additional members
+  ],
+  // project-manager - Mix of real users + generated ones to reach 23
+  '2': [
+    ...createRoleMembers([6, 7, 11]), // 3 real users
+    ...generateAdditionalRoleMembers(20, 500) // 20 additional members
+  ]
+};
+
+export const getRoleMembers = (roleId) => {
+  return mockRoleMembers[roleId] || [];
 };

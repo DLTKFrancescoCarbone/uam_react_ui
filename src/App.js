@@ -7,7 +7,9 @@ import Dashboard from './pages/Dashboard';
 import UsersPage from './pages/UsersPage';
 import UserDetailPage from './pages/UserDetailPage';
 import RolesPage from './pages/RolesPage';
+import RoleDetailPage from './pages/RoleDetailPage';
 import GroupsPage from './pages/GroupsPage';
+import GroupDetailPage from './pages/GroupDetailPage';
 import './App.css';
 
 function App() {
@@ -23,7 +25,9 @@ function App() {
           <Route path="/users" element={<UsersPage />} />
           <Route path="/users/:userId" element={<UserDetailPage />} />
           <Route path="/roles" element={<RolesPage />} />
+          <Route path="/roles/:roleId" element={<RoleDetailPage />} />
           <Route path="/groups" element={<GroupsPage />} />
+          <Route path="/groups/:groupId" element={<GroupDetailPage />} />
         </Routes>
       </div>
     </Router>

@@ -44,7 +44,6 @@ const LoginPage = () => {
             <path d="M1243.4 419.525L1289.47 499.985L1243.4 585.042" stroke="url(#paint2_linear_1_2)" strokeWidth="0.853178"/>
             <path d="M458.906 502.71L568.539 314.585H590.722V690.41H568.539L458.906 502.71Z" fill="url(#paint3_linear_1_2)"/>
             <path d="M1266.01 499.298L1155.95 311.599L1133.34 312.025V689.13H1155.52L1266.01 499.298Z" fill="url(#paint4_linear_1_2)"/>
-            <line x1="961.5" y1="385" x2="961.5" y2="629" stroke="white" strokeOpacity="0.2"/>
           </g>
           <defs>
             <linearGradient id="paint0_linear_1_2" x1="0" y1="0" x2="1728" y2="1117" gradientUnits="userSpaceOnUse">

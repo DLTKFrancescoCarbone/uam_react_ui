@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalTitle, ModalContent, ModalFooter } from '../ui/modal';
 import { Button } from '../ui/button';
-import { Input } from '../ui/input';
+import { FloatingLabelInput } from '../ui/floating-label-input';
 import { Label } from '../ui/label';
 
 const AddRoleModal = ({ isOpen, onClose, onSave }) => {
@@ -10,24 +10,46 @@ const AddRoleModal = ({ isOpen, onClose, onSave }) => {
     description: ''
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const [errors, setErrors] = useState({});
+
+  const handleInputChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [field]: value
     }));
+    
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({
+        ...prev,
+        [field]: ''
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.roleName.trim()) {
+      newErrors.roleName = 'Role Name is required';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSave = () => {
-    if (formData.roleName.trim()) {
+    if (validateForm()) {
       onSave(formData);
       setFormData({ roleName: '', description: '' });
+      setErrors({});
       onClose();
     }
   };
 
   const handleCancel = () => {
     setFormData({ roleName: '', description: '' });
+    setErrors({});
     onClose();
   };
 
@@ -38,20 +60,13 @@ const AddRoleModal = ({ isOpen, onClose, onSave }) => {
       </ModalHeader>
       
       <ModalContent className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="roleName" className="text-sm font-medium">
-            Role Name <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="roleName"
-            name="roleName"
-            type="text"
-            value={formData.roleName}
-            onChange={handleInputChange}
-            placeholder="Enter role name"
-            className="w-full"
-          />
-        </div>
+        <FloatingLabelInput
+          id="roleName"
+          label="Role Name *"
+          value={formData.roleName}
+          onChange={(e) => handleInputChange('roleName', e.target.value)}
+          error={errors.roleName}
+        />
         
         <div className="space-y-2">
           <Label htmlFor="description" className="text-sm font-medium">
@@ -61,7 +76,7 @@ const AddRoleModal = ({ isOpen, onClose, onSave }) => {
             id="description"
             name="description"
             value={formData.description}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange('description', e.target.value)}
             placeholder="Enter role description"
             rows={4}
             className="w-full px-3 py-2 border border-input bg-background rounded-md text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"

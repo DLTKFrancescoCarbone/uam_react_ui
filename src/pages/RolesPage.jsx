@@ -24,7 +24,8 @@ import {
 import AddRoleModal from '../components/roles/AddRoleModal';
 import RolesTable from '../components/roles/RolesTable';
 import ViewToggle from '../components/ui/view-toggle';
-import { mockRoles } from '../data/mockRoles';
+import { mockRoles, getRoleMembers } from '../data/mockRoles';
+import { mockUsers } from '../data/mockUsers';
 import { 
   CogIcon, 
   MagnifyingGlassIcon,
@@ -43,6 +44,8 @@ const RolesPage = () => {
   const [viewMode, setViewMode] = useState(() => {
     return localStorage.getItem('rolesViewMode') || 'card';
   });
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [showUsersModal, setShowUsersModal] = useState(false);
 
   // Import mock roles data
   const [roles] = useState(mockRoles);
@@ -69,7 +72,7 @@ const RolesPage = () => {
   };
 
   const handleEditRole = (roleId) => {
-    console.log('Edit role:', roleId);
+    navigate(`/roles/${roleId}`);
   };
 
   const handleDeleteRole = (roleId) => {
@@ -77,7 +80,16 @@ const RolesPage = () => {
   };
 
   const handleViewUsers = (roleId) => {
-    console.log('View users for role:', roleId);
+    const role = roles.find(r => r.id === roleId);
+    if (role) {
+      setSelectedRole(role);
+      setShowUsersModal(true);
+    }
+  };
+
+  const handleCloseUsersModal = () => {
+    setShowUsersModal(false);
+    setSelectedRole(null);
   };
 
   const handleSearch = (e) => {
@@ -254,12 +266,7 @@ const RolesPage = () => {
                 </div>
               ) : (
                 <Card className="overflow-visible mb-5 h-full">
-                  <RolesTable
-                    roles={filteredRoles}
-                    onEditRole={handleEditRole}
-                    onDeleteRole={handleDeleteRole}
-                    onViewUsers={handleViewUsers}
-                  />
+                  <RolesTable />
                 </Card>
               )}
 
@@ -297,6 +304,89 @@ const RolesPage = () => {
         onClose={handleCloseAddRoleModal}
         onSave={handleSaveRole}
       />
+
+      {/* Role Users Modal */}
+      {showUsersModal && selectedRole && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[85vh] flex flex-col">
+            <div className="p-6 border-b flex-shrink-0">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold">{selectedRole.name} ({getRoleMembers(selectedRole.id).length})</h2>
+                  <p className="text-sm text-gray-600 mt-1">{selectedRole.description}</p>
+                </div>
+                <button
+                  onClick={handleCloseUsersModal}
+                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-700"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+            <div className="p-6 overflow-y-auto flex-1">
+              <div className="space-y-3">
+                {getRoleMembers(selectedRole.id).map((user) => {
+                  // Check if this is a real user ID that has a detail page
+                  const isRealUser = mockUsers.find(u => Number(u.id) === Number(user.id));
+                  const isClickable = Boolean(isRealUser);
+                  
+                  return (
+                    <div 
+                      key={user.id} 
+                      className={`flex items-center justify-between p-3 border rounded-lg transition-all duration-200 ${
+                        isClickable 
+                          ? 'hover:bg-blue-50 hover:border-blue-200 cursor-pointer' 
+                          : 'hover:bg-gray-50 cursor-default opacity-90'
+                      }`}
+                      onClick={() => {
+                        if (isClickable) {
+                          handleCloseUsersModal();
+                          navigate(`/users/${user.id}`);
+                        }
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                          isClickable ? 'bg-blue-100' : 'bg-gray-100'
+                        }`}>
+                          <span className={`font-medium text-sm ${
+                            isClickable ? 'text-blue-600' : 'text-gray-600'
+                          }`}>
+                            {user.firstName[0]}{user.lastName[0]}
+                          </span>
+                        </div>
+                        <div>
+                          <div className={`font-medium text-sm ${
+                            isClickable 
+                              ? 'text-blue-900 hover:text-blue-700' 
+                              : 'text-gray-700'
+                          }`}>
+                            {user.firstName} {user.lastName}
+                            {isClickable && <span className="ml-2 text-xs text-blue-500">• View Profile</span>}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {user.username} • {user.email}
+                          </div>
+                        </div>
+                      </div>
+                      <Badge 
+                        variant={user.status === 'Active' ? 'success' : 'secondary'}
+                      >
+                        {user.status}
+                      </Badge>
+                    </div>
+                  );
+                })}
+                {getRoleMembers(selectedRole.id).length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    No users assigned to this role
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Checkbox = React.forwardRef(({ className = '', checked, onChange, children, ...props }, ref) => {
+const Checkbox = React.forwardRef(({ className = '', textClassName = '', checked, onChange, children, ...props }, ref) => {
   return (
     <label className="flex items-center space-x-2 cursor-pointer">
       <input
@@ -12,7 +12,7 @@ const Checkbox = React.forwardRef(({ className = '', checked, onChange, children
         {...props}
       />
       {children && (
-        <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+        <span className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${textClassName}`}>
           {children}
         </span>
       )}
