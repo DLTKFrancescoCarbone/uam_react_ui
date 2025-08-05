@@ -1234,11 +1234,32 @@ button.tabs-trigger-underline:hover:not([data-state="active"]) {
     gap: 1rem !important;
   }
   
+  /* Add proper spacing between filter and results count */
+  .p-4.border.rounded-lg.bg-card .flex.flex-col.md\\:flex-row.items-center.space-y-3.md\\:space-y-0.md\\:space-x-6 {
+    margin-top: 1rem !important;
+    gap: 1.5rem !important;
+  }
+  
+  /* Ensure results count has proper spacing */
+  .p-4.border.rounded-lg.bg-card .text-sm.text-muted-foreground.whitespace-nowrap {
+    margin-left: 1rem !important;
+  }
+  
   /* Ensure search container maintains minimum width */
   .relative.w-full.sm\\:w-auto.sm\\:max-w-sm {
     width: 100% !important;
     max-width: none !important;
     min-width: 250px !important;
+  }
+  
+  
+  /* Override any line-clamp or truncation utilities */
+  .p-4.border.rounded-lg.bg-card [class*="line-clamp"] {
+    line-clamp: none !important;
+    -webkit-line-clamp: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
   }
 }
 
