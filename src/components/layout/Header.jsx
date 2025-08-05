@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
 } from '../ui/dropdown-menu';
 import { 
-  ChevronRightIcon,
   ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
 
