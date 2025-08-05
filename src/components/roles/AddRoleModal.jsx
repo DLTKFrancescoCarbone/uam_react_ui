@@ -54,7 +54,7 @@ const AddRoleModal = ({ isOpen, onClose, onSave }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleCancel} className="w-full max-w-md">
+    <Modal isOpen={isOpen} onClose={handleCancel} className="w-full max-w-sm tablet:max-w-md mx-4 tablet:mx-0">
       <ModalHeader onClose={handleCancel}>
         <ModalTitle>Add Role</ModalTitle>
       </ModalHeader>

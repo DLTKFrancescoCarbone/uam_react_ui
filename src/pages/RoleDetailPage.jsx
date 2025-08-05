@@ -11,8 +11,10 @@ import { FloatingLabelInput } from '../components/ui/floating-label-input';
 import { ToggleSwitch } from '../components/ui/toggle-switch';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
 import { ArrowLeftIcon, CogIcon, UserIcon, TrashIcon } from '@heroicons/react/24/outline';
+import ViewToggle from '../components/ui/view-toggle';
 import { mockRoles, getRoleMembers } from '../data/mockRoles';
 import { Modal, ModalHeader, ModalTitle, ModalContent, ModalFooter } from '../components/ui/modal';
+import AssignUserModal from '../components/modals/AssignUserModal';
 
 const RoleDetailPage = () => {
   const { roleId } = useParams();
@@ -34,6 +36,11 @@ const RoleDetailPage = () => {
   const [showUserDetail, setShowUserDetail] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteUser, setDeleteUser] = useState(null);
+  const [usersViewMode, setUsersViewMode] = useState(() => {
+    return localStorage.getItem('roleDetailUsersViewMode') || 'list';
+  });
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [showAssignUserModal, setShowAssignUserModal] = useState(false);
 
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('isAuthenticated');
@@ -227,6 +234,49 @@ const RoleDetailPage = () => {
     setDeleteUser(null);
   };
 
+  const handleUsersViewModeChange = (newViewMode) => {
+    setUsersViewMode(newViewMode);
+    localStorage.setItem('roleDetailUsersViewMode', newViewMode);
+  };
+
+  const handleAssignUsers = () => {
+    setShowAssignUserModal(true);
+  };
+
+  const handleAssignUsersConfirm = async (selectedUsers) => {
+    // TODO: Implement actual user assignment logic
+    console.log('Assigning users to role:', role.id, selectedUsers);
+    // Here you would typically make an API call to assign the users
+    // For now, we'll just log the action
+    alert(`Successfully assigned ${selectedUsers.length} user(s) to role ${role.name}`);
+  };
+
+  const handleUnassignUsers = () => {
+    // TODO: Implement unassign users functionality
+    console.log('Unassign users clicked', selectedUsers);
+  };
+
+  const handleUserSelect = (userId) => {
+    setSelectedUsers(prev => 
+      prev.includes(userId) 
+        ? prev.filter(id => id !== userId)
+        : [...prev, userId]
+    );
+  };
+
+  const handleSelectAllUsers = () => {
+    if (selectedUsers.length === roleMembers.length) {
+      setSelectedUsers([]);
+    } else {
+      setSelectedUsers(roleMembers.map(user => user.id));
+    }
+  };
+
+  const handleBulkDeleteUsers = () => {
+    // TODO: Implement bulk delete users functionality
+    console.log('Bulk delete users clicked', selectedUsers);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -266,7 +316,7 @@ const RoleDetailPage = () => {
                 <TabsList className="tabs-list-underline">
                   <TabsTrigger value="details" className="tabs-trigger-underline">Role Details</TabsTrigger>
                   <TabsTrigger value="permissions" className="tabs-trigger-underline">Permissions</TabsTrigger>
-                  <TabsTrigger value="users" className="tabs-trigger-underline">Users</TabsTrigger>
+                  <TabsTrigger value="users" className="tabs-trigger-underline">Assigned Users ({roleMembers.length})</TabsTrigger>
                 </TabsList>
 
                 {/* Details Tab */}
@@ -458,59 +508,210 @@ const RoleDetailPage = () => {
                 <TabsContent value="users" className="space-y-6 mt-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Assigned Users</CardTitle>
+                      <div className="flex items-center justify-between w-full">
+                        <CardTitle className="text-lg">User Assignments</CardTitle>
+                        <div className="flex items-center gap-3">
+                          {selectedUsers.length > 0 && (
+                            <Button 
+                              variant="destructive" 
+                              size="sm"
+                              onClick={handleBulkDeleteUsers}
+                              className="flex items-center gap-2"
+                            >
+                              <TrashIcon className="h-4 w-4" />
+                              Delete ({selectedUsers.length})
+                            </Button>
+                          )}
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={handleUnassignUsers}
+                          >
+                            Unassign User(s)
+                          </Button>
+                          <Button 
+                            variant="default" 
+                            size="sm"
+                            onClick={handleAssignUsers}
+                          >
+                            Assign User(s)
+                          </Button>
+                          <ViewToggle 
+                            viewMode={usersViewMode} 
+                            onViewModeChange={handleUsersViewModeChange} 
+                          />
+                        </div>
+                      </div>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-4">
-                        {roleMembers.map((user) => (
-                          <div 
-                            key={user.id} 
-                            className="flex items-start justify-between p-4 border rounded-lg hover:bg-blue-50 hover:border-blue-200 cursor-pointer transition-colors"
-                            onClick={() => {
-                              // Check if this is a real user ID that has a detail page
-                              if (Number(user.id) <= 15) {
-                                handleUserClick(user);
-                              }
-                            }}
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                                <span className="font-medium text-sm text-blue-600">
-                                  {user.firstName[0]}{user.lastName[0]}
+                      {usersViewMode === 'list' ? (
+                        <div className="space-y-4">
+                          {/* Select All Header for List View */}
+                          {roleMembers.length > 0 && (
+                            <div className="flex items-center gap-3 pb-2 border-b">
+                              <input
+                                type="checkbox"
+                                checked={selectedUsers.length === roleMembers.length && roleMembers.length > 0}
+                                onChange={handleSelectAllUsers}
+                                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                              />
+                              <span className="text-sm font-medium text-muted-foreground">
+                                Select All ({roleMembers.length} users)
+                              </span>
+                              {selectedUsers.length > 0 && (
+                                <span className="text-sm text-primary ml-auto">
+                                  {selectedUsers.length} selected
                                 </span>
+                              )}
+                            </div>
+                          )}
+                          
+                          {roleMembers.map((user) => (
+                            <div 
+                              key={user.id} 
+                              className="flex items-start gap-3 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+                              onClick={() => {
+                                // Check if this is a real user ID that has a detail page
+                                if (Number(user.id) <= 15) {
+                                  handleUserClick(user);
+                                }
+                              }}
+                            >
+                              {/* Checkbox */}
+                              <div className="flex items-center pt-1">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedUsers.includes(user.id)}
+                                  onChange={(e) => {
+                                    e.stopPropagation();
+                                    handleUserSelect(user.id);
+                                  }}
+                                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                />
                               </div>
-                              <div>
+                              
+                              {/* Content */}
+                              <div className="flex-1 min-w-0">
                                 <div className="font-medium text-base mb-1">
                                   {user.firstName} {user.lastName}
                                   {Number(user.id) <= 15 && <span className="ml-2 text-xs text-blue-500">• View Details</span>}
                                 </div>
-                                <div className="text-sm text-body">{user.username} • {user.email}</div>
+                                <div className="text-sm text-body mb-2">{user.username} • {user.email}</div>
+                                <div className="flex items-center gap-2">
+                                  <Badge 
+                                    variant={user.status === 'Active' ? 'success' : 'secondary'}
+                                  >
+                                    {user.status}
+                                  </Badge>
+                                </div>
+                              </div>
+                              
+                              {/* Delete Icon */}
+                              <div className="flex items-center pt-1">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={(e) => handleDeleteClick(user, e)}
+                                  className="text-primary hover:text-white hover:bg-primary"
+                                  title="Remove user from role"
+                                >
+                                  <TrashIcon className="h-4 w-4" />
+                                </Button>
                               </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <Badge 
-                                variant={user.status === 'Active' ? 'success' : 'secondary'}
-                              >
-                                {user.status}
-                              </Badge>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={(e) => handleDeleteClick(user, e)}
-                                className="text-primary hover:text-white hover:bg-primary"
-                                title="Remove user from role"
-                              >
-                                <TrashIcon className="h-4 w-4" />
-                              </Button>
+                          ))}
+                          {roleMembers.length === 0 && (
+                            <div className="text-center py-8 text-muted-foreground">
+                              No users assigned to this role
                             </div>
-                          </div>
-                        ))}
-                        {roleMembers.length === 0 && (
-                          <div className="text-center py-8 text-muted-foreground">
-                            No users assigned to this role
-                          </div>
-                        )}
-                      </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="overflow-x-auto">
+                          <table className="w-full border-collapse">
+                            <thead>
+                              <tr className="border-b">
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground w-12">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedUsers.length === roleMembers.length && roleMembers.length > 0}
+                                    onChange={handleSelectAllUsers}
+                                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                  />
+                                </th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground">Name</th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground">Username</th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground">Email</th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground">Status</th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground w-12">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {roleMembers.map((user) => (
+                                <tr 
+                                  key={user.id} 
+                                  className="border-b hover:bg-gray-50 cursor-pointer transition-colors"
+                                  onClick={() => {
+                                    // Check if this is a real user ID that has a detail page
+                                    if (Number(user.id) <= 15) {
+                                      handleUserClick(user);
+                                    }
+                                  }}
+                                >
+                                  <td className="py-3 px-4">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedUsers.includes(user.id)}
+                                      onChange={(e) => {
+                                        e.stopPropagation();
+                                        handleUserSelect(user.id);
+                                      }}
+                                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                    />
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <div className="font-medium text-sm">
+                                      {user.firstName} {user.lastName}
+                                      {Number(user.id) <= 15 && <span className="ml-2 text-xs text-blue-500">• View Details</span>}
+                                    </div>
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <div className="text-sm text-body">{user.username}</div>
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <div className="text-sm text-body">{user.email}</div>
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <Badge 
+                                      variant={user.status === 'Active' ? 'success' : 'secondary'}
+                                    >
+                                      {user.status}
+                                    </Badge>
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={(e) => handleDeleteClick(user, e)}
+                                      className="text-primary hover:text-white hover:bg-primary"
+                                      title="Remove user from role"
+                                    >
+                                      <TrashIcon className="h-4 w-4" />
+                                    </Button>
+                                  </td>
+                                </tr>
+                              ))}
+                              {roleMembers.length === 0 && (
+                                <tr>
+                                  <td colSpan="6" className="text-center py-8 text-muted-foreground">
+                                    No users assigned to this role
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -632,6 +833,16 @@ const RoleDetailPage = () => {
           </Button>
         </ModalFooter>
       </Modal>
+
+      {/* Assign Users Modal */}
+      <AssignUserModal
+        isOpen={showAssignUserModal}
+        onClose={() => setShowAssignUserModal(false)}
+        onAssign={handleAssignUsersConfirm}
+        targetType="role"
+        targetName={role?.name}
+        excludeUserIds={roleMembers.map(user => user.id)}
+      />
       
       <Footer />
     </div>

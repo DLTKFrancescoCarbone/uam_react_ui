@@ -84,7 +84,7 @@ const GroupDetailPanel = ({ group, onClose, onSave }) => {
   };
 
   return (
-    <div className="absolute top-0 right-0 w-[420px] h-full bg-white border-l border-gray-200 shadow-lg z-10">
+    <div className="absolute top-0 right-0 w-full tablet:w-[420px] h-full bg-white border-l border-gray-200 shadow-lg z-10">
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
@@ -100,7 +100,7 @@ const GroupDetailPanel = ({ group, onClose, onSave }) => {
             onClick={onClose}
             className="h-8 w-8 p-0"
           >
-            <XMarkIcon className="h-3.5 w-3.5" />
+            <XMarkIcon className="detail-close-icon" />
           </Button>
         </div>
 

@@ -151,8 +151,8 @@ const GroupsPage = () => {
                 Manage groups, members, and group role assignments.
               </p>
             </div>
-            <Button variant="primary-header" onClick={handleCreateGroup} className="shrink-0">
-              <PlusIcon className="h-4 w-4 mr-2" />
+            <Button variant="primary-header" onClick={handleCreateGroup} className="shrink-0 tablet:h-11 tablet:px-6 tablet:py-3">
+              <PlusIcon className="h-4 w-4 mr-2 tablet:h-5 tablet:w-5" />
               Add Group
             </Button>
           </div>
@@ -190,7 +190,7 @@ const GroupsPage = () => {
                   </Select>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                <div className="flex flex-col md:flex-row items-center space-y-3 md:space-y-0 md:space-x-6">
                   {/* Results Count */}
                   <div className="text-sm text-muted-foreground whitespace-nowrap">
                     Showing {filteredGroups.length} of {groups.length} groups
@@ -199,7 +199,8 @@ const GroupsPage = () => {
                   {/* View Toggle */}
                   <ViewToggle 
                     viewMode={viewMode} 
-                    onViewModeChange={handleViewModeChange} 
+                    onViewModeChange={handleViewModeChange}
+                    options={['card', 'table']}
                   />
                 </div>
               </div>
@@ -317,8 +318,8 @@ const GroupsPage = () => {
                       }
                     </CardDescription>
                     {(!searchTerm && filterDepartment === 'all') && (
-                      <Button variant="primary-header" onClick={handleCreateGroup}>
-                        <PlusIcon className="h-4 w-4 mr-2" />
+                      <Button variant="primary-header" onClick={handleCreateGroup} className="tablet:h-11 tablet:px-6 tablet:py-3">
+                        <PlusIcon className="h-4 w-4 mr-2 tablet:h-5 tablet:w-5" />
                         Add Group
                       </Button>
                     )}

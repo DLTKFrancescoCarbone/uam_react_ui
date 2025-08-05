@@ -74,11 +74,11 @@ const UserDetailPanel = ({ user, onClose, onSave }) => {
   };
 
   // Mock user groups and roles for display
-  const userGroups = mockGroups.slice(0, 3); // Show first 3 groups as example
+  const userGroups = mockGroups.slice(0, 20); // Show first 20 groups as example
   const userRoles = mockRoles.slice(0, 2); // Show first 2 roles as example
 
   return (
-    <div className="absolute top-0 right-0 w-[420px] h-full bg-white border-l border-gray-200 shadow-lg z-10">
+    <div className="absolute top-0 right-0 w-full tablet:w-[420px] h-full bg-white border-l border-gray-200 shadow-lg z-10">
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
@@ -89,7 +89,7 @@ const UserDetailPanel = ({ user, onClose, onSave }) => {
             onClick={onClose}
             className="h-8 w-8 p-0"
           >
-            <XMarkIcon className="h-3.5 w-3.5" />
+            <XMarkIcon className="detail-close-icon" />
           </Button>
         </div>
 
@@ -98,8 +98,8 @@ const UserDetailPanel = ({ user, onClose, onSave }) => {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="tabs-list-underline">
               <TabsTrigger value="details" className="tabs-trigger-underline">Details</TabsTrigger>
-              <TabsTrigger value="groups" className="tabs-trigger-underline">Groups</TabsTrigger>
-              <TabsTrigger value="roles" className="tabs-trigger-underline">Roles</TabsTrigger>
+              <TabsTrigger value="groups" className="tabs-trigger-underline">Groups ({userGroups.length})</TabsTrigger>
+              <TabsTrigger value="roles" className="tabs-trigger-underline">Roles ({userRoles.length})</TabsTrigger>
             </TabsList>
 
             {/* Details Tab */}
@@ -240,10 +240,7 @@ const UserDetailPanel = ({ user, onClose, onSave }) => {
                       <div key={group.id} className="flex items-center justify-between p-3 border rounded-lg">
                         <div>
                           <div className="font-medium text-sm">{group.name}</div>
-                          <div className="text-xs text-gray-500">{group.description}</div>
-                          <div className="text-xs text-gray-400 mt-1">
-                            {group.memberCount} members • {group.department}
-                          </div>
+                          <div className="text-xs text-gray-500 line-clamp-2">{group.description}</div>
                         </div>
                       </div>
                     ))}

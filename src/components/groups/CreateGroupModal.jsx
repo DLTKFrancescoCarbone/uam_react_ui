@@ -52,7 +52,7 @@ const CreateGroupModal = ({ isOpen, onClose, onSave }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} className="w-full max-w-md">
+    <Modal isOpen={isOpen} onClose={handleClose} className="w-full max-w-sm tablet:max-w-md mx-4 tablet:mx-0">
       <ModalHeader onClose={handleClose}>
         <ModalTitle>Create a Group</ModalTitle>
       </ModalHeader>

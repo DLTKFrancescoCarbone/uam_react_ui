@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RevoGrid, Template } from '@revolist/react-datagrid';
 import { Badge } from '../ui/badge';
@@ -9,6 +9,18 @@ import UserDetailPanel from './UserDetailPanel';
 
 const UserTable = ({ className = '' }) => {
   const navigate = useNavigate();
+  const [isTablet, setIsTablet] = useState(false);
+  
+  // Check if we're on tablet/mobile
+  useEffect(() => {
+    const checkIsTablet = () => {
+      setIsTablet(window.innerWidth < 1024); // Below lg breakpoint
+    };
+    
+    checkIsTablet();
+    window.addEventListener('resize', checkIsTablet);
+    return () => window.removeEventListener('resize', checkIsTablet);
+  }, []);
   
   // Only include properties defined in columns to prevent extra columns
   const columnProps = [
@@ -94,21 +106,23 @@ const UserTable = ({ className = '' }) => {
     );
   };
 
-  // Actions cell component
+  // Actions cell component with tablet-friendly touch targets
   const ActionsCell = ({ model, prop, value }) => (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-1">
       <Button 
         variant="ghost" 
-        size="icon" 
+        size={isTablet ? "sm" : "icon"}
+        className={isTablet ? "min-h-[44px] px-3" : ""}
         onClick={() => handleUserClick(model)}
       >
-        <EyeIcon className="h-4 w-4 text-gray-600" />
+        <EyeIcon className={`${isTablet ? "h-5 w-5" : "h-4 w-4"} text-gray-600`} />
       </Button>
       <Button 
         variant="ghost" 
-        size="icon"
+        size={isTablet ? "sm" : "icon"}
+        className={isTablet ? "min-h-[44px] px-3" : ""}
       >
-        <TrashIcon className="h-4 w-4 text-gray-600" />
+        <TrashIcon className={`${isTablet ? "h-5 w-5" : "h-4 w-4"} text-gray-600`} />
       </Button>
     </div>
   );
@@ -131,95 +145,109 @@ const UserTable = ({ className = '' }) => {
     </div>
   );
 
-  // Column definitions
-  const columns = [
-    {
-      prop: 'select',
-      name: '',
-      size: 50,
-      minSize: 50,
-      maxSize: 50,
-      autoSize: false,
-      cellTemplate: Template(() => (
-        <input 
-          type="checkbox" 
-          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-        />
-      )),
-      headerTemplate: Template(() => (
-        <div
-          style={{
-            background: '#EDF0F6',
-            minHeight: '45px',
-            height: '100%',
-            width: '100%',
-          }}
-        />
-      ))
-    },
-    {
-      prop: 'username',
-      name: 'Username',
-      size: 200,
-      minSize: 150,
-      autoSize: false,
-      cellTemplate: Template(UsernameCell),
-      headerTemplate: Template(() => <HeaderTemplate name="Username" />)
-    },
-    {
-      prop: 'firstName',
-      name: 'First Name',
-      size: 150,
-      minSize: 120,
-      autoSize: false,
-      headerTemplate: Template(() => <HeaderTemplate name="First Name" />)
-    },
-    {
-      prop: 'lastName',
-      name: 'Last Name',
-      size: 150,
-      minSize: 120,
-      autoSize: false,
-      headerTemplate: Template(() => <HeaderTemplate name="Last Name" />)
-    },
-    {
-      prop: 'email',
-      name: 'Email',
-      size: 250,
-      minSize: 200,
-      autoSize: false,
-      headerTemplate: Template(() => <HeaderTemplate name="Email" />)
-    },
-    {
-      prop: 'status',
-      name: 'Status',
-      size: 120,
-      minSize: 100,
-      autoSize: false,
-      cellTemplate: Template(StatusCell),
-      headerTemplate: Template(() => <HeaderTemplate name="Status" />)
-    },
-    {
-      prop: 'created',
-      name: 'Created',
-      size: 180,
-      minSize: 160,
-      autoSize: false,
-      headerTemplate: Template(() => <HeaderTemplate name="Created" />)
-    },
-    {
-      prop: 'actions',
-      name: 'Actions',
-      size: 120,
-      minSize: 120,
-      maxSize: 120,
-      autoSize: false,
-      cellTemplate: Template(ActionsCell),
-      pin: 'colPinEnd',
-      columnClass: 'actions-column',
-      headerTemplate: Template(() => <HeaderTemplate name="Actions" />)
+  // Responsive column definitions
+  const getColumns = () => {
+    const baseColumns = [
+      {
+        prop: 'select',
+        name: '',
+        size: isTablet ? 60 : 50,
+        minSize: isTablet ? 60 : 50,
+        maxSize: isTablet ? 60 : 50,
+        autoSize: false,
+        cellTemplate: Template(() => (
+          <input 
+            type="checkbox" 
+            className={`rounded border-gray-300 text-blue-600 focus:ring-blue-500 ${isTablet ? 'w-5 h-5' : 'w-4 h-4'}`}
+          />
+        )),
+        headerTemplate: Template(() => (
+          <div
+            style={{
+              background: '#EDF0F6',
+              minHeight: isTablet ? '50px' : '45px',
+              height: '100%',
+              width: '100%',
+            }}
+          />
+        ))
+      },
+      {
+        prop: 'username',
+        name: 'Username',
+        size: isTablet ? 160 : 200,
+        minSize: isTablet ? 140 : 150,
+        autoSize: false,
+        cellTemplate: Template(UsernameCell),
+        headerTemplate: Template(() => <HeaderTemplate name="Username" />)
+      },
+      {
+        prop: 'email',
+        name: 'Email',
+        size: isTablet ? 200 : 250,
+        minSize: isTablet ? 180 : 200,
+        autoSize: false,
+        headerTemplate: Template(() => <HeaderTemplate name="Email" />)
+      },
+      {
+        prop: 'status',
+        name: 'Status',
+        size: isTablet ? 100 : 120,
+        minSize: isTablet ? 90 : 100,
+        autoSize: false,
+        cellTemplate: Template(StatusCell),
+        headerTemplate: Template(() => <HeaderTemplate name="Status" />)
+      },
+      {
+        prop: 'actions',
+        name: 'Actions',
+        size: isTablet ? 140 : 120,
+        minSize: isTablet ? 140 : 120,
+        maxSize: isTablet ? 140 : 120,
+        autoSize: false,
+        cellTemplate: Template(ActionsCell),
+        pin: 'colPinEnd',
+        columnClass: 'actions-column',
+        headerTemplate: Template(() => <HeaderTemplate name="Actions" />)
+      }
+    ];
+
+    // Add name columns only on desktop
+    if (!isTablet) {
+      baseColumns.splice(2, 0, 
+        {
+          prop: 'firstName',
+          name: 'First Name',
+          size: 150,
+          minSize: 120,
+          autoSize: false,
+          headerTemplate: Template(() => <HeaderTemplate name="First Name" />)
+        },
+        {
+          prop: 'lastName',
+          name: 'Last Name',
+          size: 150,
+          minSize: 120,
+          autoSize: false,
+          headerTemplate: Template(() => <HeaderTemplate name="Last Name" />)
+        }
+      );
+      
+      // Add created column only on desktop
+      baseColumns.splice(-1, 0, {
+        prop: 'created',
+        name: 'Created',
+        size: 180,
+        minSize: 160,
+        autoSize: false,
+        headerTemplate: Template(() => <HeaderTemplate name="Created" />)
+      });
     }
-  ];
+
+    return baseColumns;
+  };
+
+  const columns = getColumns();
 
   return (
     <div
@@ -230,19 +258,19 @@ const UserTable = ({ className = '' }) => {
         source={users}
         columns={columns}
         theme="compact"
-        resize={true}
-        range={true}
-        rowHeaders={true}
-        rowSize={45}
+        resize={!isTablet}
+        range={!isTablet}
+        rowHeaders={!isTablet}
+        rowSize={isTablet ? 55 : 45}
         readonly={true}
         className="revogrid-container w-full h-full"
-        autoSizeColumn={true}
+        autoSizeColumn={isTablet}
         trimmedRows={false}
-        exporting={true}
+        exporting={!isTablet}
         useVirtualScrolling={true}
         stretch={true}
         height="100%"
-        style={{ width: '100%' }}
+        style={{ width: '100%', minWidth: isTablet ? '100%' : 'auto' }}
       />
 
       {/* User Detail Panel */}

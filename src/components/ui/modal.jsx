@@ -30,7 +30,7 @@ const ModalHeader = ({ children, onClose, className = '' }) => (
         onClick={onClose}
         className="modal-close-button"
       >
-        <XMarkIcon className="h-5 w-5" />
+        <XMarkIcon className="h-3.5 w-3.5" />
       </button>
     )}
   </div>

@@ -123,17 +123,17 @@ const UsersPage = () => {
               <Button 
                 variant="outline-header"
                 onClick={handleExportUsers}
-                className="shrink-0"
+                className="shrink-0 tablet:h-11 tablet:px-6 tablet:py-3"
               >
-                <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
+                <ArrowDownTrayIcon className="h-4 w-4 mr-2 tablet:h-5 tablet:w-5" />
                 Export
               </Button>
               <Button 
                 variant="primary-header"
                 onClick={handleCreateUser}
-                className="shrink-0"
+                className="shrink-0 tablet:h-11 tablet:px-6 tablet:py-3"
               >
-                <UserPlusIcon className="h-4 w-4 mr-2" />
+                <UserPlusIcon className="h-4 w-4 mr-2 tablet:h-5 tablet:w-5" />
                 Add User
               </Button>
             </div>
@@ -171,7 +171,7 @@ const UsersPage = () => {
                   </Select>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                <div className="flex flex-col md:flex-row items-center space-y-3 md:space-y-0 md:space-x-6">
                   {/* Results Count */}
                   <div className="text-sm text-muted-foreground whitespace-nowrap">
                     Showing {filteredUsers.length} of {users.length} users
@@ -180,7 +180,8 @@ const UsersPage = () => {
                   {/* View Toggle */}
                   <ViewToggle 
                     viewMode={viewMode} 
-                    onViewModeChange={handleViewModeChange} 
+                    onViewModeChange={handleViewModeChange}
+                    options={['card', 'table']}
                   />
                 </div>
               </div>
@@ -288,8 +289,12 @@ const UsersPage = () => {
                       }
                     </CardDescription>
                     {(!searchTerm && filterStatus === 'all') && (
-                      <Button variant="primary-header" onClick={handleCreateUser}>
-                        <UserPlusIcon className="h-4 w-4 mr-2" />
+                      <Button 
+                        variant="primary-header" 
+                        onClick={handleCreateUser}
+                        className="tablet:h-11 tablet:px-6 tablet:py-3"
+                      >
+                        <UserPlusIcon className="h-4 w-4 mr-2 tablet:h-5 tablet:w-5" />
                         Add User
                       </Button>
                     )}

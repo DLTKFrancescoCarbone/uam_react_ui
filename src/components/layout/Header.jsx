@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { 
   DropdownMenu,
@@ -12,8 +12,19 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Header = () => {
+  const [isMobile, setIsMobile] = useState(false);
   const currentUser = localStorage.getItem('currentUser') || 'AA';
   const initials = currentUser.split('@')[0].substring(0, 2).toUpperCase();
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 834); // Below tablet breakpoint
+    };
+    
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('currentUser');
@@ -24,10 +35,12 @@ const Header = () => {
   return (
     <header className="w-full bg-card shadow-md px-6 py-4 fixed top-0 left-0 right-0 z-50 h-14">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="header-breadcrumb-icon">
-            <ChevronRightIcon className="h-4 w-4" />
-          </div>
+        <div className={`flex items-center gap-3 ${isMobile ? 'ml-10' : ''}`}>
+          <img 
+            src="/bluechevron.svg" 
+            alt="Logo" 
+            className="h-6 w-auto"
+          />
           <h1 className="text-lg font-medium text-header">User Access Management</h1>
         </div>
         

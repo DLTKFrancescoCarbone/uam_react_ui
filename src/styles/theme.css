@@ -92,6 +92,20 @@ l/* Theme CSS - Centralized styling for scalability */
   padding-right: 0.75rem;
 }
 
+.sidebar-mobile-open {
+  width: 16rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  z-index: 50;
+}
+
+.sidebar-mobile-closed {
+  width: 4rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  transform: translateX(-100%);
+}
+
 .sidebar-item {
   display: flex;
   align-items: center;
@@ -367,6 +381,24 @@ l/* Theme CSS - Centralized styling for scalability */
   padding-right: 2rem;
 }
 
+/* Mobile responsive overrides - below tablet breakpoint */
+@media screen and (max-width: 833px) {
+  .page-main,
+  .ml-\[66px\] {
+    margin-left: 0 !important;
+  }
+  
+  .page-main {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .px-8 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
 .page-header {
   display: flex;
   flex-direction: column;
@@ -553,6 +585,7 @@ l/* Theme CSS - Centralized styling for scalability */
 
 .modal-body {
   padding: 1.25rem;
+  overflow: visible;
 }
 
 .modal-footer {
@@ -920,6 +953,89 @@ revo-grid {
   background: #EDF0F6 !important;
 }
 
+/* Tablet-specific RevoGrid optimizations */
+@media screen and (max-width: 1023px) {
+  /* Larger row height for better touch targets */
+  .revogrid-container .rgRow {
+    min-height: 55px !important;
+  }
+  
+  /* Increase cell padding for touch */
+  .revogrid-container .rgCell {
+    padding: 12px 8px !important;
+  }
+  
+  /* Larger checkboxes for touch */
+  .revogrid-container input[type="checkbox"] {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  /* Better button spacing in action cells */
+  .revogrid-container .rgCell button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+  
+  /* Hide horizontal scrollbar on mobile when not needed */
+  .revogrid-scrollable-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Touch-friendly button improvements for mobile/tablet */
+@media screen and (max-width: 834px) {
+  /* Ensure all buttons meet minimum touch target size */
+  button, 
+  input[type="button"], 
+  input[type="submit"], 
+  .button,
+  [role="button"] {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 12px 16px !important;
+  }
+  
+  /* Icon-only buttons need special handling */
+  button[class*="icon"], 
+  .button[class*="icon"] {
+    width: 44px !important;
+    height: 44px !important;
+    padding: 10px !important;
+  }
+  
+  /* Form inputs should be touch-friendly */
+  input[type="text"],
+  input[type="email"], 
+  input[type="password"],
+  input[type="tel"],
+  select,
+  textarea {
+    min-height: 44px !important;
+    padding: 12px 16px !important;
+  }
+  
+  /* Checkbox and radio buttons */
+  input[type="checkbox"],
+  input[type="radio"] {
+    width: 20px !important;
+    height: 20px !important;
+    margin: 12px !important;
+  }
+  
+  /* Links that act as buttons */
+  a[class*="button"],
+  .btn {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 12px 16px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
 /* RevoGrid text color customization to match application theme */
 /* Body text in cells - match application body text color */
 .revogrid-container .rgCell {
@@ -1082,5 +1198,47 @@ button.tabs-trigger-underline:hover:not([data-state="active"]) {
   color: #373F4E !important;
   background: hsl(var(--background)) !important;
   font-weight: 600 !important;
+}
+
+.detail-close-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Search Icon Fix for Filter Bars at Tablet Level */
+@media screen and (max-width: 834px) {
+  /* Target filter sections specifically to fix search icon positioning */
+  .p-4.border.rounded-lg.bg-card .relative {
+    position: relative !important;
+    width: 100% !important;
+  }
+  
+  /* Ensure search icon maintains proper left positioning */
+  .p-4.border.rounded-lg.bg-card .absolute.left-3 {
+    position: absolute !important;
+    left: 0.75rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 20 !important;
+    pointer-events: none !important;
+  }
+  
+  /* Prevent input text from overlapping with icon */
+  .p-4.border.rounded-lg.bg-card input.pl-10 {
+    padding-left: 2.5rem !important;
+    text-indent: 0 !important;
+  }
+  
+  /* Fix flex container behavior at tablet breakpoint */
+  .flex.flex-col.space-y-4.sm\\:flex-row.sm\\:items-center.sm\\:space-x-4.flex-1 {
+    gap: 1rem !important;
+  }
+  
+  /* Ensure search container maintains minimum width */
+  .relative.w-full.sm\\:w-auto.sm\\:max-w-sm {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 250px !important;
+  }
 }
 

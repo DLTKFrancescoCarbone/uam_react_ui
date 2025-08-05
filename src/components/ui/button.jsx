@@ -15,10 +15,11 @@ const variants = {
 };
 
   const sizes = {
-    default: 'h-10 py-2 px-4',
-    sm: 'h-9 px-3 rounded-md',
-    lg: 'h-11 px-8 rounded-md',
-    icon: 'h-8 w-8 p-0',
+    default: 'h-10 py-2 px-4 tablet:h-11 tablet:py-3 tablet:px-6',
+    sm: 'h-9 px-3 rounded-md tablet:h-11 tablet:px-4',
+    lg: 'h-11 px-8 rounded-md tablet:h-12 tablet:px-10',
+    icon: 'h-8 w-8 p-0 tablet:h-11 tablet:w-11',
+    touch: 'h-11 w-11 p-0 min-h-[44px] min-w-[44px]',
   };
 
   const classes = `${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`;

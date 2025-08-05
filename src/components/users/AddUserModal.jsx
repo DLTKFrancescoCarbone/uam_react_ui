@@ -118,7 +118,7 @@ const AddUserModal = ({ isOpen, onClose, onSave }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} className="w-full max-w-2xl">
+    <Modal isOpen={isOpen} onClose={handleClose} className="w-full max-w-lg tablet:max-w-2xl mx-4 tablet:mx-0">
       <ModalHeader onClose={handleClose}>
         <ModalTitle>Add New User</ModalTitle>
       </ModalHeader>
@@ -144,7 +144,7 @@ const AddUserModal = ({ isOpen, onClose, onSave }) => {
             </div>
 
             {/* First Name and Last Name */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
               <FloatingLabelInput
                 id="firstName"
                 label="First Name *"
@@ -162,7 +162,7 @@ const AddUserModal = ({ isOpen, onClose, onSave }) => {
             </div>
 
             {/* Email and Phone Number */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
               <FloatingLabelInput
                 id="email"
                 type="email"
@@ -198,7 +198,7 @@ const AddUserModal = ({ isOpen, onClose, onSave }) => {
         </div>
 
         {/* Required Actions and Groups Section */}
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Required Actions */}
           <div className="border rounded-lg p-4">
             <h4 className="text-sm font-medium text-header mb-3">Required Actions</h4>

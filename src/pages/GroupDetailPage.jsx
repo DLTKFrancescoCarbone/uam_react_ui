@@ -10,7 +10,10 @@ import { Label } from '../components/ui/label';
 import { FloatingLabelInput } from '../components/ui/floating-label-input';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
 import { ArrowLeftIcon, UserGroupIcon, UserIcon, CogIcon, TrashIcon } from '@heroicons/react/24/outline';
+import ViewToggle from '../components/ui/view-toggle';
 import { Modal, ModalHeader, ModalTitle, ModalContent, ModalFooter } from '../components/ui/modal';
+import AssignUserModal from '../components/modals/AssignUserModal';
+import AssignRoleModal from '../components/modals/AssignRoleModal';
 import { mockGroups, getGroupMembers } from '../data/mockGroups';
 import { mockRoles, getRoleMembers } from '../data/mockRoles';
 
@@ -33,6 +36,16 @@ const GroupDetailPage = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteItem, setDeleteItem] = useState(null);
   const [deleteType, setDeleteType] = useState(null);
+  const [usersViewMode, setUsersViewMode] = useState(() => {
+    return localStorage.getItem('groupDetailUsersViewMode') || 'list';
+  });
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [rolesViewMode, setRolesViewMode] = useState(() => {
+    return localStorage.getItem('groupDetailRolesViewMode') || 'list';
+  });
+  const [selectedRoles, setSelectedRoles] = useState([]);
+  const [showAssignUserModal, setShowAssignUserModal] = useState(false);
+  const [showAssignRoleModal, setShowAssignRoleModal] = useState(false);
 
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('isAuthenticated');
@@ -173,6 +186,88 @@ const GroupDetailPage = () => {
   // Mock assigned roles for the group (first 3 roles as example)
   const assignedRoles = mockRoles.slice(0, 3);
 
+  const handleUsersViewModeChange = (newViewMode) => {
+    setUsersViewMode(newViewMode);
+    localStorage.setItem('groupDetailUsersViewMode', newViewMode);
+  };
+
+  const handleRolesViewModeChange = (newViewMode) => {
+    setRolesViewMode(newViewMode);
+    localStorage.setItem('groupDetailRolesViewMode', newViewMode);
+  };
+
+  const handleAssignUsers = () => {
+    setShowAssignUserModal(true);
+  };
+
+  const handleAssignUsersConfirm = async (selectedUsers) => {
+    // TODO: Implement actual user assignment logic
+    console.log('Assigning users to group:', group.id, selectedUsers);
+    // Here you would typically make an API call to assign the users
+    // For now, we'll just log the action
+    alert(`Successfully assigned ${selectedUsers.length} user(s) to ${group.name}`);
+  };
+
+  const handleUnassignUsers = () => {
+    console.log('Unassign users clicked', selectedUsers);
+  };
+
+  const handleUserSelect = (userId) => {
+    setSelectedUsers(prev => 
+      prev.includes(userId) 
+        ? prev.filter(id => id !== userId)
+        : [...prev, userId]
+    );
+  };
+
+  const handleSelectAllUsers = () => {
+    if (selectedUsers.length === groupMembers.length) {
+      setSelectedUsers([]);
+    } else {
+      setSelectedUsers(groupMembers.map(user => user.id));
+    }
+  };
+
+  const handleBulkDeleteUsers = () => {
+    console.log('Bulk delete users clicked', selectedUsers);
+  };
+
+  const handleAssignRoles = () => {
+    setShowAssignRoleModal(true);
+  };
+
+  const handleAssignRolesConfirm = async (selectedRoles) => {
+    // TODO: Implement actual role assignment logic
+    console.log('Assigning roles to group:', group.id, selectedRoles);
+    // Here you would typically make an API call to assign the roles
+    // For now, we'll just log the action
+    alert(`Successfully assigned ${selectedRoles.length} role(s) to ${group.name}`);
+  };
+
+  const handleUnassignRoles = () => {
+    console.log('Unassign roles clicked', selectedRoles);
+  };
+
+  const handleRoleSelect = (roleId) => {
+    setSelectedRoles(prev => 
+      prev.includes(roleId) 
+        ? prev.filter(id => id !== roleId)
+        : [...prev, roleId]
+    );
+  };
+
+  const handleSelectAllRoles = () => {
+    if (selectedRoles.length === assignedRoles.length) {
+      setSelectedRoles([]);
+    } else {
+      setSelectedRoles(assignedRoles.map(role => role.id));
+    }
+  };
+
+  const handleBulkDeleteRoles = () => {
+    console.log('Bulk delete roles clicked', selectedRoles);
+  };
+
   const getDepartmentColor = (department) => {
     const colors = {
       'Engineering': 'default',
@@ -223,8 +318,8 @@ const GroupDetailPage = () => {
               <Tabs value={activeTab} onValueChange={setActiveTab} className="tabs-container">
                 <TabsList className="tabs-list-underline">
                   <TabsTrigger value="details" className="tabs-trigger-underline">Group Details</TabsTrigger>
-                  <TabsTrigger value="members" className="tabs-trigger-underline">Assigned Users</TabsTrigger>
-                  <TabsTrigger value="roles" className="tabs-trigger-underline">Assigned Roles</TabsTrigger>
+                  <TabsTrigger value="members" className="tabs-trigger-underline">Assigned Users ({groupMembers.length})</TabsTrigger>
+                  <TabsTrigger value="roles" className="tabs-trigger-underline">Assigned Roles ({assignedRoles.length})</TabsTrigger>
                 </TabsList>
 
                 {/* Details Tab */}
@@ -332,57 +427,203 @@ const GroupDetailPage = () => {
                 <TabsContent value="members" className="space-y-6 mt-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Group Members</CardTitle>
+                      <div className="flex items-center justify-between w-full">
+                        <CardTitle className="text-lg">User Assignments</CardTitle>
+                        <div className="flex items-center gap-3">
+                          {selectedUsers.length > 0 && (
+                            <Button 
+                              variant="destructive" 
+                              size="sm"
+                              onClick={handleBulkDeleteUsers}
+                              className="flex items-center gap-2"
+                            >
+                              <TrashIcon className="h-4 w-4" />
+                              Delete ({selectedUsers.length})
+                            </Button>
+                          )}
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={handleUnassignUsers}
+                          >
+                            Unassign User(s)
+                          </Button>
+                          <Button 
+                            variant="default" 
+                            size="sm"
+                            onClick={handleAssignUsers}
+                          >
+                            Assign User(s)
+                          </Button>
+                          <ViewToggle 
+                            viewMode={usersViewMode} 
+                            onViewModeChange={handleUsersViewModeChange} 
+                          />
+                        </div>
+                      </div>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-4">
-                        {groupMembers.map((member) => (
-                          <div 
-                            key={member.id} 
-                            className="flex items-start justify-between p-4 border rounded-lg hover:bg-blue-50 hover:border-blue-200 cursor-pointer transition-colors"
-                            onClick={() => {
-                              setSelectedMember(member);
-                              setShowMemberModal(true);
-                            }}
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                                <span className="font-medium text-sm text-blue-600">
-                                  {member.firstName[0]}{member.lastName[0]}
+                      {usersViewMode === 'list' ? (
+                        <div className="space-y-4">
+                          {/* Select All Header for List View */}
+                          {groupMembers.length > 0 && (
+                            <div className="flex items-center gap-3 pb-2 border-b">
+                              <input
+                                type="checkbox"
+                                checked={selectedUsers.length === groupMembers.length && groupMembers.length > 0}
+                                onChange={handleSelectAllUsers}
+                                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                              />
+                              <span className="text-sm font-medium text-muted-foreground">
+                                Select All ({groupMembers.length} users)
+                              </span>
+                              {selectedUsers.length > 0 && (
+                                <span className="text-sm text-primary ml-auto">
+                                  {selectedUsers.length} selected
                                 </span>
+                              )}
+                            </div>
+                          )}
+                          
+                          {groupMembers.map((member) => (
+                            <div 
+                              key={member.id} 
+                              className="flex items-start gap-3 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+                              onClick={() => {
+                                setSelectedMember(member);
+                                setShowMemberModal(true);
+                              }}
+                            >
+                              {/* Checkbox */}
+                              <div className="flex items-center pt-1">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedUsers.includes(member.id)}
+                                  onChange={(e) => {
+                                    e.stopPropagation();
+                                    handleUserSelect(member.id);
+                                  }}
+                                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                />
                               </div>
-                              <div>
+                              
+                              {/* Content */}
+                              <div className="flex-1 min-w-0">
                                 <div className="font-medium text-base mb-1">
                                   {member.firstName} {member.lastName}
                                   {Number(member.id) <= 15 && <span className="ml-2 text-xs text-blue-500">• View Profile</span>}
                                 </div>
-                                <div className="text-sm text-body">{member.username} • {member.email}</div>
+                                <div className="text-sm text-body mb-2">{member.username} • {member.email}</div>
+                                <div className="flex items-center gap-2">
+                                  <Badge 
+                                    variant={member.status === 'Active' ? 'success' : 'secondary'}
+                                  >
+                                    {member.status}
+                                  </Badge>
+                                </div>
+                              </div>
+                              
+                              {/* Delete Icon */}
+                              <div className="flex items-center pt-1">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={(e) => handleDeleteClick(member, 'user', e)}
+                                  className="text-primary hover:text-white hover:bg-primary"
+                                  title="Remove user from group"
+                                >
+                                  <TrashIcon className="h-4 w-4" />
+                                </Button>
                               </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <Badge 
-                                variant={member.status === 'Active' ? 'success' : 'secondary'}
-                              >
-                                {member.status}
-                              </Badge>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={(e) => handleDeleteClick(member, 'user', e)}
-                                className="text-primary hover:text-white hover:bg-primary"
-                                title="Remove user from group"
-                              >
-                                <TrashIcon className="h-4 w-4" />
-                              </Button>
+                          ))}
+                          {groupMembers.length === 0 && (
+                            <div className="text-center py-8 text-muted-foreground">
+                              No users assigned to this group
                             </div>
-                          </div>
-                        ))}
-                        {groupMembers.length === 0 && (
-                          <div className="text-center py-8 text-muted-foreground">
-                            No members in this group
-                          </div>
-                        )}
-                      </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="overflow-x-auto">
+                          <table className="w-full border-collapse">
+                            <thead>
+                              <tr className="border-b">
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground w-12">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedUsers.length === groupMembers.length && groupMembers.length > 0}
+                                    onChange={handleSelectAllUsers}
+                                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                  />
+                                </th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground">Name</th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground">Username</th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground">Email</th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground">Status</th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground w-12">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {groupMembers.map((member) => (
+                                <tr 
+                                  key={member.id} 
+                                  className="border-b hover:bg-gray-50 cursor-pointer transition-colors"
+                                  onClick={() => {
+                                    setSelectedMember(member);
+                                    setShowMemberModal(true);
+                                  }}
+                                >
+                                  <td className="py-3 px-4">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedUsers.includes(member.id)}
+                                      onChange={(e) => {
+                                        e.stopPropagation();
+                                        handleUserSelect(member.id);
+                                      }}
+                                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                    />
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <div className="font-medium text-sm">{member.firstName} {member.lastName}</div>
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <div className="text-sm text-body">{member.username}</div>
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <div className="text-sm text-body">{member.email}</div>
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <Badge 
+                                      variant={member.status === 'Active' ? 'success' : 'secondary'}
+                                    >
+                                      {member.status}
+                                    </Badge>
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={(e) => handleDeleteClick(member, 'user', e)}
+                                      className="text-primary hover:text-white hover:bg-primary"
+                                      title="Remove user from group"
+                                    >
+                                      <TrashIcon className="h-4 w-4" />
+                                    </Button>
+                                  </td>
+                                </tr>
+                              ))}
+                              {groupMembers.length === 0 && (
+                                <tr>
+                                  <td colSpan="6" className="text-center py-8 text-muted-foreground">
+                                    No users assigned to this group
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -391,56 +632,194 @@ const GroupDetailPage = () => {
                 <TabsContent value="roles" className="space-y-6 mt-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Assigned Roles</CardTitle>
+                      <div className="flex items-center justify-between w-full">
+                        <CardTitle className="text-lg">Role Assignments</CardTitle>
+                        <div className="flex items-center gap-3">
+                          {selectedRoles.length > 0 && (
+                            <Button 
+                              variant="destructive" 
+                              size="sm"
+                              onClick={handleBulkDeleteRoles}
+                              className="flex items-center gap-2"
+                            >
+                              <TrashIcon className="h-4 w-4" />
+                              Delete ({selectedRoles.length})
+                            </Button>
+                          )}
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={handleUnassignRoles}
+                          >
+                            Unassign Role(s)
+                          </Button>
+                          <Button 
+                            variant="default" 
+                            size="sm"
+                            onClick={handleAssignRoles}
+                          >
+                            Assign Role(s)
+                          </Button>
+                          <ViewToggle 
+                            viewMode={rolesViewMode} 
+                            onViewModeChange={handleRolesViewModeChange} 
+                          />
+                        </div>
+                      </div>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-4">
-                        {assignedRoles.map((role) => (
-                          <div 
-                            key={role.id} 
-                            className="flex items-start justify-between p-4 border rounded-lg hover:bg-blue-50 hover:border-blue-200 cursor-pointer transition-colors"
-                            onClick={() => {
-                              setSelectedRole(role);
-                              setShowRoleModal(true);
-                            }}
-                          >
-                            <div className="flex-1">
-                              <div className="font-medium text-base mb-1">
-                                {role.name}
-                                <span className="ml-2 text-xs text-blue-500">• View Details</span>
+                      {rolesViewMode === 'list' ? (
+                        <div className="space-y-4">
+                          {/* Select All Header for List View */}
+                          {assignedRoles.length > 0 && (
+                            <div className="flex items-center gap-3 pb-2 border-b">
+                              <input
+                                type="checkbox"
+                                checked={selectedRoles.length === assignedRoles.length && assignedRoles.length > 0}
+                                onChange={handleSelectAllRoles}
+                                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                              />
+                              <span className="text-sm font-medium text-muted-foreground">
+                                Select All ({assignedRoles.length} roles)
+                              </span>
+                              {selectedRoles.length > 0 && (
+                                <span className="text-sm text-primary ml-auto">
+                                  {selectedRoles.length} selected
+                                </span>
+                              )}
+                            </div>
+                          )}
+                          
+                          {assignedRoles.map((role) => (
+                            <div 
+                              key={role.id} 
+                              className="flex items-start gap-3 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+                              onClick={() => {
+                                setSelectedRole(role);
+                                setShowRoleModal(true);
+                              }}
+                            >
+                              {/* Checkbox */}
+                              <div className="flex items-center pt-1">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedRoles.includes(role.id)}
+                                  onChange={(e) => {
+                                    e.stopPropagation();
+                                    handleRoleSelect(role.id);
+                                  }}
+                                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                />
                               </div>
-                              <div className="text-sm text-body mb-2">{role.description}</div>
-                              <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                                <span className="text-blue-600">{role.userCount} users</span>
-                                <span>•</span>
-                                <span>{role.composite ? 'Composite' : 'Simple'} role</span>
+                              
+                              {/* Content */}
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-base mb-1">{role.name}</div>
+                                <div className="text-sm text-body mb-2 line-clamp-2">{role.description}</div>
+                                <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                                  <span className="text-blue-600 hover:text-blue-800">{role.userCount} users</span>
+                                  <span>•</span>
+                                  <span>{role.composite ? 'Composite' : 'Simple'} role</span>
+                                </div>
+                              </div>
+                              
+                              {/* Delete Icon */}
+                              <div className="flex items-center pt-1">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={(e) => handleDeleteClick(role, 'role', e)}
+                                  className="text-primary hover:text-white hover:bg-primary"
+                                  title="Remove role from group"
+                                >
+                                  <TrashIcon className="h-4 w-4" />
+                                </Button>
                               </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <Badge 
-                                variant={role.composite ? 'purple' : 'cyan'}
-                                className="text-xs"
-                              >
-                                {role.composite ? 'Composite' : 'Simple'}
-                              </Badge>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={(e) => handleDeleteClick(role, 'role', e)}
-                                className="text-primary hover:text-white hover:bg-primary"
-                                title="Remove role from group"
-                              >
-                                <TrashIcon className="h-4 w-4" />
-                              </Button>
+                          ))}
+                          {assignedRoles.length === 0 && (
+                            <div className="text-center py-8 text-muted-foreground">
+                              No roles assigned to this group
                             </div>
-                          </div>
-                        ))}
-                        {assignedRoles.length === 0 && (
-                          <div className="text-center py-8 text-muted-foreground">
-                            No roles assigned to this group
-                          </div>
-                        )}
-                      </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="overflow-x-auto">
+                          <table className="w-full border-collapse">
+                            <thead>
+                              <tr className="border-b">
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground w-12">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedRoles.length === assignedRoles.length && assignedRoles.length > 0}
+                                    onChange={handleSelectAllRoles}
+                                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                  />
+                                </th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground">Role Name</th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground">Description</th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground">Type</th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground">Users</th>
+                                <th className="text-left py-3 px-4 font-medium text-sm text-muted-foreground w-12">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {assignedRoles.map((role) => (
+                                <tr 
+                                  key={role.id} 
+                                  className="border-b hover:bg-gray-50 cursor-pointer transition-colors"
+                                  onClick={() => {
+                                    setSelectedRole(role);
+                                    setShowRoleModal(true);
+                                  }}
+                                >
+                                  <td className="py-3 px-4">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedRoles.includes(role.id)}
+                                      onChange={(e) => {
+                                        e.stopPropagation();
+                                        handleRoleSelect(role.id);
+                                      }}
+                                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                    />
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <div className="font-medium text-sm">{role.name}</div>
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <div className="text-sm text-body line-clamp-2">{role.description}</div>
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <div className="text-sm text-muted-foreground">{role.composite ? 'Composite' : 'Simple'}</div>
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <div className="text-sm text-muted-foreground">{role.userCount}</div>
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={(e) => handleDeleteClick(role, 'role', e)}
+                                      className="text-primary hover:text-white hover:bg-primary"
+                                      title="Remove role from group"
+                                    >
+                                      <TrashIcon className="h-4 w-4" />
+                                    </Button>
+                                  </td>
+                                </tr>
+                              ))}
+                              {assignedRoles.length === 0 && (
+                                <tr>
+                                  <td colSpan="6" className="text-center py-8 text-muted-foreground">
+                                    No roles assigned to this group
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -746,6 +1125,26 @@ const GroupDetailPage = () => {
           </Button>
         </ModalFooter>
       </Modal>
+
+      {/* Assign Users Modal */}
+      <AssignUserModal
+        isOpen={showAssignUserModal}
+        onClose={() => setShowAssignUserModal(false)}
+        onAssign={handleAssignUsersConfirm}
+        targetType="group"
+        targetName={group?.name}
+        excludeUserIds={groupMembers.map(user => user.id)}
+      />
+
+      {/* Assign Roles Modal */}
+      <AssignRoleModal
+        isOpen={showAssignRoleModal}
+        onClose={() => setShowAssignRoleModal(false)}
+        onAssign={handleAssignRolesConfirm}
+        targetType="group"
+        targetName={group?.name}
+        excludeRoleIds={assignedRoles.map(role => role.id)}
+      />
     </div>
   );
 };
