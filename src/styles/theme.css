@@ -1056,6 +1056,330 @@ revo-grid {
   color: #373F4E !important;
 }
 
+/* Enhanced Permissions Styles */
+.permissions-tree-node {
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+
+.permissions-node-header {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+  background-color: hsl(var(--card));
+}
+
+.permissions-node-header:hover {
+  background-color: hsl(var(--muted) / 0.5);
+}
+
+.permissions-node-header.expanded {
+  background-color: hsl(var(--muted) / 0.3);
+}
+
+.permissions-node-content {
+  background-color: hsl(var(--card));
+  border-top: 1px solid hsl(var(--border));
+}
+
+.permission-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 0.75rem;
+  border-top: 1px solid hsl(var(--border));
+  transition: background-color 150ms ease;
+}
+
+.permission-item:hover {
+  background-color: hsl(var(--muted) / 0.3);
+}
+
+.permission-item:first-child {
+  border-top: none;
+}
+
+.permission-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.permission-name {
+  font-weight: 500;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.25rem;
+}
+
+.permission-id {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  margin-bottom: 0.25rem;
+}
+
+.permission-description {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.4;
+}
+
+.permission-tags {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.filter-chips {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-chip {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--background));
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 150ms ease;
+  white-space: nowrap;
+}
+
+.filter-chip:hover {
+  background-color: hsl(var(--muted));
+  border-color: hsl(var(--primary));
+}
+
+.filter-chip.active {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary));
+}
+
+.permissions-search-input {
+  position: relative;
+}
+
+.permissions-search-clear {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background-color: hsl(var(--muted-foreground));
+  color: hsl(var(--background));
+  border: none;
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 150ms ease;
+}
+
+.permissions-search-clear.visible {
+  display: flex;
+}
+
+.permissions-search-clear:hover {
+  background-color: hsl(var(--destructive));
+}
+
+.permissions-stats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.permissions-stats strong {
+  color: hsl(var(--foreground));
+  font-weight: 600;
+}
+
+.permission-checkbox {
+  margin-right: 0.75rem;
+  margin-top: 0.125rem;
+}
+
+.permission-checkbox input[type="checkbox"],
+input[type="checkbox"].permissions-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: hsl(var(--primary));
+  border-radius: 3px;
+  border: 2px solid hsl(var(--border));
+  background-color: hsl(var(--background));
+  transition: all 150ms ease;
+}
+
+.permission-checkbox input[type="checkbox"]:hover,
+input[type="checkbox"].permissions-checkbox:hover {
+  border-color: hsl(var(--primary));
+}
+
+.permission-checkbox input[type="checkbox"]:checked,
+input[type="checkbox"].permissions-checkbox:checked {
+  background-color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+}
+
+.permission-checkbox input[type="checkbox"]:indeterminate,
+input[type="checkbox"].permissions-checkbox:indeterminate {
+  background-color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+  opacity: 0.7;
+}
+
+.permission-checkbox input[type="checkbox"]:disabled,
+input[type="checkbox"].permissions-checkbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.permission-checkbox input[type="checkbox"]:disabled:hover,
+input[type="checkbox"].permissions-checkbox:disabled:hover {
+  border-color: hsl(var(--border));
+}
+
+/* Highlight text styling */
+mark {
+  background-color: #fef08a;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  color: inherit;
+}
+
+/* Multi-select dropdown styles */
+.multi-select-dropdown {
+  position: relative;
+}
+
+.multi-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.375rem;
+  background-color: hsl(var(--background));
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 150ms ease;
+  min-width: 140px;
+  height: 2rem;
+}
+
+.multi-select-trigger:hover {
+  border-color: hsl(var(--primary));
+}
+
+.multi-select-trigger:focus {
+  outline: none;
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
+}
+
+.multi-select-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.25rem;
+  width: 100%;
+  min-width: 200px;
+  max-width: 300px;
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 50;
+  max-height: 15rem;
+  overflow-y: auto;
+}
+
+.multi-select-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+  font-size: 0.875rem;
+}
+
+.multi-select-option:hover {
+  background-color: hsl(var(--muted));
+}
+
+.multi-select-option.selected {
+  background-color: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+  font-weight: 500;
+}
+
+.multi-select-option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.multi-select-option-label {
+  font-weight: 500;
+}
+
+.multi-select-option-description {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  margin-top: 0.25rem;
+}
+
+.multi-select-clear-btn {
+  padding: 0.125rem;
+  margin-left: 0.25rem;
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  font-size: 0.75rem;
+  line-height: 1;
+  transition: color 150ms ease;
+}
+
+.multi-select-clear-btn:hover {
+  color: hsl(var(--destructive));
+}
+
+/* Permissions action bar */
+.permissions-action-bar {
+  position: sticky;
+  bottom: 0;
+  background-color: hsl(var(--background));
+  border-top: 1px solid hsl(var(--border));
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+}
+
+.permissions-selection-info {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.permissions-selection-info strong {
+  color: hsl(var(--foreground));
+  font-weight: 600;
+}
+
 /* Form Field Styles */
 .form-field-readonly {
   font-size: 0.875rem;

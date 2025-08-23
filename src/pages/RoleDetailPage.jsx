@@ -15,6 +15,7 @@ import ViewToggle from '../components/ui/view-toggle';
 import { mockRoles, getRoleMembers } from '../data/mockRoles';
 import { Modal, ModalHeader, ModalTitle, ModalContent, ModalFooter } from '../components/ui/modal';
 import AssignUserModal from '../components/modals/AssignUserModal';
+import EnhancedPermissionsTab from '../components/roles/EnhancedPermissionsTab';
 
 const RoleDetailPage = () => {
   const { roleId } = useParams();
@@ -29,7 +30,6 @@ const RoleDetailPage = () => {
   const [errors, setErrors] = useState({});
   const [isComposite, setIsComposite] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
-  const [isEditingPermissions, setIsEditingPermissions] = useState(false);
   const [editedPermissions, setEditedPermissions] = useState([]);
   const [rolePermissions, setRolePermissions] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -175,35 +175,13 @@ const RoleDetailPage = () => {
   // Get role members
   const roleMembers = getRoleMembers(role.id);
 
-  // Initialize edited permissions when entering edit mode
-  const handleEditPermissions = () => {
-    setEditedPermissions([...rolePermissions]);
-    setIsEditingPermissions(true);
-  };
-
-  const handleCancelPermissions = () => {
-    setEditedPermissions([]);
-    setIsEditingPermissions(false);
-  };
-
   const handleSavePermissions = () => {
     setRolePermissions([...editedPermissions]);
-    setIsEditingPermissions(false);
     setEditedPermissions([]);
     // Here you would typically make an API call to save permissions
+    console.log('Saving permissions:', editedPermissions);
   };
 
-  const handlePermissionToggle = (permissionId) => {
-    setEditedPermissions(prev =>
-      prev.map(permission =>
-        permission.id === permissionId
-          ? { ...permission, granted: !permission.granted }
-          : permission
-      )
-    );
-  };
-
-  const displayPermissions = isEditingPermissions ? editedPermissions : rolePermissions;
 
   const handleUserClick = (user) => {
     setSelectedUser(user);
@@ -441,67 +419,15 @@ const RoleDetailPage = () => {
                   </Card>
                 </TabsContent>
 
-                {/* Permissions Tab */}
+                {/* Enhanced Permissions Tab */}
                 <TabsContent value="permissions" className="space-y-6 mt-6">
-                  <Card>
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">Role Permissions</CardTitle>
-                        {!isEditingPermissions ? (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={handleEditPermissions}
-                          >
-                            Edit
-                          </Button>
-                        ) : (
-                          <div className="flex gap-2">
-                            <Button onClick={handleSavePermissions} size="sm">
-                              Save
-                            </Button>
-                            <Button variant="outline" onClick={handleCancelPermissions} size="sm">
-                              Cancel
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {displayPermissions.map((permission) => (
-                          <div 
-                            key={permission.id} 
-                            className={`flex items-start justify-between p-4 border rounded-lg ${isEditingPermissions ? 'hover:bg-gray-50' : ''}`}
-                          >
-                            <div className="flex-1">
-                              <div className="font-medium text-base mb-1">{permission.name}</div>
-                              <div className="text-sm text-body">{permission.description}</div>
-                            </div>
-                            {isEditingPermissions ? (
-                              <label className="flex items-center justify-between cursor-pointer min-w-[100px]">
-                                <span className="text-sm font-medium">
-                                  {permission.granted ? 'Granted' : 'Denied'}
-                                </span>
-                                <input
-                                  type="checkbox"
-                                  checked={permission.granted}
-                                  onChange={() => handlePermissionToggle(permission.id)}
-                                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-2 ml-3"
-                                />
-                              </label>
-                            ) : (
-                              <Badge 
-                                variant={permission.granted ? 'success' : 'secondary'}
-                              >
-                                {permission.granted ? 'Granted' : 'Denied'}
-                              </Badge>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <EnhancedPermissionsTab
+                    rolePermissions={rolePermissions}
+                    onPermissionsChange={(updatedPermissions) => {
+                      setEditedPermissions(updatedPermissions);
+                    }}
+                    onSavePermissions={handleSavePermissions}
+                  />
                 </TabsContent>
 
                 {/* Users Tab */}
