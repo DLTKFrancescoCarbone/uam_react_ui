@@ -20,7 +20,8 @@ import {
 const EnhancedPermissionsTab = ({ 
   rolePermissions = [], 
   onPermissionsChange,
-  onSavePermissions
+  onSavePermissions,
+  showFilters = true
 }) => {
   const [permissionTree, setPermissionTree] = useState(permissionsData);
   const [searchTerm, setSearchTerm] = useState('');
@@ -447,47 +448,94 @@ const EnhancedPermissionsTab = ({
               <strong>{checkedPermissions.length}</strong> permissions selected
             </div>
           </div>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={clearAll}
-            >
-              Clear
-            </Button>
-            <Button
-              size="sm"
-              onClick={onSavePermissions}
-            >
-              Save Permissions
-            </Button>
-          </div>
+          {showFilters && (
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearAll}
+              >
+                Clear
+              </Button>
+              <Button
+                size="sm"
+                onClick={onSavePermissions}
+              >
+                Save Permissions
+              </Button>
+            </div>
+          )}
         </div>
       </CardHeader>
       
       <CardContent className="p-0">
         {/* Controls Panel */}
-        <div className="p-4 border-b border-gray-200 space-y-4">
-          {/* Search and View Controls */}
-          <div className="flex items-center gap-4">
-            <div className="relative flex-1 max-w-md">
-              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search permissions..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-8"
-              />
-              {searchTerm && (
-                <button
-                  onClick={clearSearch}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 h-5 w-5 rounded-full bg-gray-400 text-white text-xs hover:bg-gray-500"
-                >
-                  ×
-                </button>
-              )}
+        {showFilters && (
+          <div className="p-4 border-b border-gray-200 space-y-4">
+            {/* Search and View Controls */}
+            <div className="flex items-center gap-4">
+              <div className="relative flex-1 max-w-md">
+                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search permissions..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 pr-8"
+                />
+                {searchTerm && (
+                  <button
+                    onClick={clearSearch}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 h-5 w-5 rounded-full bg-gray-400 text-white text-xs hover:bg-gray-500"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <Button variant="outline" size="sm" onClick={expandAll}>
+                  Expand All
+                </Button>
+                <Button variant="outline" size="sm" onClick={collapseAll}>
+                  Collapse All
+                </Button>
+                
+                {/* Filter Dropdowns */}
+                <MultiSelectDropdown
+                  options={filterOptions}
+                  selectedValues={activeFilters}
+                  onChange={handleFilterChange}
+                  placeholder="Filter by Type"
+                  className="w-[180px]"
+                />
+                
+                <MultiSelectDropdown
+                  options={quickActionOptions}
+                  selectedValues={selectedQuickActions}
+                  onChange={handleQuickActionsChange}
+                  placeholder="Filter Permission"
+                  className="w-[180px]"
+                />
+              </div>
             </div>
-            
+
+            {/* Statistics */}
+            <div className="flex justify-end">
+              <div className="flex gap-4 text-sm text-gray-600">
+                <div>
+                  <strong>{visiblePermissions.length}</strong> visible
+                </div>
+                <div>
+                  <strong>{allPermissions.length}</strong> total
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Simple controls for slideout */}
+        {!showFilters && (
+          <div className="p-4 border-b border-gray-200">
             <div className="flex items-center gap-3">
               <Button variant="outline" size="sm" onClick={expandAll}>
                 Expand All
@@ -495,38 +543,9 @@ const EnhancedPermissionsTab = ({
               <Button variant="outline" size="sm" onClick={collapseAll}>
                 Collapse All
               </Button>
-              
-              {/* Filter Dropdowns */}
-              <MultiSelectDropdown
-                options={filterOptions}
-                selectedValues={activeFilters}
-                onChange={handleFilterChange}
-                placeholder="Filter by Type"
-                className="w-[180px]"
-              />
-              
-              <MultiSelectDropdown
-                options={quickActionOptions}
-                selectedValues={selectedQuickActions}
-                onChange={handleQuickActionsChange}
-                placeholder="Filter Permission"
-                className="w-[180px]"
-              />
             </div>
           </div>
-
-          {/* Statistics */}
-          <div className="flex justify-end">
-            <div className="flex gap-4 text-sm text-gray-600">
-              <div>
-                <strong>{visiblePermissions.length}</strong> visible
-              </div>
-              <div>
-                <strong>{allPermissions.length}</strong> total
-              </div>
-            </div>
-          </div>
-        </div>
+        )}
 
         {/* Permissions Tree */}
         <div className="max-h-[600px] overflow-y-auto p-4">

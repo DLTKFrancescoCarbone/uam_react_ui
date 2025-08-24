@@ -183,16 +183,24 @@ const RoleDetailPanel = ({ role, onClose, onSave }) => {
                     )}
                   </div>
 
-                  {/* Role Type */}
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Role Type</Label>
-                    <div>
-                      <Badge 
-                        variant={role.composite ? 'purple' : 'cyan'}
-                        className="text-xs"
-                      >
-                        {role.composite ? 'Composite' : 'Simple'}
-                      </Badge>
+                  {/* Role Type and Active Users Summary */}
+                  <div className="flex justify-between items-start">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Role Type</Label>
+                      <div>
+                        <Badge 
+                          variant={role.composite ? 'purple' : 'cyan'}
+                          className="text-xs"
+                        >
+                          {role.composite ? 'Composite' : 'Simple'}
+                        </Badge>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-sm font-medium">Active Users: </span>
+                      <span className="text-sm text-gray-600">
+                        {roleMembers.filter(user => user.status === 'Active').length}
+                      </span>
                     </div>
                   </div>
 
@@ -232,6 +240,7 @@ const RoleDetailPanel = ({ role, onClose, onSave }) => {
                     setEditedPermissions(updatedPermissions);
                   }}
                   onSavePermissions={handleSavePermissions}
+                  showFilters={false}
                 />
               </div>
             </TabsContent>

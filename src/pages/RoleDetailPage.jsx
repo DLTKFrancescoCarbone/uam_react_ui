@@ -318,32 +318,48 @@ const RoleDetailPage = () => {
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-6">
-                      {/* Role Type Display */}
+                      {/* Role Type Display and Active Users Summary */}
                       {isEditing ? (
-                        <div className="flex items-center space-x-3">
-                          <ToggleSwitch
-                            checked={isComposite}
-                            onChange={handleCompositeToggle}
-                          />
-                          <Label className="text-sm font-medium text-muted-foreground">
-                            Type
-                          </Label>
-                          <Badge 
-                            variant={isComposite ? 'purple' : 'cyan'}
-                            className="text-xs"
-                          >
-                            {isComposite ? 'Composite' : 'Simple'}
-                          </Badge>
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center space-x-3">
+                            <ToggleSwitch
+                              checked={isComposite}
+                              onChange={handleCompositeToggle}
+                            />
+                            <Label className="text-sm font-medium text-muted-foreground">
+                              Type
+                            </Label>
+                            <Badge 
+                              variant={isComposite ? 'purple' : 'cyan'}
+                              className="text-xs"
+                            >
+                              {isComposite ? 'Composite' : 'Simple'}
+                            </Badge>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-sm font-medium">Active Users: </span>
+                            <span className="text-sm text-gray-600">
+                              {roleMembers.filter(user => user.status === 'Active').length}
+                            </span>
+                          </div>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-2">
-                          <Label className="text-sm font-medium">Type:</Label>
-                          <Badge 
-                            variant={isComposite ? 'purple' : 'cyan'}
-                            className="text-xs"
-                          >
-                            {isComposite ? 'Composite' : 'Simple'}
-                          </Badge>
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center gap-2">
+                            <Label className="text-sm font-medium">Type:</Label>
+                            <Badge 
+                              variant={isComposite ? 'purple' : 'cyan'}
+                              className="text-xs"
+                            >
+                              {isComposite ? 'Composite' : 'Simple'}
+                            </Badge>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-sm font-medium">Active Users: </span>
+                            <span className="text-sm text-gray-600">
+                              {roleMembers.filter(user => user.status === 'Active').length}
+                            </span>
+                          </div>
                         </div>
                       )}
 
@@ -427,6 +443,7 @@ const RoleDetailPage = () => {
                       setEditedPermissions(updatedPermissions);
                     }}
                     onSavePermissions={handleSavePermissions}
+                    showFilters={true}
                   />
                 </TabsContent>
 
